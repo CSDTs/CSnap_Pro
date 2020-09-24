@@ -1,0 +1,116 @@
+<blocks app="CSnap! 3.0, http://csdt.org" version="1">
+    <block-definition s="iterate %&apos;length&apos; curl %&apos;curl&apos; scale %&apos;scale&apos; width %&apos;width&apos; height %&apos;height&apos;" type="command" category="pen">
+        <header></header>
+        <code></code>
+        <translations></translations>
+        <inputs>
+            <input type="%n">10</input>
+            <input type="%n">-6</input>
+            <input type="%n">96</input>
+            <input type="%n">40</input>
+            <input type="%n">40</input>
+        </inputs>
+        <script>
+            <block s="doRepeat">
+                <block var="length"/>
+                <script>
+                    <block s="translatePercent">
+                        <block var="width"/>
+                        <l>
+                            <option>width</option>
+                        </l>
+                    </block>
+                    <block s="translatePercent">
+                        <block var="height"/>
+                        <l>
+                            <option>height</option>
+                        </l>
+                    </block>
+                    <block s="rotateByDegrees">
+                        <block var="curl"/></block>
+                    <block s="newSizeOfCurrent">
+                        <block var="scale"/></block>
+                    <block s="doStamp"></block>
+                </script>
+            </block>
+        </script>
+    </block-definition>
+    <block-definition s="Out, Stamp, Back: Radius %&apos;radius&apos;" type="command" category="pen">
+        <header></header>
+        <code></code>
+        <translations></translations>
+        <inputs>
+            <input type="%n">150</input>
+        </inputs>
+        <script>
+            <block s="translatePercent">
+                <block var="radius"/>
+                <l>
+                    <option>height</option>
+                </l>
+            </block>
+            <block s="doStamp"></block>
+            <block s="translatePercent">
+                <block s="reportProduct">
+                    <block var="radius"/>
+                    <l>-1</l>
+                </block>
+                <l>
+                    <option>height</option>
+                </l>
+            </block>
+        </script>
+    </block-definition>
+    <block-definition s="vine iterations %&apos;iterations&apos; straight %&apos;straightness&apos; translate %&apos;translate&apos; scale %&apos;scale&apos;" type="command" category="pen">
+        <header></header>
+        <code></code>
+        <translations></translations>
+        <inputs>
+            <input type="%n">100</input>
+            <input type="%n">6</input>
+            <input type="%n">100</input>
+            <input type="%n">99</input>
+        </inputs>
+        <script>
+            <block s="doDeclareVariables">
+                <list>
+                    <l>count</l>
+                </list>
+            </block>
+            <block s="doSetVar">
+                <l>count</l>
+                <l>0</l>
+            </block>
+            <block s="doRepeat">
+                <block var="iterations"/>
+                <script>
+                    <block s="translatePercent">
+                        <block var="translate"/>
+                        <l>
+                            <option>height</option>
+                        </l>
+                    </block>
+                    <block s="turnLeft">
+                        <block s="reportProduct">
+                            <l>12</l>
+                            <block s="reportMonadic">
+                                <l>
+                                    <option>sin</option>
+                                </l>
+                                <block var="count"/></block>
+                        </block>
+                    </block>
+                    <block s="newSizeOfCurrent">
+                        <block var="scale"/></block>
+                    <block s="doStamp"></block>
+                    <block s="doChangeVar">
+                        <l>count</l>
+                        <block s="reportSum">
+                            <l>1</l>
+                            <block var="straightness"/></block>
+                    </block>
+                </script>
+            </block>
+        </script>
+    </block-definition>
+</blocks>

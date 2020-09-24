@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2019-October-09';
+modules.cloud = '2020-May-17';
 
 // Global stuff
 
@@ -44,20 +44,61 @@ var Cloud;
 
 function Cloud() {
     this.init();
+    this.getCSRFToken();
 }
 
 Cloud.prototype.init = function () {
-    this.apiBasePath = '/api/v1';
-    this.url = this.determineCloudDomain() + this.apiBasePath;
+    this.apiBasePath = '/api';
+    this.url = this.determineCloudDomain();
     this.username = null;
+    this.user_id = null;
+    this.application_id = 97;
+    this.classroom_id = '';
+    this.dataID = '';
+    this.imgID = 1000;
+
+    if (typeof config !== 'undefined') {
+        if (config.urls !== undefined) {
+            if (config.urls.create_project_url !== undefined) {
+                this.create_project_url = config.urls.create_project_url;
+            }
+            if (config.urls.create_file_url !== undefined) {
+                this.create_file_url = config.urls.create_file_url;
+            }
+            if (config.urls.list_project_url !== undefined) {
+                this.list_project_url = config.urls.list_project_url;
+            }
+            if (config.urls.login_url !== undefined) {
+                this.login_url = config.urls.login_url
+            }
+            if (config.urls.user_detail_url !== undefined) {
+                this.user_detail_url = config.urls.user_detail_url;
+            }
+            this.user_api_detail_url = config.urls.user_api_detail_url;
+            if (config.urls.project_url_root !== undefined) {
+                this.project_url_root = config.urls.project_url_root;
+            }
+        }
+
+        if (config.project !== undefined) {
+            if (config.project.project_url !== undefined) {
+                this.project_url = config.project.project_url;
+            }
+            if (config.project.project_id !== undefined) {
+                this.project_id = config.project.project_id;
+            }
+        }
+    }
+
+
 };
 
 // Projects larger than this are rejected.
 Cloud.MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 Cloud.prototype.knownDomains = {
-    'Snap!Cloud' : 'https://snap.berkeley.edu',
-    'Snap!Cloud (cs10)' : 'https://snap-cloud.cs10.org',
+    'Snap!Cloud': '',
+    'Snap!Cloud (cs10)': 'https://snap-cloud.cs10.org',
     'Snap!Cloud (staging)': 'https://snap-staging.cs10.org',
     'localhost': 'http://localhost:8080',
     'localhost (secure)': 'https://localhost:4431'
@@ -76,7 +117,9 @@ Cloud.prototype.determineCloudDomain = function () {
         cloudDomain = this.defaultDomain,
         domainMap = this.knownDomains;
 
-    if (metaTag) { return metaTag.getAttribute('location'); }
+    if (metaTag) {
+        return metaTag.getAttribute('location');
+    }
 
     Object.keys(domainMap).some(function (name) {
         var server = domainMap[name];
@@ -111,7 +154,9 @@ Cloud.isMatchingDomain = function (client, server) {
 
 Cloud.prototype.parseDict = function (src) {
     var dict = {};
-    if (!src) {return dict; }
+    if (!src) {
+        return dict;
+    }
     src.split("&").forEach(function (entry) {
         var pair = entry.split("="),
             key = decodeURIComponent(pair[0]),
@@ -125,12 +170,14 @@ Cloud.prototype.encodeDict = function (dict) {
     var str = '',
         pair,
         key;
-    if (!dict) {return null; }
+    if (!dict) {
+        return null;
+    }
     for (key in dict) {
         if (dict.hasOwnProperty(key)) {
-            pair = encodeURIComponent(key)
-                + '='
-                + encodeURIComponent(dict[key]);
+            pair = encodeURIComponent(key) +
+                '=' +
+                encodeURIComponent(dict[key]);
             if (str.length > 0) {
                 str += '&';
             }
@@ -163,13 +210,14 @@ Cloud.prototype.request = function (
     wantsRawResponse,
     body) {
 
+
+
     var request = new XMLHttpRequest(),
         myself = this,
         fullPath = this.url +
-            (path.indexOf('%username') > -1 ?
-                path.replace('%username', encodeURIComponent(this.username)) :
-                path);
-
+        (path.indexOf('%user_id') > -1 ?
+            path.replace('%user_id', encodeURIComponent(this.user_id)) :
+            path);
     try {
         request.open(
             method,
@@ -180,18 +228,19 @@ Cloud.prototype.request = function (
             'Content-Type',
             'application/json; charset=utf-8'
         );
+        // request.setRequestHeader('X-CSRFToken', csrftoken);
         request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
                     var response =
                         (!wantsRawResponse ||
-                        (request.responseText.indexOf('{"errors"') === 0)) ?
-                            JSON.parse(request.responseText) :
-                            request.responseText;
+                            (request.responseText.indexOf('{"errors"') === 0)) ?
+                        JSON.parse(request.responseText) :
+                        request.responseText;
 
                     if (response.errors) {
-                       onError.call(
+                        onError.call(
                             null,
                             response.errors[0],
                             errorMsg
@@ -259,8 +308,10 @@ Cloud.prototype.initSession = function (onSuccess) {
     }
     this.request(
         'POST',
-        '/init',
-        function () { myself.checkCredentials(onSuccess); },
+        '',
+        function () {
+            myself.checkCredentials(onSuccess);
+        },
         function () {},
         null,
         true
@@ -273,12 +324,14 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
         function (user) {
             if (user.username) {
                 myself.username = user.username;
-                myself.verified = user.verified;
+                myself.user_id = user.id;
+                myself.verified = true; //Since we don't have verified statuses for users, forcing true for now...
             }
             if (onSuccess) {
-            	onSuccess.call(
+                onSuccess.call(
                     null,
                     user.username,
+                    user.id,
                     user.role,
                     response ? JSON.parse(response) : null
                 );
@@ -290,8 +343,8 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
 
 Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
     this.request(
-    	'GET',
-        '/users/c',
+        'GET',
+        this.apiBasePath + '/users/c',
         onSuccess,
         onError,
         'Could not retrieve current user'
@@ -300,8 +353,8 @@ Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
 
 Cloud.prototype.getUser = function (username, onSuccess, onError) {
     this.request(
-    	'GET',
-        '/users/' + encodeURIComponent(username),
+        'GET',
+        this.apiBasePath + '/users/' + encodeURIComponent(username),
         onSuccess,
         onError,
         'Could not retrieve user'
@@ -310,41 +363,43 @@ Cloud.prototype.getUser = function (username, onSuccess, onError) {
 
 Cloud.prototype.logout = function (onSuccess, onError) {
     this.username = null;
-    this.request(
-        'POST',
-        '/logout',
-        onSuccess,
-        onError,
-        'logout failed'
-    );
+    this.getCSRFToken();
+    $.post('/accounts/logout/', {}, onSuccess, 'json').fail(onError);
 };
 
 Cloud.prototype.login = function (
-	username,
+    username,
     password,
     persist,
     onSuccess,
     onError
 ) {
     var myself = this;
-    this.request(
-        'POST',
-        '/users/' + encodeURIComponent(username) + '/login?' +
-            this.encodeDict({
-                persist: persist
-            }),
-        function (response) {
-            myself.checkCredentials(onSuccess, onError, response);
-        },
-        onError,
-        'login failed',
-        'false', // wants raw response
-        hex_sha512(password) // password travels inside the body
-    );
+    let myCallBack = function (data, textStatus, jqXHR) {
+        myself.getCSRFToken();
+        $.ajax({
+            dataType: "json",
+            url: myself.apiBasePath + '/user',
+            success: function (data) {
+                myself.user_id = data.id;
+                myself.username = data.username;
+                onSuccess(data, textStatus, jqXHR);
+            },
+        });
+
+    };
+    myself.getCSRFToken();
+    $.post('/accounts/login/', {
+        'login': username,
+        'password': password
+    }, myCallBack).fail(function (errorCall) {
+        alert("Your username or password was incorrect. Please try again.");
+        return errorCall;
+    });
 };
 
 Cloud.prototype.signup = function (
-	username,
+    username,
     password,
     passwordRepeat,
     email,
@@ -364,7 +419,7 @@ Cloud.prototype.signup = function (
 };
 
 Cloud.prototype.changePassword = function (
-	password,
+    password,
     newPassword,
     passwordRepeat,
     onSuccess,
@@ -403,6 +458,28 @@ Cloud.prototype.resendVerification = function (username, onSuccess, onError) {
     );
 };
 
+Cloud.prototype.updateURL = function (URL) {
+    if (window.history !== undefined && window.history.pushState !== undefined) {
+        window.history.pushState({}, "", "/projects/" + URL + "/run");
+    }
+};
+
+Cloud.prototype.dataURItoBlob = function (dataURI, type) {
+    let binary;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        binary = atob(dataURI.split(',')[1]);
+    else
+        binary = unescape(dataURI.split(',')[1]);
+    //var binary = atob(dataURI.split(',')[1]);
+    let array = [];
+    for (var i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], {
+        type: type
+    });
+}
+
 
 // Projects
 
@@ -413,18 +490,39 @@ Cloud.prototype.saveProject = function (projectName, body, onSuccess, onError) {
     this.checkCredentials(
         function (username) {
             if (username) {
-                myself.request(
-                    'POST',
-                    '/projects/' +
-                        encodeURIComponent(username) +
-                        '/' +
-                        encodeURIComponent(projectName),
-                    onSuccess,
-                    onError,
-                    'Project could not be saved',
-                    false,
-                    JSON.stringify(body) // POST body
-                );
+                let xml_string = 'data:text/xml,' + encodeURIComponent(body.xml);
+                let xml_blob = myself.dataURItoBlob(xml_string, 'text/xml');
+                let xml = new FormData();
+                xml.append('file', xml_blob);
+
+                let img_string = body.thumbnail;
+                let img_blob = myself.dataURItoBlob(img_string, 'image/png');
+                let img = new FormData();
+                img.append('file', img_blob);
+
+                let xml_id, img_id;
+                let completed = 0;
+
+                let successXML = function (data) {
+                    completed++;
+                    xml_id = data.id;
+                    if (completed === 2) {
+                        myself.createProject(projectName, xml_id, img_id, onSuccess, onError);
+                    }
+                }
+
+                let successIMG = function (data) {
+                    completed++;
+                    img_id = data.id;
+                    if (completed === 2) {
+                        myself.createProject(projectName, xml_id, img_id, onSuccess, onError);
+                    }
+                }
+
+                myself.saveFile(img, successIMG, onError);
+                myself.saveFile(xml, successXML, onError);
+
+
             } else {
                 onError.call(this, 'You are not logged in', 'Snap!Cloud');
             }
@@ -432,11 +530,52 @@ Cloud.prototype.saveProject = function (projectName, body, onSuccess, onError) {
     );
 };
 
+Cloud.prototype.saveFile = function (file, onSuccess, onError) {
+    $.ajax({
+        type: 'PUT',
+        url: this.apiBasePath + '/files/',
+        data: file,
+        processData: false,
+        contentType: false,
+        success: onSuccess,
+    }).fail(onError);
+};
+
+Cloud.prototype.createProject = function (projectName, dataNum, imgNum, onSuccess, onError) {
+    if (this.project_id !== undefined) {
+        $.ajax({
+            type: 'PUT',
+            url: this.apiBasePath + '/projects/' + this.project_id + '/',
+            data: {
+                name: projectName,
+                description: '',
+                classroom: dataNum.classroom_id,
+                application: this.application_id,
+                project: dataNum,
+                screenshot: imgNum
+            },
+            success: onSuccess,
+            dataType: 'json'
+        }).fail(onError);
+    } else {
+        $.post(this.apiBasePath + '/projects/', {
+            name: projectName,
+            description: '',
+            classroom: this.classroom_id,
+            application: this.application_id,
+            project: dataNum,
+            screenshot: imgNum,
+        }, onSuccess, 'json').fail(onError);
+    }
+
+
+}
+
 Cloud.prototype.getProjectList = function (onSuccess, onError, withThumbnail) {
-    var path = '/projects/%username?updatingnotes=true';
+    var path = this.apiBasePath + '/projects/?owner=%user_id';
 
     if (withThumbnail) {
-        path += '&withthumbnail=true';
+        // path += '&withthumbnail=true';
     }
 
     this.withCredentialsRequest(
@@ -449,7 +588,7 @@ Cloud.prototype.getProjectList = function (onSuccess, onError, withThumbnail) {
 };
 
 Cloud.prototype.getPublishedProjectList = function (
-	username,
+    username,
     page,
     pageSize,
     searchTerm,
@@ -457,9 +596,17 @@ Cloud.prototype.getPublishedProjectList = function (
     onError,
     withThumbnail
 ) {
-    var path = '/projects' +
-    		(username ? '/' + encodeURIComponent(username) : '') +
-	        '?ispublished=true';
+    var path = this.apiBasePath + '/projects' +
+        (username ? '/' + encodeURIComponent(username) : '') +
+        '?ispublished=true';
+
+    if (!username) {
+        // When requesting the global list of published projects, filter out
+        // those with project names that are typical of online courses like
+        // Teals or BJC. When requesting a user's published projects, show them
+        // all.
+        path += '&filtered=true';
+    }
 
     if (withThumbnail) {
         path += '&withthumbnail=true';
@@ -483,18 +630,18 @@ Cloud.prototype.getPublishedProjectList = function (
 };
 
 Cloud.prototype.getThumbnail = function (
-	username,
+    username,
     projectName,
     onSuccess,
     onError
 ) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'GET',
-        '/projects/' +
-            (username ? encodeURIComponent(username) : '%username') +
-            '/' +
-            encodeURIComponent(projectName) +
-            '/thumbnail',
+        this.apiBasePath + '/projects/' +
+        (username ? encodeURIComponent(username) : '%user_id') +
+        '/' +
+        encodeURIComponent(projectName) +
+        '/thumbnail',
         onSuccess,
         onError,
         'Could not fetch thumbnail',
@@ -502,21 +649,19 @@ Cloud.prototype.getThumbnail = function (
     );
 };
 
-Cloud.prototype.getProject = function (projectName, delta, onSuccess, onError) {
+Cloud.prototype.getProject = function (proj, delta, onSuccess, onError) {
     this.withCredentialsRequest(
         'GET',
-        '/projects/%username/' +
-            encodeURIComponent(projectName) +
-            (delta ? '?delta=' + delta : ''),
+        proj.project_url,
         onSuccess,
         onError,
-        'Could not fetch project ' + projectName,
+        'Could not fetch project ' + proj.id,
         true
     );
 };
 
 Cloud.prototype.getPublicProject = function (
-	projectName,
+    projectName,
     username,
     onSuccess,
     onError
@@ -524,9 +669,9 @@ Cloud.prototype.getPublicProject = function (
     this.request(
         'GET',
         '/projects/' +
-            encodeURIComponent(username) +
-            '/' +
-            encodeURIComponent(projectName),
+        encodeURIComponent(username) +
+        '/' +
+        encodeURIComponent(projectName),
         onSuccess,
         onError,
         'Could not fetch project ' + projectName,
@@ -535,7 +680,7 @@ Cloud.prototype.getPublicProject = function (
 };
 
 Cloud.prototype.getProjectMetadata = function (
-	projectName,
+    projectName,
     username,
     onSuccess,
     onError
@@ -543,10 +688,10 @@ Cloud.prototype.getProjectMetadata = function (
     this.request(
         'GET',
         '/projects/' +
-            encodeURIComponent(username) +
-            '/' +
-            encodeURIComponent(projectName) +
-            '/metadata',
+        encodeURIComponent(username) +
+        '/' +
+        encodeURIComponent(projectName) +
+        '/metadata',
         onSuccess,
         onError,
         'Could not fetch metadata for ' + projectName
@@ -554,15 +699,15 @@ Cloud.prototype.getProjectMetadata = function (
 };
 
 Cloud.prototype.getProjectVersionMetadata = function (
-        projectName,
+    projectName,
     onSuccess,
     onError
 ) {
     this.withCredentialsRequest(
         'GET',
         '/projects/%username/' +
-            encodeURIComponent(projectName) +
-            '/versions',
+        encodeURIComponent(projectName) +
+        '/versions',
         onSuccess,
         onError,
         'Could not fetch versions for project ' + projectName
@@ -570,7 +715,7 @@ Cloud.prototype.getProjectVersionMetadata = function (
 };
 
 Cloud.prototype.getRemixes = function (
-	username,
+    username,
     projectName,
     page,
     pageSize,
@@ -578,8 +723,8 @@ Cloud.prototype.getRemixes = function (
     onError
 ) {
     var path = '/projects/' +
-                encodeURIComponent(username) + '/' +
-                encodeURIComponent(projectName) + '/remixes';
+        encodeURIComponent(username) + '/' +
+        encodeURIComponent(projectName) + '/remixes';
 
     if (page) {
         path += '?page=' + page + '&pagesize=' + (pageSize || 16);
@@ -595,7 +740,7 @@ Cloud.prototype.getRemixes = function (
 };
 
 Cloud.prototype.deleteProject = function (
-	projectName,
+    projectName,
     username,
     onSuccess,
     onError
@@ -603,9 +748,9 @@ Cloud.prototype.deleteProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'DELETE',
         '/projects/' +
-            (username ? encodeURIComponent(username) : '%username') +
-            '/' +
-            encodeURIComponent(projectName),
+        (username ? encodeURIComponent(username) : '%username') +
+        '/' +
+        encodeURIComponent(projectName),
         onSuccess,
         onError,
         'Could not delete project'
@@ -613,7 +758,7 @@ Cloud.prototype.deleteProject = function (
 };
 
 Cloud.prototype.shareProject = function (
-	projectName,
+    projectName,
     username,
     onSuccess,
     onError
@@ -621,10 +766,10 @@ Cloud.prototype.shareProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-            (username ? encodeURIComponent(username) : '%username') +
-            '/' +
-            encodeURIComponent(projectName) +
-            '/metadata?ispublic=true',
+        (username ? encodeURIComponent(username) : '%username') +
+        '/' +
+        encodeURIComponent(projectName) +
+        '/metadata?ispublic=true',
         onSuccess,
         onError,
         'Could not share project'
@@ -632,7 +777,7 @@ Cloud.prototype.shareProject = function (
 };
 
 Cloud.prototype.unshareProject = function (
-	projectName,
+    projectName,
     username,
     onSuccess,
     onError
@@ -640,10 +785,10 @@ Cloud.prototype.unshareProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-            (username ? encodeURIComponent(username) : '%username') +
-            '/' +
-            encodeURIComponent(projectName) +
-            '/metadata?ispublic=false&ispublished=false',
+        (username ? encodeURIComponent(username) : '%username') +
+        '/' +
+        encodeURIComponent(projectName) +
+        '/metadata?ispublic=false&ispublished=false',
         onSuccess,
         onError,
         'Could not unshare project'
@@ -651,7 +796,7 @@ Cloud.prototype.unshareProject = function (
 };
 
 Cloud.prototype.publishProject = function (
-	projectName,
+    projectName,
     username,
     onSuccess,
     onError
@@ -659,10 +804,10 @@ Cloud.prototype.publishProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-            (username ? encodeURIComponent(username) : '%username') +
-            '/' +
-            encodeURIComponent(projectName) +
-            '/metadata?ispublished=true',
+        (username ? encodeURIComponent(username) : '%username') +
+        '/' +
+        encodeURIComponent(projectName) +
+        '/metadata?ispublished=true',
         onSuccess,
         onError,
         'Could not publish project'
@@ -670,7 +815,7 @@ Cloud.prototype.publishProject = function (
 };
 
 Cloud.prototype.unpublishProject = function (
-	projectName,
+    projectName,
     username,
     onSuccess,
     onError
@@ -678,10 +823,10 @@ Cloud.prototype.unpublishProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-            (username ? encodeURIComponent(username) : '%username') +
-            '/' +
-            encodeURIComponent(projectName) +
-            '/metadata?ispublished=false',
+        (username ? encodeURIComponent(username) : '%username') +
+        '/' +
+        encodeURIComponent(projectName) +
+        '/metadata?ispublished=false',
         onSuccess,
         onError,
         'Could not unpublish project'
@@ -689,7 +834,7 @@ Cloud.prototype.unpublishProject = function (
 };
 
 Cloud.prototype.updateNotes = function (
-	projectName,
+    projectName,
     notes,
     onSuccess,
     onError
@@ -697,18 +842,20 @@ Cloud.prototype.updateNotes = function (
     this.withCredentialsRequest(
         'POST',
         '/projects/%username/' +
-            encodeURIComponent(projectName) +
-            '/metadata',
+        encodeURIComponent(projectName) +
+        '/metadata',
         onSuccess,
         onError,
         'Could not update project notes',
         false, // wants raw response
-        JSON.stringify({ notes: notes })
+        JSON.stringify({
+            notes: notes
+        })
     );
 };
 
 Cloud.prototype.updateProjectName = function (
-	projectName,
+    projectName,
     newName,
     onSuccess,
     onError
@@ -716,20 +863,22 @@ Cloud.prototype.updateProjectName = function (
     this.withCredentialsRequest(
         'POST',
         '/projects/%username/' +
-            encodeURIComponent(projectName) +
-            '/metadata',
+        encodeURIComponent(projectName) +
+        '/metadata',
         onSuccess,
         onError,
         'Could not update project name',
         false, // wants raw response
-        JSON.stringify({ projectname: newName })
+        JSON.stringify({
+            projectname: newName
+        })
     );
 };
 
 // Collections
 
 Cloud.prototype.newCollection = function (
-        collectionName,
+    collectionName,
     onSuccess,
     onError
 ) {
@@ -743,7 +892,7 @@ Cloud.prototype.newCollection = function (
 };
 
 Cloud.prototype.getCollectionMetadata = function (
-        collectionUsername,
+    collectionUsername,
     collectionName,
     onSuccess,
     onError
@@ -751,11 +900,11 @@ Cloud.prototype.getCollectionMetadata = function (
     this.request(
         'GET',
         '/users/' +
-            (collectionUsername ?
-                encodeURIComponent(collectionUsername) :
-                '%username') +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/metadata',
+        (collectionUsername ?
+            encodeURIComponent(collectionUsername) :
+            '%username') +
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/metadata',
         onSuccess,
         onError,
         'Could not fetch metadata for ' + collectionName
@@ -772,11 +921,11 @@ Cloud.prototype.getCollectionProjects = function (
     withThumbnail
 ) {
     var path = '/users/' +
-                (collectionUsername ?
-                    encodeURIComponent(collectionUsername) :
-                    '%username') +
-                '/collections/' + encodeURIComponent(collectionName) +
-                '/projects';
+        (collectionUsername ?
+            encodeURIComponent(collectionUsername) :
+            '%username') +
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/projects';
 
     if (page) {
         path += '?page=' + page + '&pagesize=' + (pageSize || 16);
@@ -805,8 +954,8 @@ Cloud.prototype.setCollectionThumbnail = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/thumbnail?id=' + encodeURIComponent(thumbnailId),
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/thumbnail?id=' + encodeURIComponent(thumbnailId),
         onSuccess,
         onError,
         'Could not set project thumbnail'
@@ -814,7 +963,7 @@ Cloud.prototype.setCollectionThumbnail = function (
 };
 
 Cloud.prototype.updateCollectionDescription = function (
-	collectionUsername,
+    collectionUsername,
     collectionName,
     description,
     onSuccess,
@@ -823,18 +972,20 @@ Cloud.prototype.updateCollectionDescription = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/metadata',
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/metadata',
         onSuccess,
         onError,
         'Could not update collection description',
         false, // wants raw response
-        JSON.stringify({ description: description })
+        JSON.stringify({
+            description: description
+        })
     );
 };
 
 Cloud.prototype.updateCollectionName = function (
-	collectionUsername,
+    collectionUsername,
     collectionName,
     newName,
     onSuccess,
@@ -843,18 +994,20 @@ Cloud.prototype.updateCollectionName = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/metadata',
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/metadata',
         onSuccess,
         onError,
         'Could not update collection name',
         false, // wants raw response
-        JSON.stringify({ name: newName })
+        JSON.stringify({
+            name: newName
+        })
     );
 };
 
 Cloud.prototype.shareCollection = function (
-	collectionUsername,
+    collectionUsername,
     collectionName,
     onSuccess,
     onError
@@ -862,8 +1015,8 @@ Cloud.prototype.shareCollection = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/metadata?shared=true',
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/metadata?shared=true',
         onSuccess,
         onError,
         'Could not share collection'
@@ -871,7 +1024,7 @@ Cloud.prototype.shareCollection = function (
 };
 
 Cloud.prototype.unshareCollection = function (
-	collectionUsername,
+    collectionUsername,
     collectionName,
     onSuccess,
     onError
@@ -879,8 +1032,8 @@ Cloud.prototype.unshareCollection = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/metadata?shared=false&published=false',
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/metadata?shared=false&published=false',
         onSuccess,
         onError,
         'Could not unshare collection'
@@ -888,7 +1041,7 @@ Cloud.prototype.unshareCollection = function (
 };
 
 Cloud.prototype.publishCollection = function (
-	collectionUsername,
+    collectionUsername,
     collectionName,
     onSuccess,
     onError
@@ -896,8 +1049,8 @@ Cloud.prototype.publishCollection = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/metadata?published=true',
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/metadata?published=true',
         onSuccess,
         onError,
         'Could not publish collection'
@@ -905,7 +1058,7 @@ Cloud.prototype.publishCollection = function (
 };
 
 Cloud.prototype.unpublishCollection = function (
-	collectionUsername,
+    collectionUsername,
     collectionName,
     onSuccess,
     onError
@@ -913,8 +1066,8 @@ Cloud.prototype.unpublishCollection = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/metadata?published=false',
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/metadata?published=false',
         onSuccess,
         onError,
         'Could not unpublish collection'
@@ -922,7 +1075,7 @@ Cloud.prototype.unpublishCollection = function (
 };
 
 Cloud.prototype.addProjectToCollection = function (
-        collectionUsername,
+    collectionUsername,
     collectionName,
     projectUsername,
     projectName,
@@ -932,8 +1085,8 @@ Cloud.prototype.addProjectToCollection = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/projects',
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/projects',
         onSuccess,
         onError,
         'Could not add project to collection',
@@ -946,7 +1099,7 @@ Cloud.prototype.addProjectToCollection = function (
 };
 
 Cloud.prototype.removeProjectFromCollection = function (
-        collectionUsername,
+    collectionUsername,
     collectionName,
     projectId,
     onSuccess,
@@ -955,8 +1108,8 @@ Cloud.prototype.removeProjectFromCollection = function (
     this.withCredentialsRequest(
         'DELETE',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/projects/' + encodeURIComponent(projectId),
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/projects/' + encodeURIComponent(projectId),
         onSuccess,
         onError,
         'Could not remove project from collection'
@@ -964,7 +1117,7 @@ Cloud.prototype.removeProjectFromCollection = function (
 };
 
 Cloud.prototype.getUserCollections = function (
-        collectionUsername,
+    collectionUsername,
     page,
     pageSize,
     searchTerm,
@@ -972,23 +1125,21 @@ Cloud.prototype.getUserCollections = function (
     onError
 ) {
     this[(collectionUsername !== this.username) ?
-            'request' :
-            'withCredentialsRequest'](
+        'request' :
+        'withCredentialsRequest'](
         'GET',
         '/users/' +
-            (collectionUsername ?
-                encodeURIComponent(collectionUsername) :
-                '%username') +
-            '/collections?' +
-            this.encodeDict(
-                page > 0 ?
-                    {
-                        page: page,
-                        pagesize: pageSize || 16,
-                        matchtext:
-                            searchTerm ? encodeURIComponent(searchTerm) : ''
-                    } : {}
-            ),
+        (collectionUsername ?
+            encodeURIComponent(collectionUsername) :
+            '%username') +
+        '/collections?' +
+        this.encodeDict(
+            page > 0 ? {
+                page: page,
+                pagesize: pageSize || 16,
+                matchtext: searchTerm ? encodeURIComponent(searchTerm) : ''
+            } : {}
+        ),
         onSuccess,
         onError,
         'Could not fetch collections'
@@ -996,7 +1147,7 @@ Cloud.prototype.getUserCollections = function (
 };
 
 Cloud.prototype.getCollectionsContainingProject = function (
-        username,
+    username,
     projectName,
     page,
     pageSize,
@@ -1004,8 +1155,8 @@ Cloud.prototype.getCollectionsContainingProject = function (
     onError
 ) {
     var path = '/projects/' +
-                encodeURIComponent(username) + '/' +
-                encodeURIComponent(projectName) + '/collections';
+        encodeURIComponent(username) + '/' +
+        encodeURIComponent(projectName) + '/collections';
 
     if (page) {
         path += '?page=' + page + '&pagesize=' + (pageSize || 16);
@@ -1021,7 +1172,7 @@ Cloud.prototype.getCollectionsContainingProject = function (
 };
 
 Cloud.prototype.getCollections = function (
-        page,
+    page,
     pageSize,
     searchTerm,
     onSuccess,
@@ -1032,7 +1183,9 @@ Cloud.prototype.getCollections = function (
         pagesize: page ? pageSize || 16 : '',
     };
 
-    if (searchTerm) { dict.matchtext = encodeURIComponent(searchTerm); }
+    if (searchTerm) {
+        dict.matchtext = encodeURIComponent(searchTerm);
+    }
 
     this.request(
         'GET',
@@ -1044,7 +1197,7 @@ Cloud.prototype.getCollections = function (
 };
 
 Cloud.prototype.deleteCollection = function (
-        collectionUsername,
+    collectionUsername,
     collectionName,
     onSuccess,
     onError
@@ -1052,7 +1205,7 @@ Cloud.prototype.deleteCollection = function (
     this.withCredentialsRequest(
         'DELETE',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName),
+        '/collections/' + encodeURIComponent(collectionName),
         onSuccess,
         onError,
         'Could not remove collection'
@@ -1060,7 +1213,7 @@ Cloud.prototype.deleteCollection = function (
 };
 
 Cloud.prototype.addEditorToCollection = function (
-        collectionUsername,
+    collectionUsername,
     collectionName,
     editorUsername,
     onSuccess,
@@ -1069,8 +1222,8 @@ Cloud.prototype.addEditorToCollection = function (
     this.withCredentialsRequest(
         'POST',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/editors',
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/editors',
         onSuccess,
         onError,
         'Could not add editor to collection',
@@ -1082,7 +1235,7 @@ Cloud.prototype.addEditorToCollection = function (
 };
 
 Cloud.prototype.removeEditorFromCollection = function (
-        collectionUsername,
+    collectionUsername,
     collectionName,
     editorUsername,
     onSuccess,
@@ -1091,8 +1244,8 @@ Cloud.prototype.removeEditorFromCollection = function (
     this.withCredentialsRequest(
         'DELETE',
         '/users/' + encodeURIComponent(collectionUsername) +
-            '/collections/' + encodeURIComponent(collectionName) +
-            '/editors/' + encodeURIComponent(editorUsername),
+        '/collections/' + encodeURIComponent(collectionName) +
+        '/editors/' + encodeURIComponent(editorUsername),
         onSuccess,
         onError,
         'Could not remove editor from collection'
@@ -1111,4 +1264,66 @@ Cloud.prototype.showProjectPath = function (username, projectname) {
         user: username,
         project: projectname
     });
+};
+
+
+Cloud.prototype.getCSRFToken = function () {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    function sameOrigin(url) {
+        // test that a given url is a same-origin URL
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                // Send the token to same-origin, relative URLs only.
+                // Send the token only if the method warrants CSRF protection
+                // Using the CSRFToken value acquired earlier
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+}
+
+Cloud.prototype.getClassroomList = function (callBack, errorCall) {
+
+    let myself = this;
+    $.get(myself.apiBasePath + "/team/?user=" + myself.user_id, null,
+        function (data) {
+            callBack(data);
+        }, "json").fail(errorCall);
+
+
+
 };

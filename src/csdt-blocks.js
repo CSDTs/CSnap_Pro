@@ -1,8 +1,5 @@
 /*
-
-CSDT Custom Block Functions
-
-
+    CSDT Custom Block Functions
 */
 
 SpriteMorph.prototype.translatePercent = function (percent, direction) {
@@ -93,7 +90,7 @@ SpriteMorph.prototype.flipVertical = function(){
     this.costume = costume;
     this.flippedX = !this.flippedX;
     this.changed();
-    this.drawNew();
+    this.rerender();
     this.changed();
     this.positionTalkBubble();
 };
@@ -116,7 +113,7 @@ SpriteMorph.prototype.flipHorizontal = function(){
     this.costume = costume;
     this.flippedY = !this.flippedY;
     this.changed();
-    this.drawNew();
+    this.rerender();
     this.changed();
     this.positionTalkBubble();
 };
@@ -152,12 +149,14 @@ SpriteMorph.prototype.changeCostumeOpacity = function(opacity){
 SpriteMorph.prototype.smoothBorders = function(start, dest) {
     var tempSize = this.size,
         tempColor = this.color;
+
+        // console.log(this.lineList);
     for(line = 0; line  < this.lineList.length; line++) {
       this.size = this.lineList[line][2];
       this.color = this.lineList[line][3];
       this.drawLine(this.lineList[line][0], this.lineList[line][1], false);
-
     }
+
     this.size = tempSize;
     this.color = tempColor;
     this.lineList = [];
@@ -170,9 +169,8 @@ SpriteMorph.prototype.getBorderSize = function () {
 
 SpriteMorph.prototype.setBorderSize = function (size) {
     // pen size
-    if (!isNaN(size)) {
-        this.borderSize = Math.min(Math.max(+size, 0.0001), 1000);
-    }
+        this.borderSize = size;
+
 };
 
 
@@ -236,3 +234,15 @@ SpriteMorph.prototype.changeBorderShade = function (delta) {
 
 };
 
+SpriteMorph.prototype.drawBorderedLine = function(start,dest) { //drawLine wrapper to draw line and border in one go
+    this.drawLine(start,dest,true);
+    this.drawLine(start,dest,false);
+
+    if(this.isDown) {
+    this.lineList[this.lineList.length] = [start, dest, this.size, this.color];
+    }
+};
+
+SpriteMorph.prototype.flatLineEnds = function(bool){
+    SpriteMorph.prototype.useFlatLineEnds = bool;
+}

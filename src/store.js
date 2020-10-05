@@ -210,10 +210,10 @@ XML_Serializer.prototype.format = function (string) {
         // value = values[(isNaN(index) ? (i += 1) : index) + 1];
 
         return spec === '@' ?
-                this.escape(value)
-                    : spec === '$' ?
-                        this.escape(value, true)
-                            : value;
+            this.escape(value) :
+            spec === '$' ?
+            this.escape(value, true) :
+            value;
     });
 };
 
@@ -289,11 +289,11 @@ SnapSerializer.prototype.init = function () {
 XML_Serializer.prototype.mediaXML = function (name) {
     // under construction....
     var xml = '<media name="' +
-            (name || 'untitled') +
-            '" app="' + this.app +
-            '" version="' +
-            this.version +
-            '">';
+        (name || 'untitled') +
+        '" app="' + this.app +
+        '" version="' +
+        this.version +
+        '">';
     this.media.forEach(object => {
         var str = object.toXML(this).replace(
             '~',
@@ -322,8 +322,8 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
         ide.inform(
             app + ' Project',
             'This project has been created by a different app:\n\n' +
-                app +
-                '\n\nand may be incompatible or fail to load here.'
+            app +
+            '\n\nand may be incompatible or fail to load here.'
         );
     }
     return this.rawLoadProjectModel(xmlNode, remixID);
@@ -331,13 +331,17 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
 
 SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     // private
-    var project = {sprites: {}},
+    var project = {
+            sprites: {}
+        },
         model,
         nameID;
 
     this.project = project;
 
-    model = {project: xmlNode };
+    model = {
+        project: xmlNode
+    };
     if (+xmlNode.attributes.version > this.version) {
         throw 'Project uses newer version of Serializer';
     }
@@ -346,6 +350,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
 
     this.objects = {};
     project.name = model.project.attributes.name;
+
     if (!project.name) {
         nameID = 1;
         while (
@@ -369,14 +374,30 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
 
     model.stage = model.project.require('stage');
     StageMorph.prototype.frameRate = 0;
+
     project.stage = new StageMorph(project.globalVariables);
     project.stage.remixID = remixID;
+
     if (Object.prototype.hasOwnProperty.call(
             model.stage.attributes,
             'id'
         )) {
         this.objects[model.stage.attributes.id] = project.stage;
     }
+
+    // CSDT 
+    if (model.stage.attributes.hideCostumesTab) {
+        StageMorph.prototype.hideCostumesTab = model.stage.attributes.hideCostumesTab === 'true';
+    }else{
+        StageMorph.prototype.hideCostumesTab = false;
+    }
+
+    if (model.stage.attributes.decategorize) {
+        StageMorph.prototype.decategorize = model.stage.attributes.decategorize === 'true';
+    }else{
+        StageMorph.prototype.decategorize = false;
+    }
+
     if (model.stage.attributes.name) {
         project.stage.name = model.stage.attributes.name;
     }
@@ -575,8 +596,8 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             watcher = new WatcherMorph(
                 model.attributes['var'],
                 color,
-                isNil(target) ? project.globalVariables
-                    : target.variables,
+                isNil(target) ? project.globalVariables :
+                target.variables,
                 model.attributes['var'],
                 hidden
             );
@@ -601,12 +622,14 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
             ))
         );
         project.stage.add(watcher);
-        watcher.onNextStep = function () {this.currentValue = null; };
+        watcher.onNextStep = function () {
+            this.currentValue = null;
+        };
 
         // set watcher's contentsMorph's extent if it is showing a list and
         // its monitor dimensions are given
         if (watcher.currentValue instanceof List &&
-                watcher.cellMorph.contentsMorph) {
+            watcher.cellMorph.contentsMorph) {
             extX = model.attributes.extX;
             if (extX) {
                 watcher.cellMorph.contentsMorph.setWidth(+extX);
@@ -675,7 +698,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         throw 'Module uses newer version of Serializer';
     }
     model.childrenNamed('sprite').forEach(model => {
-        var sprite  = new SpriteMorph(project.globalVariables);
+        var sprite = new SpriteMorph(project.globalVariables);
 
         if (model.attributes.id) {
             this.objects[model.attributes.id] = sprite;
@@ -916,8 +939,8 @@ SnapSerializer.prototype.loadVariables = function (varFrame, element, object) {
         value = child.children[0];
         v = new Variable();
         v.isTransient = (child.attributes.transient === 'true');
-        v.value = (v.isTransient || !value ) ? 0
-                : this.loadValue(value, object);
+        v.value = (v.isTransient || !value) ? 0 :
+            this.loadValue(value, object);
         varFrame.vars[child.attributes.name] = v;
     });
 };
@@ -970,8 +993,8 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                     [
                         child.attributes.type,
                         contains(['%b', '%boolUE'], child.attributes.type) ?
-                            (child.contents ? child.contents === 'true' : null)
-                                : child.contents,
+                        (child.contents ? child.contents === 'true' : null) :
+                        child.contents,
                         options ? options.contents : undefined,
                         child.attributes.readonly === 'true'
                     ]
@@ -1019,8 +1042,8 @@ SnapSerializer.prototype.populateCustomBlocks = function (
         if (child.tag !== 'block-definition') {
             return;
         }
-        definition = isGlobal ? object.globalBlocks[index]
-                : object.customBlocks[index];
+        definition = isGlobal ? object.globalBlocks[index] :
+            object.customBlocks[index];
         script = child.childNamed('script');
         if (script) {
             definition.body = new Context(
@@ -1114,7 +1137,6 @@ SnapSerializer.prototype.loadScript = function (model, object) {
         this.project.stage = object.parentThatIsA(StageMorph);
         this.project.targetStage = this.project.stage;
     }
-
     model.children.forEach(child => {
         nextBlock = this.loadBlock(child, false, object);
         if (!nextBlock) {
@@ -1126,8 +1148,8 @@ SnapSerializer.prototype.loadScript = function (model, object) {
             } else {
                 console.log(
                     'SNAP: expecting a command but getting a reporter:\n' +
-                        '  ' + block.blockSpec + '\n' +
-                        '  ' + nextBlock.blockSpec
+                    '  ' + block.blockSpec + '\n' +
+                    '  ' + nextBlock.blockSpec
                 );
                 return topBlock;
             }
@@ -1162,17 +1184,17 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                 model.attributes['var']
             );
         } else {
-        /*
-        // disable JavaScript functions, commented out for now
-        if (model.attributes.s === 'reportJSFunction' &&
-                !Process.prototype.enableJS) {
-            if (window.confirm('enable JavaScript?')) {
-                Process.prototype.enableJS = true;
-            } else {
-                throw new Error('JavaScript is not enabled');
+            /*
+            // disable JavaScript functions, commented out for now
+            if (model.attributes.s === 'reportJSFunction' &&
+                    !Process.prototype.enableJS) {
+                if (window.confirm('enable JavaScript?')) {
+                    Process.prototype.enableJS = true;
+                } else {
+                    throw new Error('JavaScript is not enabled');
+                }
             }
-        }
-        */
+            */
             block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
             migration = SpriteMorph.prototype.blockMigrations[
                 model.attributes.s
@@ -1201,18 +1223,18 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                 receiver.customBlocks,
                 block => block.blockSpec() === model.attributes.s
             ) || (
-            	receiver.inheritedMethodsCache ?
-                	detect(
-                        receiver.inheritedMethodsCache,
-                        block => block.blockSpec() === model.attributes.s
-                	)
-          		: null
-          	);
+                receiver.inheritedMethodsCache ?
+                detect(
+                    receiver.inheritedMethodsCache,
+                    block => block.blockSpec() === model.attributes.s
+                ) :
+                null
+            );
         }
         if (!info || !contains(
-        		// catch other forks' blocks
-        		SpriteMorph.prototype.categories, info.category
-        )) {
+                // catch other forks' blocks
+                SpriteMorph.prototype.categories, info.category
+            )) {
             return this.obsoleteBlock(isReporter);
         }
         block = info.type === 'command' ? new CustomCommandBlockMorph(
@@ -1247,8 +1269,8 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
 
 SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
     // private
-    var block = isReporter ? new ReporterBlockMorph()
-            : new CommandBlockMorph();
+    var block = isReporter ? new ReporterBlockMorph() :
+        new CommandBlockMorph();
     block.selector = 'errorObsolete';
     block.color = new Color(200, 0, 20);
     block.setSpec('Obsolete!');
@@ -1266,7 +1288,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         inp = this.loadScript(model, object);
         if (inp) {
             if (block.selector === 'reifyReporter' ||
-                    block.selector === 'reifyPredicate') {
+                block.selector === 'reifyPredicate') {
                 input.replaceInput(input.children[0], inp);
                 input.fixLayout();
             } else {
@@ -1295,7 +1317,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         });
         input.fixLayout();
     } else if (model.tag === 'block' || model.tag === 'custom-block') {
-//        block.silentReplaceInput(input, this.loadBlock(model, true, object));
+        //        block.silentReplaceInput(input, this.loadBlock(model, true, object));
         block.replaceInput(input, this.loadBlock(model, true, object));
     } else if (model.tag === 'color') {
         input.setColor(this.loadColor(model.contents));
@@ -1313,7 +1335,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
 SnapSerializer.prototype.loadValue = function (model, object) {
     // private
     var v, i, lst, items, el, center, image, name, audio, option, bool, origin,
-    	wish, def,
+        wish, def,
         myself = this;
 
     function record() {
@@ -1332,273 +1354,273 @@ SnapSerializer.prototype.loadValue = function (model, object) {
     }
 
     switch (model.tag) {
-    case 'ref':
-        if (Object.prototype.hasOwnProperty.call(model.attributes, 'id')) {
-            return this.objects[model.attributes.id];
-        }
-        if (Object.prototype.hasOwnProperty.call(
-                model.attributes,
-                'mediaID'
-            )) {
-            return this.mediaDict[model.attributes.mediaID];
-        }
-        throw new Error('expecting a reference id');
-    case 'l':
-        option = model.childNamed('option');
-        if (option) {
-            return [option.contents];
-        }
-        bool = model.childNamed('bool');
-        if (bool) {
-            return this.loadValue(bool);
-        }
-        wish = model.childNamed('wish');
-        if (wish) {
-            return this.loadValue(wish);
-        }
-        return model.contents;
-    case 'bool':
-        return model.contents === 'true';
-    case 'list':
-        if (model.attributes.hasOwnProperty('linked')) {
+        case 'ref':
+            if (Object.prototype.hasOwnProperty.call(model.attributes, 'id')) {
+                return this.objects[model.attributes.id];
+            }
+            if (Object.prototype.hasOwnProperty.call(
+                    model.attributes,
+                    'mediaID'
+                )) {
+                return this.mediaDict[model.attributes.mediaID];
+            }
+            throw new Error('expecting a reference id');
+        case 'l':
+            option = model.childNamed('option');
+            if (option) {
+                return [option.contents];
+            }
+            bool = model.childNamed('bool');
+            if (bool) {
+                return this.loadValue(bool);
+            }
+            wish = model.childNamed('wish');
+            if (wish) {
+                return this.loadValue(wish);
+            }
+            return model.contents;
+        case 'bool':
+            return model.contents === 'true';
+        case 'list':
+            if (model.attributes.hasOwnProperty('linked')) {
+                if (model.attributes.struct === 'atomic') {
+                    v = Process.prototype.parseCSV(model.contents);
+                    v.becomeLinked();
+                    record();
+                    return v;
+                }
+                v = new List();
+                v.isLinked = true;
+                record();
+                lst = v;
+                items = model.childrenNamed('item');
+                items.forEach((item, i) => {
+                    var value = item.children[0];
+                    if (!value) {
+                        v.first = 0;
+                    } else {
+                        v.first = this.loadValue(value, object);
+                    }
+                    var tail = model.childNamed('list') ||
+                        model.childNamed('ref');
+                    if (tail) {
+                        v.rest = this.loadValue(tail, object);
+                    } else {
+                        if (i < (items.length - 1)) {
+                            v.rest = new List();
+                            v = v.rest;
+                            v.isLinked = true;
+                        }
+                    }
+                });
+                return lst;
+            }
             if (model.attributes.struct === 'atomic') {
                 v = Process.prototype.parseCSV(model.contents);
-                v.becomeLinked();
                 record();
                 return v;
             }
             v = new List();
-            v.isLinked = true;
             record();
-            lst = v;
-            items = model.childrenNamed('item');
-            items.forEach((item, i) => {
+            v.contents = model.childrenNamed('item').map(item => {
                 var value = item.children[0];
                 if (!value) {
-                    v.first = 0;
-                } else {
-                    v.first = this.loadValue(value, object);
+                    return 0;
                 }
-                var tail = model.childNamed('list') ||
-                    model.childNamed('ref');
-                if (tail) {
-                    v.rest = this.loadValue(tail, object);
+                return this.loadValue(value, object);
+            });
+            return v;
+        case 'sprite':
+            v = new SpriteMorph(this.project.globalVariables);
+            if (model.attributes.id) {
+                this.objects[model.attributes.id] = v;
+            }
+            if (model.attributes.name) {
+                v.name = model.attributes.name;
+                this.project.sprites[model.attributes.name] = v;
+            }
+            if (model.attributes.idx) {
+                v.idx = +model.attributes.idx;
+            }
+            if (model.attributes.color) {
+                v.color = this.loadColor(model.attributes.color);
+                v.cachedHSV = v.color.hsv();
+            }
+            if (model.attributes.pen) {
+                v.penPoint = model.attributes.pen;
+            }
+            if (model.attributes.volume) {
+                v.volume = +model.attributes.volume;
+            }
+            if (model.attributes.pan) {
+                v.pan = +model.attributes.pan;
+            }
+            this.project.stage.add(v);
+            v.scale = parseFloat(model.attributes.scale || '1');
+            v.rotationStyle = parseFloat(
+                model.attributes.rotation || '1'
+            );
+            v.isDraggable = model.attributes.draggable !== 'false';
+            v.isVisible = model.attributes.hidden !== 'true';
+            v.heading = parseFloat(model.attributes.heading) || 0;
+            v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+            this.loadObject(v, model);
+            v.fixLayout();
+
+            return v;
+        case 'context':
+            v = new Context(null);
+            record();
+            el = model.childNamed('origin');
+            if (el) {
+                el = el.childNamed('ref') || el.childNamed('sprite');
+                if (el) {
+                    v.origin = this.loadValue(el);
+                }
+            }
+            el = model.childNamed('receiver');
+            if (el) {
+                el = el.childNamed('ref') || el.childNamed('sprite');
+                if (el) {
+                    v.receiver = this.loadValue(el);
+                }
+            }
+            origin = v.origin || v.receiver || object; // for local blocks look up
+            el = model.childNamed('script');
+            if (el) {
+                v.expression = this.loadScript(el, origin);
+            } else {
+                el = model.childNamed('block') ||
+                    model.childNamed('custom-block');
+                if (el) {
+                    v.expression = this.loadBlock(el, null, origin);
                 } else {
-                    if (i < (items.length - 1)) {
-                        v.rest = new List();
-                        v = v.rest;
-                        v.isLinked = true;
+                    el = model.childNamed('l');
+                    if (el) {
+                        bool = el.childNamed('bool');
+                        if (bool) {
+                            v.expression = new BooleanSlotMorph(
+                                this.loadValue(bool)
+                            );
+                        } else {
+                            v.expression = new InputSlotMorph(el.contents);
+                        }
                     }
                 }
-            });
-            return lst;
-        }
-        if (model.attributes.struct === 'atomic') {
-            v = Process.prototype.parseCSV(model.contents);
+            }
+            if (v.expression instanceof BlockMorph) {
+                // bind empty slots to implicit formal parameters
+                i = 0;
+                v.expression.allEmptySlots().forEach(slot => {
+                    i += 1;
+                    if (slot instanceof MultiArgMorph) {
+                        slot.bindingID = ['arguments'];
+                    } else {
+                        slot.bindingID = i;
+                    }
+                });
+                // and remember the number of detected empty slots
+                v.emptySlots = i;
+            }
+            el = model.childNamed('inputs');
+            if (el) {
+                el.children.forEach(item => {
+                    if (item.tag === 'input') {
+                        v.inputs.push(item.contents);
+                    }
+                });
+            }
+            el = model.childNamed('variables');
+            if (el) {
+                this.loadVariables(v.variables, el, origin);
+            }
+            el = model.childNamed('context');
+            if (el) {
+                v.outerContext = this.loadValue(el, origin);
+            }
+            if (v.outerContext && v.receiver &&
+                !v.outerContext.variables.parentFrame) {
+                v.outerContext.variables.parentFrame = v.receiver.variables;
+            }
+            return v;
+        case 'costume':
+            center = new Point();
+            if (Object.prototype.hasOwnProperty.call(
+                    model.attributes,
+                    'center-x'
+                )) {
+                center.x = parseFloat(model.attributes['center-x']);
+            }
+            if (Object.prototype.hasOwnProperty.call(
+                    model.attributes,
+                    'center-y'
+                )) {
+                center.y = parseFloat(model.attributes['center-y']);
+            }
+            if (Object.prototype.hasOwnProperty.call(
+                    model.attributes,
+                    'name'
+                )) {
+                name = model.attributes.name;
+            }
+            if (Object.prototype.hasOwnProperty.call(
+                    model.attributes,
+                    'image'
+                )) {
+                image = new Image();
+                if (model.attributes.image.indexOf('data:image/svg+xml') === 0 &&
+                    !MorphicPreferences.rasterizeSVGs) {
+                    v = new SVG_Costume(null, name, center);
+                    image.onload = function () {
+                        v.contents = image;
+                        v.version = +new Date();
+                        if (typeof v.loaded === 'function') {
+                            v.loaded();
+                        } else {
+                            v.loaded = true;
+                        }
+                    };
+                } else {
+                    v = new Costume(null, name, center);
+                    image.onload = function () {
+                        var canvas = newCanvas(
+                                new Point(image.width, image.height),
+                                true // nonRetina
+                            ),
+                            context = canvas.getContext('2d');
+                        context.drawImage(image, 0, 0);
+                        v.contents = canvas;
+                        v.version = +new Date();
+                        if (typeof v.loaded === 'function') {
+                            v.loaded();
+                        } else {
+                            v.loaded = true;
+                        }
+                    };
+                }
+                image.src = model.attributes.image;
+            }
             record();
             return v;
-        }
-        v = new List();
-        record();
-        v.contents = model.childrenNamed('item').map(item => {
-            var value = item.children[0];
-            if (!value) {
-                return 0;
+        case 'sound':
+            audio = new Audio();
+            audio.src = model.attributes.sound;
+            v = new Sound(audio, model.attributes.name);
+            if (Object.prototype.hasOwnProperty.call(
+                    model.attributes,
+                    'mediaID'
+                )) {
+                this.mediaDict[model.attributes.mediaID] = v;
             }
-            return this.loadValue(value, object);
-        });
-        return v;
-    case 'sprite':
-        v  = new SpriteMorph(this.project.globalVariables);
-        if (model.attributes.id) {
-            this.objects[model.attributes.id] = v;
-        }
-        if (model.attributes.name) {
-            v.name = model.attributes.name;
-            this.project.sprites[model.attributes.name] = v;
-        }
-        if (model.attributes.idx) {
-            v.idx = +model.attributes.idx;
-        }
-        if (model.attributes.color) {
-            v.color = this.loadColor(model.attributes.color);
-            v.cachedHSV = v.color.hsv();
-        }
-        if (model.attributes.pen) {
-            v.penPoint = model.attributes.pen;
-        }
-        if (model.attributes.volume) {
-            v.volume = +model.attributes.volume;
-        }
-        if (model.attributes.pan) {
-            v.pan = +model.attributes.pan;
-        }
-        this.project.stage.add(v);
-        v.scale = parseFloat(model.attributes.scale || '1');
-        v.rotationStyle = parseFloat(
-            model.attributes.rotation || '1'
-        );
-        v.isDraggable = model.attributes.draggable !== 'false';
-        v.isVisible = model.attributes.hidden !== 'true';
-        v.heading = parseFloat(model.attributes.heading) || 0;
-        v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
-        this.loadObject(v, model);
-        v.fixLayout();
-
-        return v;
-    case 'context':
-        v = new Context(null);
-        record();
-        el = model.childNamed('origin');
-        if (el) {
-            el = el.childNamed('ref') || el.childNamed('sprite');
-            if (el) {
-                v.origin = this.loadValue(el);
-            }
-        }
-        el = model.childNamed('receiver');
-        if (el) {
-            el = el.childNamed('ref') || el.childNamed('sprite');
-            if (el) {
-                v.receiver = this.loadValue(el);
-            }
-        }
-        origin = v.origin || v.receiver || object; // for local blocks look up
-        el = model.childNamed('script');
-        if (el) {
-            v.expression = this.loadScript(el, origin);
-        } else {
-            el = model.childNamed('block') ||
-                model.childNamed('custom-block');
-            if (el) {
-                v.expression = this.loadBlock(el, null, origin);
-            } else {
-                el = model.childNamed('l');
-                if (el) {
-                    bool = el.childNamed('bool');
-                    if (bool) {
-                        v.expression = new BooleanSlotMorph(
-                            this.loadValue(bool)
-                        );
-                    } else {
-                        v.expression = new InputSlotMorph(el.contents);
-                    }
-                }
-            }
-        }
-        if (v.expression instanceof BlockMorph) {
-            // bind empty slots to implicit formal parameters
-            i = 0;
-            v.expression.allEmptySlots().forEach(slot => {
-                i += 1;
-                if (slot instanceof MultiArgMorph) {
-                    slot.bindingID = ['arguments'];
-                } else {
-                    slot.bindingID = i;
-                }
-            });
-            // and remember the number of detected empty slots
-            v.emptySlots = i;
-        }
-        el = model.childNamed('inputs');
-        if (el) {
-            el.children.forEach(item => {
-                if (item.tag === 'input') {
-                    v.inputs.push(item.contents);
-                }
-            });
-        }
-        el = model.childNamed('variables');
-        if (el) {
-            this.loadVariables(v.variables, el, origin);
-        }
-        el = model.childNamed('context');
-        if (el) {
-            v.outerContext = this.loadValue(el, origin);
-        }
-        if (v.outerContext && v.receiver &&
-                !v.outerContext.variables.parentFrame) {
-            v.outerContext.variables.parentFrame = v.receiver.variables;
-        }
-        return v;
-    case 'costume':
-        center = new Point();
-        if (Object.prototype.hasOwnProperty.call(
-                model.attributes,
-                'center-x'
-            )) {
-            center.x = parseFloat(model.attributes['center-x']);
-        }
-        if (Object.prototype.hasOwnProperty.call(
-                model.attributes,
-                'center-y'
-            )) {
-            center.y = parseFloat(model.attributes['center-y']);
-        }
-        if (Object.prototype.hasOwnProperty.call(
-                model.attributes,
-                'name'
-            )) {
-            name = model.attributes.name;
-        }
-        if (Object.prototype.hasOwnProperty.call(
-                model.attributes,
-                'image'
-            )) {
-            image = new Image();
-            if (model.attributes.image.indexOf('data:image/svg+xml') === 0
-                    && !MorphicPreferences.rasterizeSVGs) {
-                v = new SVG_Costume(null, name, center);
-                image.onload = function () {
-                    v.contents = image;
-                    v.version = +new Date();
-                    if (typeof v.loaded === 'function') {
-                        v.loaded();
-                    } else {
-                        v.loaded = true;
-                    }
-                };
-            } else {
-                v = new Costume(null, name, center);
-                image.onload = function () {
-                    var canvas = newCanvas(
-                            new Point(image.width, image.height),
-                            true // nonRetina
-                        ),
-                        context = canvas.getContext('2d');
-                    context.drawImage(image, 0, 0);
-                    v.contents = canvas;
-                    v.version = +new Date();
-                    if (typeof v.loaded === 'function') {
-                        v.loaded();
-                    } else {
-                        v.loaded = true;
-                    }
-                };
-            }
-            image.src = model.attributes.image;
-        }
-        record();
-        return v;
-    case 'sound':
-        audio = new Audio();
-        audio.src = model.attributes.sound;
-        v = new Sound(audio, model.attributes.name);
-        if (Object.prototype.hasOwnProperty.call(
-                model.attributes,
-                'mediaID'
-            )) {
-            this.mediaDict[model.attributes.mediaID] = v;
-        }
-        record();
-        return v;
-    case 'wish':
-    	def = new CustomBlockDefinition(model.attributes.s);
-     	def.type = model.attributes.type;
-      	def.category = model.attributes.category;
-       	def.storedSemanticSpec = model.attributes.s;
-        def.updateTranslations(model.contents);
-        return def.blockInstance(true); // include translations
+            record();
+            return v;
+        case 'wish':
+            def = new CustomBlockDefinition(model.attributes.s);
+            def.type = model.attributes.type;
+            def.category = model.attributes.category;
+            def.storedSemanticSpec = model.attributes.s;
+            def.updateTranslations(model.contents);
+            return def.blockInstance(true); // include translations
     }
     return undefined;
 };
@@ -1649,6 +1671,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
         ide.hasChangedMedia = true;
     }
     project.stage.fixLayout();
+    // ide.buildPanes();
     ide.createCorral();
     ide.selectSprite(sprite);
     ide.fixLayout();
@@ -1690,10 +1713,10 @@ StageMorph.prototype.toXML = function (serializer) {
             selector => {
                 str += (
                     '<' + selector + '>' +
-                        XML_Element.prototype.escape(
-                            StageMorph.prototype[key][selector]
-                        ) +
-                        '</' + selector + '>'
+                    XML_Element.prototype.escape(
+                        StageMorph.prototype[key][selector]
+                    ) +
+                    '</' + selector + '>'
                 );
             }
         );
@@ -1703,35 +1726,36 @@ StageMorph.prototype.toXML = function (serializer) {
     this.removeAllClones();
     return serializer.format(
         '<project name="@" app="@" version="@">' +
-            '<notes>$</notes>' +
-            '<thumbnail>$</thumbnail>' +
-            '<stage name="@" width="@" height="@" ' +
-            'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
-            'penlog="@" ' +
-            '%' +
-            'volume="@" ' +
-            'pan="@" ' +
-            'lines="@" ' +
-            'ternary="@" ' +
-            'hyperops="@" ' +
-            'codify="@" ' +
-            'inheritance="@" ' +
-            'sublistIDs="@" ' +
-            'scheduled="@" ~>' +
-            '<pentrails>$</pentrails>' +
-            '%' + // current costume, if it's not in the wardrobe
-            '<costumes>%</costumes>' +
-            '<sounds>%</sounds>' +
-            '<variables>%</variables>' +
-            '<blocks>%</blocks>' +
-            '<scripts>%</scripts><sprites>%</sprites>' +
-            '</stage>' +
-            '<hidden>$</hidden>' +
-            '<headers>%</headers>' +
-            '<code>%</code>' +
-            '<blocks>%</blocks>' +
-            '<variables>%</variables>' +
-            '</project>',
+        '<notes>$</notes>' +
+        '<thumbnail>$</thumbnail>' +
+        '<stage name="@" width="@" height="@" ' +
+        'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
+        'tutorial="@" hideCostumesTab="@" decategorize="@" '+
+        'penlog="@" ' +
+        '%' +
+        'volume="@" ' +
+        'pan="@" ' +
+        'lines="@" ' +
+        'ternary="@" ' +
+        'hyperops="@" ' +
+        'codify="@" ' +
+        'inheritance="@" ' +
+        'sublistIDs="@" ' +
+        'scheduled="@" ~>' +
+        '<pentrails>$</pentrails>' +
+        '%' + // current costume, if it's not in the wardrobe
+        '<costumes>%</costumes>' +
+        '<sounds>%</sounds>' +
+        '<variables>%</variables>' +
+        '<blocks>%</blocks>' +
+        '<scripts>%</scripts><sprites>%</sprites>' +
+        '</stage>' +
+        '<hidden>$</hidden>' +
+        '<headers>%</headers>' +
+        '<code>%</code>' +
+        '<blocks>%</blocks>' +
+        '<variables>%</variables>' +
+        '</project>',
         (ide && ide.projectName) ? ide.projectName : localize('Untitled'),
         serializer.app,
         serializer.version,
@@ -1747,9 +1771,12 @@ StageMorph.prototype.toXML = function (serializer) {
         this.color.a,
         this.getTempo(),
         this.isThreadSafe,
+        StageMorph.prototype.tutorial,
+        StageMorph.prototype.hideCostumesTab,
+        StageMorph.prototype.decategorize,
         this.enablePenLogging,
         this.instrument ?
-                ' instrument="' + parseInt(this.instrument) + '" ' : '',
+        ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.volume,
         this.pan,
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
@@ -1763,8 +1790,8 @@ StageMorph.prototype.toXML = function (serializer) {
 
         // current costume, if it's not in the wardrobe
         !costumeIdx && this.costume ?
-            '<wear>' + serializer.store(this.costume) + '</wear>'
-                : '',
+        '<wear>' + serializer.store(this.costume) + '</wear>' :
+        '',
 
         serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
@@ -1773,14 +1800,14 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.scripts),
         serializer.store(this.children),
         Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
-                (a, b) => a + ' ' + b,
-                ''
-            ),
+            (a, b) => a + ' ' + b,
+            ''
+        ),
         code('codeHeaders'),
         code('codeMappings'),
         serializer.store(this.globalBlocks),
         (ide && ide.globalVariables) ?
-                    serializer.store(ide.globalVariables) : ''
+        serializer.store(ide.globalVariables) : ''
     );
 };
 
@@ -1795,25 +1822,25 @@ SpriteMorph.prototype.toXML = function (serializer) {
 
     return serializer.format(
         '<sprite name="@" idx="@" x="@" y="@"' +
-            ' heading="@"' +
-            ' scale="@"' +
-            ' volume="@"' +
-            ' pan="@"' +
-            ' rotation="@"' +
-            '%' +
-            ' draggable="@"' +
-            '%' +
-            ' costume="@" color="@,@,@,@" pen="@" ~>' +
-            '%' + // inheritance info
-            '%' + // nesting info
-            '%' + // current costume
-            (noCostumes ? '%' : '<costumes>%</costumes>') +
-            (noSounds ? '%' : '<sounds>%</sounds>') +
-            '<blocks>%</blocks>' +
-            '<variables>%</variables>' +
-            (this.exemplar ? '<dispatches>%</dispatches>' : '%') +
-            (noScripts ? '%' : '<scripts>%</scripts>') +
-            '</sprite>',
+        ' heading="@"' +
+        ' scale="@"' +
+        ' volume="@"' +
+        ' pan="@"' +
+        ' rotation="@"' +
+        '%' +
+        ' draggable="@"' +
+        '%' +
+        ' costume="@" color="@,@,@,@" pen="@" ~>' +
+        '%' + // inheritance info
+        '%' + // nesting info
+        '%' + // current costume
+        (noCostumes ? '%' : '<costumes>%</costumes>') +
+        (noSounds ? '%' : '<sounds>%</sounds>') +
+        '<blocks>%</blocks>' +
+        '<variables>%</variables>' +
+        (this.exemplar ? '<dispatches>%</dispatches>' : '%') +
+        (noScripts ? '%' : '<scripts>%</scripts>') +
+        '</sprite>',
         this.name,
         idx,
         this.xPosition(),
@@ -1824,7 +1851,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.pan,
         this.rotationStyle,
         this.instrument ?
-                ' instrument="' + parseInt(this.instrument) + '" ' : '',
+        ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.isDraggable,
         this.isVisible ? '' : ' hidden="true"',
         costumeIdx,
@@ -1835,34 +1862,35 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.penPoint,
 
         // inheritance info
-        this.exemplar
-            ? '<inherit exemplar="' +
-                    this.exemplar.name +
-                    '">' +
-                    (this.inheritedAttributes.length ?
-                        serializer.store(new List(this.inheritedAttributes))
-                        : '') +
-                    '</inherit>'
-            : '',
+        this.exemplar ?
+        '<inherit exemplar="' +
+        this.exemplar.name +
+        '">' +
+        (this.inheritedAttributes.length ?
+            serializer.store(new List(this.inheritedAttributes)) :
+            '') +
+        '</inherit>' :
+        '',
 
         // nesting info
-        this.anchor
-            ? '<nest anchor="' +
-                    this.anchor.name +
-                    '" synch="'
-                    + this.rotatesWithAnchor
-                    + (this.scale === this.nestingScale ? '' :
-                            '"'
-                            + ' scale="'
-                            + this.nestingScale)
+        this.anchor ?
+        '<nest anchor="' +
+        this.anchor.name +
+        '" synch="' +
+        this.rotatesWithAnchor +
+        (this.scale === this.nestingScale ? '' :
+            '"' +
+            ' scale="' +
+            this.nestingScale)
 
-                    + '"/>'
-            : '',
+        +
+        '"/>' :
+        '',
 
         // current costume, if it's not in the wardrobe
         !costumeIdx && this.costume ?
-            '<wear>' + serializer.store(this.costume) + '</wear>'
-                : '',
+        '<wear>' + serializer.store(this.costume) + '</wear>' :
+        '',
 
         noCostumes ? '' : serializer.store(this.costumes, this.name + '_cst'),
         noSounds ? '' : serializer.store(this.sounds, this.name + '_snd'),
@@ -1881,8 +1909,8 @@ Costume.prototype.toXML = function (serializer) {
         this.name,
         this.rotationCenter.x,
         this.rotationCenter.y,
-        this instanceof SVG_Costume ? this.contents.src
-                : normalizeCanvas(this.contents).toDataURL('image/png')
+        this instanceof SVG_Costume ? this.contents.src :
+        normalizeCanvas(this.contents).toDataURL('image/png')
     );
 };
 
@@ -1903,8 +1931,7 @@ VariableFrame.prototype.toXML = function (serializer) {
         if (this.vars[v].isTransient) {
             dta = serializer.format(
                 '<variable name="@" transient="true"/>',
-                v)
-            ;
+                v);
         } else if (val === undefined || val === null) {
             dta = serializer.format('<variable name="@"/>', v);
         } else {
@@ -1912,13 +1939,13 @@ VariableFrame.prototype.toXML = function (serializer) {
                 '<variable name="@">%</variable>',
                 v,
                 typeof val === 'object' ?
-                        (isSnapObject(val) ? ''
-                                : serializer.store(val))
-                                : typeof val === 'boolean' ?
-                                        serializer.format(
-                                            '<bool>$</bool>', val
-                                        )
-                                        : serializer.format('<l>$</l>', val)
+                (isSnapObject(val) ? '' :
+                    serializer.store(val)) :
+                typeof val === 'boolean' ?
+                serializer.format(
+                    '<bool>$</bool>', val
+                ) :
+                serializer.format('<l>$</l>', val)
             );
         }
         return vars + dta;
@@ -1932,8 +1959,8 @@ WatcherMorph.prototype.toXML = function (serializer) {
         isList = this.currentValue instanceof List,
         color = this.readoutColor,
         position = this.parent ?
-                this.topLeft().subtract(this.parent.topLeft())
-                : this.topLeft();
+        this.topLeft().subtract(this.parent.topLeft()) :
+        this.topLeft();
 
     if (this.isTemporary()) {
         // do not save watchers on temporary variables
@@ -1942,27 +1969,27 @@ WatcherMorph.prototype.toXML = function (serializer) {
     return serializer.format(
         '<watcher% % style="@"% x="@" y="@" color="@,@,@"%%/>',
         (isVar && this.target.owner) || (!isVar && this.target) ?
-                    serializer.format(' scope="@"',
-                        isVar ? this.target.owner.name : this.target.name)
-                            : '',
+        serializer.format(' scope="@"',
+            isVar ? this.target.owner.name : this.target.name) :
+        '',
         serializer.format(isVar ? 'var="@"' : 's="@"', this.getter),
         this.style,
         isVar && this.style === 'slider' ? serializer.format(
-                ' min="@" max="@"',
-                this.sliderMorph.start,
-                this.sliderMorph.stop
-            ) : '',
+            ' min="@" max="@"',
+            this.sliderMorph.start,
+            this.sliderMorph.stop
+        ) : '',
         position.x,
         position.y,
         color.r,
         color.g,
         color.b,
-        !isList ? ''
-                : serializer.format(
-                ' extX="@" extY="@"',
-                this.cellMorph.contentsMorph.width(),
-                this.cellMorph.contentsMorph.height()
-            ),
+        !isList ? '' :
+        serializer.format(
+            ' extX="@" extY="@"',
+            this.cellMorph.contentsMorph.width(),
+            this.cellMorph.contentsMorph.height()
+        ),
         this.isVisible ? '' : ' hidden="true"'
     );
 };
@@ -2074,21 +2101,20 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
         '<custom-block s="@"%>%%%</custom-block>',
         this.semanticSpec,
         this.isGlobal ?
-                '' : serializer.format(' scope="@"', scope),
+        '' : serializer.format(' scope="@"', scope),
         serializer.store(this.inputs()),
         this.isGlobal &&
-        	this.definition.variableNames.length &&
-            !serializer.isExportingBlocksLibrary ?
-                '<variables>' +
-                    this.variables.toXML(serializer) +
-                    '</variables>'
-                        : '',
+        this.definition.variableNames.length &&
+        !serializer.isExportingBlocksLibrary ?
+        '<variables>' +
+        this.variables.toXML(serializer) +
+        '</variables>' :
+        '',
         this.comment ? this.comment.toXML(serializer) : ''
     );
 };
 
-CustomReporterBlockMorph.prototype.toBlockXML
-    = CustomCommandBlockMorph.prototype.toBlockXML;
+CustomReporterBlockMorph.prototype.toBlockXML = CustomCommandBlockMorph.prototype.toBlockXML;
 
 CustomBlockDefinition.prototype.toXML = function (serializer) {
     function encodeScripts(array) {
@@ -2105,41 +2131,41 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
 
     return serializer.format(
         '<block-definition s="@" type="@" category="@">' +
-            '%' +
-            (this.variableNames.length ? '<variables>%</variables>' : '@') +
-            '<header>@</header>' +
-            '<code>@</code>' +
-            '<translations>@</translations>' +
-            '<inputs>%</inputs>%%' +
-            '</block-definition>',
+        '%' +
+        (this.variableNames.length ? '<variables>%</variables>' : '@') +
+        '<header>@</header>' +
+        '<code>@</code>' +
+        '<translations>@</translations>' +
+        '<inputs>%</inputs>%%' +
+        '</block-definition>',
         this.spec,
         this.type,
         this.category || 'other',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?
-                serializer.store(new List(this.variableNames)) : ''),
+            serializer.store(new List(this.variableNames)) : ''),
         this.codeHeader || '',
         this.codeMapping || '',
         this.translationsAsText(),
         Array.from(this.declarations.keys()).reduce((xml, decl) => {
             // to be refactored now that we've moved to ES6 Map:
-                return xml + serializer.format(
-                    '<input type="@"$>$%</input>',
-                    this.declarations.get(decl)[0],
-                    this.declarations.get(decl)[3] ?
-                            ' readonly="true"' : '',
-                    this.declarations.get(decl)[1],
-                    this.declarations.get(decl)[2] ?
-                            serializer.format(
-                                '<options>@</options>',
-                                this.declarations.get(decl)[2]
-                            ) : ''
-                );
-            }, ''),
+            return xml + serializer.format(
+                '<input type="@"$>$%</input>',
+                this.declarations.get(decl)[0],
+                this.declarations.get(decl)[3] ?
+                ' readonly="true"' : '',
+                this.declarations.get(decl)[1],
+                this.declarations.get(decl)[2] ?
+                serializer.format(
+                    '<options>@</options>',
+                    this.declarations.get(decl)[2]
+                ) : ''
+            );
+        }, ''),
         this.body ? serializer.store(this.body.expression) : '',
         this.scripts.length > 0 ?
-                    '<scripts>' + encodeScripts(this.scripts) + '</scripts>'
-                        : ''
+        '<scripts>' + encodeScripts(this.scripts) + '</scripts>' :
+        ''
     );
 };
 
@@ -2151,22 +2177,22 @@ ArgMorph.prototype.toXML = function () {
 
 BooleanSlotMorph.prototype.toXML = function () {
     return (typeof this.value === 'boolean') ?
-            '<l><bool>' + this.value + '</bool></l>'
-                    : '<l/>';
+        '<l><bool>' + this.value + '</bool></l>' :
+        '<l/>';
 
 };
 
 InputSlotMorph.prototype.toXML = function (serializer) {
-	if (this.selectedBlock) {
- 		return serializer.format(
-        	'<l><wish s="@" type="@" category="@">@</wish></l>',
+    if (this.selectedBlock) {
+        return serializer.format(
+            '<l><wish s="@" type="@" category="@">@</wish></l>',
             this.selectedBlock.semanticSpec,
-         	this.selectedBlock instanceof CommandBlockMorph ? 'command'
-          		: (this.selectedBlock.isPredicate ? 'predicate' : 'reporter'),
+            this.selectedBlock instanceof CommandBlockMorph ? 'command' :
+            (this.selectedBlock.isPredicate ? 'predicate' : 'reporter'),
             this.selectedBlock.category,
             this.selectedBlock.storedTranslations
         );
- 	}
+    }
     if (this.constant) {
         return serializer.format(
             '<l><option>$</option></l>',
@@ -2228,12 +2254,12 @@ List.prototype.toXML = function (serializer, mediaContext) {
     var xml, value, item;
 
     if (this.hasOnlyAtomicData() &&
-            (!this.isLinked || !StageMorph.prototype.enableSublistIDs)) {
+        (!this.isLinked || !StageMorph.prototype.enableSublistIDs)) {
         // special case for a less cluttered format
         return serializer.format(
             '<list struct="atomic" ' +
-                (this.isLinked ? 'linked="linked" ' : '') +
-                '~>@</list>',
+            (this.isLinked ? 'linked="linked" ' : '') +
+            '~>@</list>',
             this.asCSV()
         );
     }
@@ -2247,11 +2273,11 @@ List.prototype.toXML = function (serializer, mediaContext) {
                 xml += serializer.format(
                     '<item>%</item>',
                     typeof value === 'object' ?
-                            (isSnapObject(value) ? ''
-                                    : serializer.store(value, mediaContext))
-                            : typeof value === 'boolean' ?
-                                    serializer.format('<bool>$</bool>', value)
-                                    : serializer.format('<l>$</l>', value)
+                    (isSnapObject(value) ? '' :
+                        serializer.store(value, mediaContext)) :
+                    typeof value === 'boolean' ?
+                    serializer.format('<bool>$</bool>', value) :
+                    serializer.format('<l>$</l>', value)
                 );
             }
             if (!isNil(this.rest)) {
@@ -2267,11 +2293,11 @@ List.prototype.toXML = function (serializer, mediaContext) {
                 xml += serializer.format(
                     '<item>%</item>',
                     typeof value === 'object' ?
-                            (isSnapObject(value) ? ''
-                                    : serializer.store(value, mediaContext))
-                            : typeof value === 'boolean' ?
-                                    serializer.format('<bool>$</bool>', value)
-                                    : serializer.format('<l>$</l>', value)
+                    (isSnapObject(value) ? '' :
+                        serializer.store(value, mediaContext)) :
+                    typeof value === 'boolean' ?
+                    serializer.format('<bool>$</bool>', value) :
+                    serializer.format('<l>$</l>', value)
                 );
             }
             item = item.rest;
@@ -2285,11 +2311,11 @@ List.prototype.toXML = function (serializer, mediaContext) {
             return xml + serializer.format(
                 '<item>%</item>',
                 typeof item === 'object' ?
-                        (isSnapObject(item) ? ''
-                                : serializer.store(item, mediaContext))
-                        : typeof item === 'boolean' ?
-                                serializer.format('<bool>$</bool>', item)
-                                : serializer.format('<l>$</l>', item)
+                (isSnapObject(item) ? '' :
+                    serializer.store(item, mediaContext)) :
+                typeof item === 'boolean' ?
+                serializer.format('<bool>$</bool>', item) :
+                serializer.format('<l>$</l>', item)
             );
         }, '')
     );
@@ -2301,13 +2327,13 @@ Context.prototype.toXML = function (serializer) {
     }
     return serializer.format(
         '<context ~><inputs>%</inputs><variables>%</variables>' +
-            '%<receiver>%</receiver><origin>%</origin>%</context>',
+        '%<receiver>%</receiver><origin>%</origin>%</context>',
         this.inputs.reduce(
-                (xml, input) => {
-                    return xml + serializer.format('<input>$</input>', input);
-                },
-                ''
-            ),
+            (xml, input) => {
+                return xml + serializer.format('<input>$</input>', input);
+            },
+            ''
+        ),
         this.variables ? serializer.store(this.variables) : '',
         this.expression ? serializer.store(this.expression) : '',
         this.receiver ? serializer.store(this.receiver) : '',

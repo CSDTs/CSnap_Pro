@@ -84,8 +84,11 @@ Cloud.prototype.init = function () {
             if (config.project.project_url !== undefined) {
                 this.project_url = config.project.project_url;
             }
-            if (config.project.project_id !== undefined) {
-                this.project_id = config.project.project_id;
+            if (config.project.id !== undefined) {
+                this.project_id = config.project.id;
+            }
+            if (config.project.approved !== undefined){
+                this.project_approved = config.project.approved;
             }
         }
     }
@@ -302,20 +305,23 @@ Cloud.prototype.withCredentialsRequest = function (
 
 Cloud.prototype.initSession = function (onSuccess) {
     var myself = this;
-    if (location.protocol === 'file:') {
-        // disabled for now (jens)
-        return;
-    }
-    this.request(
-        'POST',
-        '',
-        function () {
-            myself.checkCredentials(onSuccess);
-        },
-        function () {},
-        null,
-        true
-    );
+  
+    // if (location.protocol === 'file:') {
+    //     // disabled for now (jens)
+    //     return;
+    // }
+    // this.request(
+    //     'POST',
+    //     '',
+    //     function () {
+
+    //         myself.checkCredentials(onSuccess);
+    //     },
+    //     function () {},
+    //     null,
+    //     true
+    // );
+    return;
 };
 
 Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
@@ -542,7 +548,8 @@ Cloud.prototype.saveFile = function (file, onSuccess, onError) {
 };
 
 Cloud.prototype.createProject = function (projectName, dataNum, imgNum, onSuccess, onError) {
-    if (this.project_id !== undefined) {
+    console.log(this.project_id);
+    if (this.project_id !== null) {
         $.ajax({
             type: 'PUT',
             url: this.apiBasePath + '/projects/' + this.project_id + '/',
@@ -650,7 +657,7 @@ Cloud.prototype.getThumbnail = function (
 };
 
 Cloud.prototype.getProject = function (proj, delta, onSuccess, onError) {
-    this.withCredentialsRequest(
+    this.request(
         'GET',
         proj.project_url,
         onSuccess,
@@ -1319,10 +1326,18 @@ Cloud.prototype.getCSRFToken = function () {
 Cloud.prototype.getClassroomList = function (callBack, errorCall) {
 
     let myself = this;
-    $.get(myself.apiBasePath + "/team/?user=" + myself.user_id, null,
-        function (data) {
-            callBack(data);
-        }, "json").fail(errorCall);
+    this.withCredentialsRequest(
+        'GET',
+        myself.apiBasePath + "/team/?user=" + myself.user_id,
+        callBack,
+        errorCall,
+        'You must be logged in to view classrooms.'
+    );
+
+    // $.get(myself.apiBasePath + "/team/?user=" + myself.user_id, null,
+    //     function (data) {
+    //         callBack(data);
+    //     }, "json").fail(errorCall);
 
 
 

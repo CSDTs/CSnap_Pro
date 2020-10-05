@@ -209,7 +209,7 @@ modules.api = '2020-July-06';
     global variables
 */
 
-IDE_Morph.prototype.broadcast = function(message, callback) {
+IDE_Morph.prototype.broadcast = function (message, callback) {
     // same as using the broadcast block - launch all scripts
     // in the current project reacting to the specified message,
     // if a callback is supplied wait for all processes to terminate
@@ -313,3 +313,48 @@ IDE_Morph.prototype.newList = function (array) {
     // nested array will not be automatically converted to nested lists
     return new List(array);
 };
+
+
+// Tutorial CSDT
+
+IDE_Morph.prototype.testTutorialLayout = function () {
+    // StageMorph.prototype.tutorial = !StageMorph.prototype.tutorial;
+    this.createControlBar();
+    this.createCategories();
+    this.createPalette();
+    // this.createStage();
+    this.createSpriteBar();
+    this.createSpriteEditor();
+    this.createCorralBar();
+    this.createCorral();
+
+    this.fixLayout();
+
+    return this.stage.tutorial;
+}
+
+
+IDE_Morph.prototype.setCostumeTabVisibility = function(bool) {
+    StageMorph.prototype.showCostumesTab = bool;
+}
+
+IDE_Morph.prototype.setCategoriesVisibility = function(bool){
+    StageMorph.prototype.categorize = bool;
+}
+
+IDE_Morph.prototype.renderTutorialLayout = function(){
+    this.createControlBar();
+    this.createCategories();
+    this.createPalette();
+    // this.createStage();
+    this.createSpriteBar();
+    this.createSpriteEditor();
+    this.createCorralBar();
+    this.createCorral();
+
+    this.fixLayout();
+}
+
+IDE_Morph.prototype.getCurrentScript = function(){
+
+}

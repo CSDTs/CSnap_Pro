@@ -358,3 +358,9 @@ IDE_Morph.prototype.renderTutorialLayout = function(){
 IDE_Morph.prototype.getCurrentScript = function(){
 
 }
+
+IDE_Morph.prototype.loadTutorial = function (xml) {
+    // return a new Snap list the shape of the given array, if any
+    // nested array will not be automatically converted to nested lists
+    this.droppedText(xml);
+};

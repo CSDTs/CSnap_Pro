@@ -316,7 +316,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'flat line end? %b'
         },
-
         // Motion
         forward: {
             only: SpriteMorph,
@@ -2284,7 +2283,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     var blocks = [], myself = this, varNames, button,
         cat = category || 'motion', txt,
         inheritedVars = this.inheritedVariableNames();
-
+        
     function block(selector, isGhosted) {
         if (StageMorph.prototype.hiddenPrimitives[selector]) {
             return null;
@@ -2292,6 +2291,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
         newBlock.isTemplate = true;
         if (isGhosted) {newBlock.ghost(); }
+        // console.log(newBlock);
         return newBlock;
     }
 
@@ -2372,7 +2372,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('turn'));
             blocks.push(block('turnLeft'));
             blocks.push('-');
-            blocks.push(block('setHeading'));
+            // blocks.push(block('setHeading'));
             blocks.push(block('doFaceTowards'));
             blocks.push('-');
             blocks.push(block('gotoXY'));
@@ -2390,14 +2390,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('xPosition', this.inheritsAttribute('x position')));
             blocks.push(watcherToggle('yPosition'));
             blocks.push(block('yPosition', this.inheritsAttribute('y position')));
-            blocks.push(watcherToggle('direction'));
-            blocks.push(block('direction', this.inheritsAttribute('direction')));
+            // blocks.push(watcherToggle('direction'));
+            // blocks.push(block('direction', this.inheritsAttribute('direction')));
+            blocks.push(watcherToggle('getAngle'));
+            blocks.push(block('getAngle'));
             blocks.push('=');
             blocks.push(block('translatePercent'));
             blocks.push(block('pointAtAngle'));
             blocks.push(block('rotateByDegrees'));
-            blocks.push(watcherToggle('getAngle'));
-            blocks.push(block('getAngle'));
+
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));
 
@@ -2543,14 +2544,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('doPasteOn'));
             blocks.push('=');
-            blocks.push(block('smoothBorders'));
-            blocks.push(block('setBorderSize'));
-            blocks.push(block('getBorderSize'));
-            blocks.push(block('setBorderHue'));
-            blocks.push(block('getBorderHue'));
-            blocks.push(block('setBorderShade'));
-            blocks.push(block('getBorderShade'));
-            blocks.push(block('changeBorderShade'));
+            // blocks.push(block('smoothBorders'));
+            // blocks.push(block('setBorderSize'));
+            // blocks.push(block('getBorderSize'));
+            // blocks.push(block('setBorderHue'));
+            // blocks.push(block('getBorderHue'));
+            // blocks.push(block('setBorderShade'));
+            // blocks.push(block('getBorderShade'));
+            // blocks.push(block('changeBorderShade'));
             blocks.push(block('flatLineEnds'));
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));
@@ -2884,7 +2885,12 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(this.makeBlockButton());
         }
     }else{
-        blocks.push(block('translatePercent'));
+        blocks.push(block('receiveGo'));
+        blocks.push(block('clear'));
+        blocks.push(block('gotoXY'));
+        blocks.push(block('pointAtAngle'));
+        blocks.push(block('reportBoolean'));
+        blocks.push(block('setSize'));
     }
      return blocks;
 };
@@ -2954,6 +2960,12 @@ SpriteMorph.prototype.palette = function (category) {
 };
 
 SpriteMorph.prototype.freshPalette = function (category) {
+    if(StageMorph.prototype.decategorize){
+        // console.log(category);
+        category = 'pen';
+        // console.log(category);
+    }
+    
     var palette = new ScrollFrameMorph(null, null, this.sliderColor),
         unit = SyntaxElementMorph.prototype.fontSize,
         x = 0,
@@ -3177,7 +3189,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     }
 
     // local custom blocks:
-
     y += unit * 1.6;
     this.customBlocks.forEach(definition => {
         var block;
@@ -7602,9 +7613,9 @@ StageMorph.prototype.frameRate = 0; // unscheduled per default
 
 // StageMorph tutorial settings CSDT
 StageMorph.prototype.tutorial = false;
-
 StageMorph.prototype.hideCostumesTab = false;
 StageMorph.prototype.decategorize = false;
+StageMorph.prototype.enableGlide = false;
 
 StageMorph.prototype.showSoundTab = true;
 

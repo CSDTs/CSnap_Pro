@@ -143,9 +143,6 @@ SpriteMorph.prototype.changeCostumeOpacity = function(opacity){
 
 
 
-
-
-
 SpriteMorph.prototype.smoothBorders = function(start, dest) {
     var tempSize = this.size,
         tempColor = this.color;

@@ -216,6 +216,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // additional properties:
     this.cloud = new Cloud();
+    this.initializeCloud();
     // this.cloud = new CSnapCloud('/api');
 
     // CSDT URLs
@@ -615,9 +616,13 @@ IDE_Morph.prototype.openIn = function (world) {
             // this.cloud.initSession(initUser);
         } else {
             // login only persistent during a single browser session
+            // console.log('check credentials');
             this.cloud.checkCredentials(initUser);
         }
     }
+
+    // console.log('check credentials');
+    this.cloud.checkCredentials(initUser);
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();

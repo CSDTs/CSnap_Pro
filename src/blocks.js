@@ -3261,6 +3261,26 @@ BlockMorph.prototype.hidePrimitive = function () {
     ide.refreshPalette();
 };
 
+// CSDT Show
+BlockMorph.prototype.showPrimitive = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        dict,
+        cat;
+    if (!ide) {return; }
+    delete StageMorph.prototype.hiddenPrimitives[this.selector];
+    dict = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    };
+    cat = dict[this.selector] || this.category;
+    if (cat === 'lists') {cat = 'variables'; }
+    ide.flushBlocksCache(cat);
+    ide.refreshPalette();
+};
+
 BlockMorph.prototype.isInheritedVariable = function (shadowedOnly) {
     // private - only for variable getter template inside the palette
     if (this.isTemplate &&
@@ -6011,7 +6031,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 ReporterBlockMorph.prototype.exportResultPic = function () {
     var top = this.topBlock(),
         receiver = top.scriptTarget(),
-        stage;
+        stage
     if (top !== this) {return; }
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);

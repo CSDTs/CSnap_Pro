@@ -339,7 +339,7 @@ IDE_Morph.prototype.setCostumeTabVisibility = function(bool) {
 }
 
 IDE_Morph.prototype.setCategoriesVisibility = function(bool){
-    StageMorph.prototype.categorize = bool;
+    StageMorph.prototype.decategorize = bool;
 }
 
 IDE_Morph.prototype.renderTutorialLayout = function(){
@@ -364,3 +364,16 @@ IDE_Morph.prototype.loadTutorial = function (xml) {
     // nested array will not be automatically converted to nested lists
     this.droppedText(xml);
 };
+
+
+IDE_Morph.prototype.hideBlocks= function(tutBlocks){
+
+    let currentBlocks = this.palette.contents.children;
+
+    let hiddenBlocks = currentBlocks.filter(block => tutBlocks.includes(block.selector));
+    hiddenBlocks.map(block => block.hidePrimitive());
+    console.log(StageMorph.prototype.hiddenPrimitives);
+
+    setTimeout(function(){ hiddenBlocks.map(block => block.showPrimitive()); console.log(StageMorph.prototype.hiddenPrimitives);}, 3000);
+
+}

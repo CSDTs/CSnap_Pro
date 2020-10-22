@@ -391,12 +391,17 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     }else{
         StageMorph.prototype.hideCostumesTab = false;
     }
-
     if (model.stage.attributes.decategorize) {
         StageMorph.prototype.decategorize = model.stage.attributes.decategorize === 'true';
     }else{
         StageMorph.prototype.decategorize = false;
     }
+    if (model.stage.attributes.enableGlide) {
+        StageMorph.prototype.enableGlide = model.stage.attributes.enableGlide === 'true';
+    }else{
+        StageMorph.prototype.enableGlide = false;
+    }
+
 
     if (model.stage.attributes.name) {
         project.stage.name = model.stage.attributes.name;
@@ -1675,6 +1680,10 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     ide.createCorral();
     ide.selectSprite(sprite);
     ide.fixLayout();
+    // if (StageMorph.prototype.decategorize){
+        ide.renderTutorialLayout();
+    // }
+    
     ide.world().keyboardFocus = project.stage;
 };
 
@@ -1730,7 +1739,7 @@ StageMorph.prototype.toXML = function (serializer) {
         '<thumbnail>$</thumbnail>' +
         '<stage name="@" width="@" height="@" ' +
         'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
-        'tutorial="@" hideCostumesTab="@" decategorize="@" '+
+        'tutorial="@" hideCostumesTab="@" decategorize="@" enableGlide="@"'+
         'penlog="@" ' +
         '%' +
         'volume="@" ' +
@@ -1774,6 +1783,7 @@ StageMorph.prototype.toXML = function (serializer) {
         StageMorph.prototype.tutorial,
         StageMorph.prototype.hideCostumesTab,
         StageMorph.prototype.decategorize,
+        StageMorph.prototype.enableGlide,
         this.enablePenLogging,
         this.instrument ?
         ' instrument="' + parseInt(this.instrument) + '" ' : '',

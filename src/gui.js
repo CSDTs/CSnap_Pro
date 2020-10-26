@@ -3924,6 +3924,26 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         }
     };
 
+    dialog.cancel = function(){
+
+        // CSDT Kill Audio Sampling (need to clean up...)
+        let audioKill = dialog.children.filter(c => c instanceof ScrollFrameMorph)[0];
+        let audioContents = audioKill.contents;
+        let audioArray = audioContents.children.filter(a => a instanceof SoundIconMorph);
+
+        for(let i = 0; i < audioArray.length; i++){
+            try{
+                audioArray[i].object.previewAudio.pause()
+                audioArray[i].object.previewAudio.pause();
+                audioArray[i].object.previewAudio.terminated = true;
+                audioArray[i].object.previewAudio = null;
+            }catch(e){
+
+            }
+        }
+        dialog.destroy();
+    }
+
     dialog.fixLayout = function () {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
             x = 0,

@@ -7012,8 +7012,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                     msg.destroy();
                 },
                 (err, lbl) => {
-                    msg.destroy();
+                    // msg.destroy();
                     this.ide.cloudError().call(null, err, lbl);
+                    this.ide.initializeCloud(); 
+                    //CSDT allow users to login if trying to save without logging in
                 }
             );
             this.classroomList = [];

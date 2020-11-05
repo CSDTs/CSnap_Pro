@@ -549,7 +549,7 @@ Cloud.prototype.saveFile = function (file, onSuccess, onError) {
 
 Cloud.prototype.createProject = function (projectName, dataNum, imgNum, onSuccess, onError) {
     // console.log(this.project_id);
-    if (this.project_id !== null) {
+    if (this.project_id !== undefined) {
         $.ajax({
             type: 'PUT',
             url: this.apiBasePath + '/projects/' + this.project_id + '/',

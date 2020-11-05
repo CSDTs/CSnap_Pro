@@ -4812,7 +4812,6 @@ IDE_Morph.prototype.openProjectString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenProjectString = function (str) {
-    this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
     StageMorph.prototype.hiddenPrimitives = {};
     StageMorph.prototype.codeMappings = {};
@@ -4837,6 +4836,9 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
             this
         );
     }
+    // CSDT Present Mode
+    this.toggleAppMode(config.presentation !== undefined ? true: false);
+    
     this.stopFastTracking();
 };
 

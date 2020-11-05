@@ -2886,6 +2886,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         }
     }else{
         blocks.push(block('receiveGo'));
+        blocks.push(block('doFaceTowards'));
         blocks.push(block('clear'));
         blocks.push(block('gotoXY'));
         blocks.push(block('pointAtAngle'));
@@ -7615,6 +7616,7 @@ StageMorph.prototype.frameRate = 0; // unscheduled per default
 StageMorph.prototype.tutorial = false;
 StageMorph.prototype.hideCostumesTab = false;
 StageMorph.prototype.decategorize = false;
+StageMorph.prototype.changeBlocks = false;
 StageMorph.prototype.enableGlide = false;
 
 StageMorph.prototype.showSoundTab = true;

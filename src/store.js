@@ -388,17 +388,22 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     // CSDT 
     if (model.stage.attributes.hideCostumesTab) {
         StageMorph.prototype.hideCostumesTab = model.stage.attributes.hideCostumesTab === 'true';
-    }else{
+    } else {
         StageMorph.prototype.hideCostumesTab = false;
     }
     if (model.stage.attributes.decategorize) {
         StageMorph.prototype.decategorize = model.stage.attributes.decategorize === 'true';
-    }else{
+    } else {
         StageMorph.prototype.decategorize = false;
+    }
+    if (model.stage.attributes.changeBlocks) {
+        StageMorph.prototype.changeBlocks = model.stage.attributes.changeBlocks === 'true';
+    } else {
+        StageMorph.prototype.changeBlocks = false;
     }
     if (model.stage.attributes.enableGlide) {
         StageMorph.prototype.enableGlide = model.stage.attributes.enableGlide === 'true';
-    }else{
+    } else {
         StageMorph.prototype.enableGlide = false;
     }
 
@@ -1656,11 +1661,13 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     if (ide.globalVariables) {
         ide.globalVariables = project.globalVariables;
     }
-    if (stage) {
-        stage.destroy();
+    if (!stage.changeBlocks) {
+        if (stage) {
+            stage.destroy();
+        }
+        ide.add(project.stage);
+        ide.stage = project.stage;
     }
-    ide.add(project.stage);
-    ide.stage = project.stage;
     sprites = ide.stage.children.filter(
         child => child instanceof SpriteMorph
     );
@@ -1675,15 +1682,26 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     } else {
         ide.hasChangedMedia = true;
     }
+    if (!stage.changeBlocks) {
     project.stage.fixLayout();
+    }else{
+        ide.stage.fixLayout();
+    }
     // ide.buildPanes();
     ide.createCorral();
     ide.selectSprite(sprite);
+    if (stage.changeBlocks) {
+      ide.flushBlocksCache();
+      ide.refreshPalette();
+    }
+ 
     ide.fixLayout();
+
     // if (StageMorph.prototype.decategorize){
-        ide.renderTutorialLayout();
+    ide.renderTutorialLayout();
+   
     // }
-    
+
     ide.world().keyboardFocus = project.stage;
 };
 
@@ -1739,7 +1757,7 @@ StageMorph.prototype.toXML = function (serializer) {
         '<thumbnail>$</thumbnail>' +
         '<stage name="@" width="@" height="@" ' +
         'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
-        'tutorial="@" hideCostumesTab="@" decategorize="@" enableGlide="@"'+
+        'tutorial="@" hideCostumesTab="@" decategorize="@" changeBlocks="@" enableGlide="@"' +
         'penlog="@" ' +
         '%' +
         'volume="@" ' +
@@ -1783,6 +1801,7 @@ StageMorph.prototype.toXML = function (serializer) {
         StageMorph.prototype.tutorial,
         StageMorph.prototype.hideCostumesTab,
         StageMorph.prototype.decategorize,
+        StageMorph.prototype.changeBlocks,
         StageMorph.prototype.enableGlide,
         this.enablePenLogging,
         this.instrument ?

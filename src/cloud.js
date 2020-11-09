@@ -548,8 +548,16 @@ Cloud.prototype.saveFile = function (file, onSuccess, onError) {
 };
 
 Cloud.prototype.createProject = function (projectName, dataNum, imgNum, onSuccess, onError) {
-    // console.log(this.project_id);
-    if (this.project_id !== undefined) {
+    if (this.project_id === null || this.project_id === undefined || typeof this.project_id === undefined) {
+        $.post(this.apiBasePath + '/projects/', {
+            name: projectName,
+            description: '',
+            classroom: this.classroom_id,
+            application: this.application_id,
+            project: dataNum,
+            screenshot: imgNum,
+        }, onSuccess, 'json').fail(onError);
+    } else {
         $.ajax({
             type: 'PUT',
             url: this.apiBasePath + '/projects/' + this.project_id + '/',
@@ -564,18 +572,7 @@ Cloud.prototype.createProject = function (projectName, dataNum, imgNum, onSucces
             success: onSuccess,
             dataType: 'json'
         }).fail(onError);
-    } else {
-        $.post(this.apiBasePath + '/projects/', {
-            name: projectName,
-            description: '',
-            classroom: this.classroom_id,
-            application: this.application_id,
-            project: dataNum,
-            screenshot: imgNum,
-        }, onSuccess, 'json').fail(onError);
     }
-
-
 }
 
 Cloud.prototype.getProjectList = function (onSuccess, onError, withThumbnail) {

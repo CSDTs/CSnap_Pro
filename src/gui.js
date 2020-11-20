@@ -5139,6 +5139,7 @@ IDE_Morph.prototype.saveFileAs = function (
         }
         // download a file and delegate to FileSaver
         // false: Do not preprend a BOM to the file.
+        console.log(fileName + fileExt);
         saveAs(contents, fileName + fileExt, false);
     } else {
         dialog = new DialogBoxMorph();

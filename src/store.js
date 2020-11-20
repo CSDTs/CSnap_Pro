@@ -1757,7 +1757,7 @@ StageMorph.prototype.toXML = function (serializer) {
         '<thumbnail>$</thumbnail>' +
         '<stage name="@" width="@" height="@" ' +
         'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
-        'tutorial="@" hideCostumesTab="@" decategorize="@" changeBlocks="@" enableGlide="@"' +
+        'tutorial="@" hideCostumesTab="@" decategorize="@" changeBlocks="@" enableGlide="@" ' +
         'penlog="@" ' +
         '%' +
         'volume="@" ' +

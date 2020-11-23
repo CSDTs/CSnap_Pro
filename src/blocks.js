@@ -1765,13 +1765,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 part = new InputSlotMorph(
                     'x',
                     false, {
+                        x_and_y: ['x_and_y'],
                         x: ['x'],
-                        y: ['y'],
-                        x_and_y: ['x_and_y']
+                        y: ['y']
                     },
                     true
                 );
-                part.setContents(['x']);
+                part.setContents(['x_and_y']);
                 break;
 
             default:

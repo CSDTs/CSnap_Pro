@@ -2534,8 +2534,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doThink'));
             blocks.push('-');
             blocks.push(block('reportGetImageAttribute'));
-            blocks.push(block('reportNewCostumeStretched'));
-            blocks.push(block('reportNewCostume'));
+            // blocks.push(block('reportNewCostumeStretched'));
+            // blocks.push(block('reportNewCostume'));
             blocks.push('-');
             blocks.push(block('changeEffect'));
             blocks.push(block('setEffect'));

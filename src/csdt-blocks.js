@@ -304,3 +304,112 @@ SpriteMorph.prototype.drawBorderedLine = function (start, dest) { //drawLine wra
 SpriteMorph.prototype.flatLineEnds = function (bool) {
     SpriteMorph.prototype.useFlatLineEnds = bool;
 }
+
+SpriteMorph.prototype.degreesToRadians = function(degrees){
+    return ((3.141592653589 * degrees) / 180);
+}
+
+SpriteMorph.prototype.drawLogSpiral = function(c, endangle, getSize, penGrowth, isClockwise){
+    var xOrigin, yOrigin, startingDirection, beta, t, tinc, roffset, r, h, start, end, segments, startAngle, clockwise, size; 
+    this.down();
+    segments = 5;
+ 
+    if(isClockwise === null || typeof isClockwise === undefined){
+        clockwise = false;
+    }else{
+        clockwise = isClockwise;
+    }
+
+    if(clockwise){
+        if(endangle < 0){
+            startingDirection = ((((90 - this.direction()) - endangle) + degrees(Math.atan(1 / c))) - 180);
+        }else{
+            startingDirection = ((90 - this.direction()) + degrees(Math.atan(1 / c)));
+        }
+    }else{
+        if(endangle < 0){
+            startingDirection = (((90 - this.direction()) + endangle) + (180 - degrees(Math.atan(1 / c))));
+        }else{
+            startingDirection = (90 - this.direction()) - degrees(Math.atan(1 / c));
+        }
+    }
+
+    size = 2 * (getSize / Math.exp(c * this.degreesToRadians(Math.abs(endangle))));
+    roffset = size * Math.exp(c * this.degreesToRadians(0));
+
+    if(endangle < 0){
+        start = Math.abs(endangle);
+        end = 0;
+        r = size * Math.exp(c * this.degreesToRadians(Math.abs(endangle)));
+        if(clockwise){
+            xOrigin = this.xPosition() - ((r * Math.cos(radians(startingDirection - start))) - (roffset * Math.cos(radians(startingDirection))));
+            yOrigin = this.yPosition() - ((r * Math.sin(radians(startingDirection - start))) - (roffset * Math.sin(radians(startingDirection))));
+        }else{
+            xOrigin = this.xPosition() - ((r * Math.cos(radians(start + startingDirection))) - (roffset * Math.cos(radians(startingDirection))));
+            yOrigin = this.yPosition() - ((r * Math.sin(radians(tart + startingDirection))) - (roffset * Math.sin(radians(startingDirection))));
+        }
+    }else{
+        start = 0;
+        end = endangle;
+        xOrigin = this.xPosition();
+        yOrigin = this.yPosition();
+
+    }
+
+
+    t = start;
+    if(end > start){
+        tinc = 1;
+    }else{
+        tinc = -1;
+    }
+
+    let repeatCounter = Math.abs((end - start) / tinc) / segments;
+
+    for (let i = 0; i < repeatCounter; i ++){
+        //  Find way to do warp
+        for (let j = 0; j < segments; j++){
+            r = size * Math.exp(c * this.degreesToRadians(t));
+            if(!clockwise){
+                this.gotoXY(((xOrigin + (r * Math.cos(radians(t + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                            ((yOrigin + (r * Math.sin(radians(t + startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+            }else{
+                this.gotoXY(((xOrigin + (r * Math.cos(radians((t * -1) + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                            ((yOrigin + (r * Math.sin(radians((t * -1 )+ startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+            }
+            t = t + tinc;
+            this.changeSize(penGrowth);
+            if(clockwise){
+                this.turn(tinc);
+            }else{
+                this.turnLeft(tinc);
+            }
+        }
+    }
+
+    let modCounter =  Math.abs((end - start) / tinc) % segments;
+
+    for (let k = 0; k < modCounter; k++){
+        r = size * Math.exp(c * this.degreesToRadians(t));
+        if(!clockwise){
+            this.gotoXY(((xOrigin + (r * Math.cos(radians(t + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                        ((yOrigin + (r * Math.sin(radians(t + startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+        }else{
+            this.gotoXY(((xOrigin + (r * Math.cos(radians((t * -1) + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                        ((yOrigin + (r * Math.sin(radians((t * -1)+ startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+        }
+        t = t + tinc;
+        this.changeSize(penGrowth);
+        if(clockwise){
+            this.turn(tinc);
+        }else{
+            this.turnLeft(tinc);
+        }
+    }
+
+    this.up();
+    
+
+}
+
+

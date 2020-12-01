@@ -320,6 +320,20 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: "scale %scft by factor %n percent",
             defaults: [null, 100]
         },
+        drawLogSpiral:{
+            only: SpriteMorph,
+            type: "command",
+            category: "pen",
+            spec: "log spiral: c %n sweep %n size %n pen growth %n clockwise? %bool",
+            defaults: [0.2, 360, 38, 0.1, false]
+        },
+        degreesToRadians: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'other',
+            spec: 'degrees to radians %n',
+            defaults: [0]
+        },
         // Motion
         forward: {
             only: SpriteMorph,
@@ -2673,6 +2687,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             // blocks.push(block('getBorderShade'));
             // blocks.push(block('changeBorderShade'));
             blocks.push(block('flatLineEnds'));
+            blocks.push(block('drawLogSpiral'));
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));
 
@@ -3001,7 +3016,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 blocks.push(block('reportMappedCode'));
                 blocks.push('=');
             }
-
+            blocks.push(block('degreesToRadians'));
             blocks.push(this.makeBlockButton());
         }
     } else {
@@ -9272,6 +9287,52 @@ StageMorph.prototype.userMenu = function () {
         () => ide.saveCanvasAs(this.fullImage(), this.name),
         'save a picture\nof the stage'
     );
+    menu.addItem(
+        "stl...",
+        () => {
+            let featRequest = new XMLHttpRequest();
+            featRequest.open('GET', '/stl', false);
+            featRequest.send(); // there will be a 'pause' here until the response to come.
+            // the object request will be actually modified
+            if (featRequest.status === 404) {
+                ide.showMessage(
+                    'STL Conversion feature coming soon...',
+                    5
+                );
+            }else{
+            let img = this.fullImage().toDataURL();
+            let result = {
+                result: img
+            };
+            let projectName = ide.projectName;
+            ide.showMessage(
+                'Converting, please wait...'
+            );
+            $.ajax({
+                type: 'GET',
+                url: "/stl",
+                data: result,
+                success: function (response) {
+                    let blob = new Blob( [response], { type : 'application/octet-stream' } ); // Generate Blob from the string
+                    saveAs(blob, projectName + '.stl');
+                    ide.showMessage(
+                        'Success',
+                        2
+                    );
+                },
+                error:function(data){
+                    console.error(data);
+                    ide.showMessage(
+                        'Stage image too complicated to convert.\nTry simplifying your design\nand try again later.',
+                        5
+                    );
+                }
+              });
+            }
+        },
+        'save a stl\nof the stage\nfor 3D printing'
+    );
+
     menu.addLine();
     menu.addItem(
         'pen trails',

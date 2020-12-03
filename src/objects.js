@@ -2687,7 +2687,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             // blocks.push(block('getBorderShade'));
             // blocks.push(block('changeBorderShade'));
             blocks.push(block('flatLineEnds'));
-            blocks.push(block('drawLogSpiral'));
+            // blocks.push(block('drawLogSpiral'));
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));
 
@@ -3016,7 +3016,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 blocks.push(block('reportMappedCode'));
                 blocks.push('=');
             }
-            blocks.push(block('degreesToRadians'));
+            // blocks.push(block('degreesToRadians'));
             blocks.push(this.makeBlockButton());
         }
     } else {

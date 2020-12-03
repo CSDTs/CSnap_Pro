@@ -80,6 +80,9 @@ Cloud.prototype.init = function () {
             }
         }
 
+        if (typeof config.application_id !== 'undefined') {
+            this.application_id = config.application_id;
+        }
         if (config.project !== undefined) {
             if (config.project.project_url !== undefined) {
                 this.project_url = config.project.project_url;

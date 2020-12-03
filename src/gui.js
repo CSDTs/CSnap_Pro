@@ -3924,20 +3924,20 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         }
     };
 
-    dialog.cancel = function(){
+    dialog.cancel = function () {
 
         // CSDT Kill Audio Sampling (need to clean up...)
         let audioKill = dialog.children.filter(c => c instanceof ScrollFrameMorph)[0];
         let audioContents = audioKill.contents;
         let audioArray = audioContents.children.filter(a => a instanceof SoundIconMorph);
 
-        for(let i = 0; i < audioArray.length; i++){
-            try{
+        for (let i = 0; i < audioArray.length; i++) {
+            try {
                 audioArray[i].object.previewAudio.pause()
                 audioArray[i].object.previewAudio.pause();
                 audioArray[i].object.previewAudio.terminated = true;
                 audioArray[i].object.previewAudio = null;
-            }catch(e){
+            } catch (e) {
 
             }
         }
@@ -4837,8 +4837,8 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
         );
     }
     // CSDT Present Mode
-    this.toggleAppMode(config.presentation !== undefined ? true: false);
-    
+    this.toggleAppMode(config.presentation !== undefined ? true : false);
+
     this.stopFastTracking();
 };
 
@@ -7017,7 +7017,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 (err, lbl) => {
                     // msg.destroy();
                     this.ide.cloudError().call(null, err, lbl);
-                    this.ide.initializeCloud(); 
+                    this.ide.initializeCloud();
                     //CSDT allow users to login if trying to save without logging in
                 }
             );
@@ -7233,7 +7233,7 @@ ProjectDialogMorph.prototype.installCloudClassroomList = function (cl) {
         }
         myself.edit();
     };
-    this.classroomListField.select(this.classroomListField.elements[0], true);
+    // this.classroomListField.select(this.classroomListField.elements[0], true);
     this.body.add(this.classroomListField);
     this.fixLayout();
 };
@@ -7278,7 +7278,14 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
 
 ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     this.projectList = pl[0] ? pl : [];
-    let filteredProjectList = this.projectList.filter(p => p.application === this.ide.cloud.application_id);
+    // let filteredProjectList = this.projectList.filter(p => p.application === this.ide.cloud.application_id);
+    let filteredProjectList = this.projectList.filter(function (p) {
+
+        if (p.application === 97 || p.application >= 103)
+            return true;
+        else
+            return false;
+    });
     this.projectList = filteredProjectList;
     this.projectList.sort((x, y) =>
         x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1
@@ -7417,6 +7424,7 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.ide.source = 'cloud';
         this.ide.cloud.project_id = null;
         this.ide.cloud.project_approved = false;
+        this.ide.cloud.classroom_id = '';
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
         this.ide.openProjectString(src);
         this.destroy();
@@ -7443,7 +7451,9 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
             this.ide.nextSteps([
                 () => this.ide.cloud.updateURL(proj.id),
                 () => this.ide.cloud.project_id = proj.id,
+                () => this.ide.cloud.application_id = proj.application,
                 () => this.ide.cloud.project_approved = proj.approved,
+                () => this.ide.cloud.classroom_id = proj.classroom,
                 () => this.ide.droppedText(clouddata)
 
             ]);

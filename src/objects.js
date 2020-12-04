@@ -327,6 +327,13 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: "log spiral: c %n sweep %n size %n pen growth %n clockwise? %bool",
             defaults: [0.2, 360, 38, 0.1, false]
         },
+        drawCircle:{
+            only: SpriteMorph,
+            type: "command",
+            category: "pen",
+            spec: "circle: diameter %n sweep %n",
+            defaults: [50, 360]
+        },
         degreesToRadians: {
             only: SpriteMorph,
             type: 'reporter',
@@ -2687,7 +2694,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             // blocks.push(block('getBorderShade'));
             // blocks.push(block('changeBorderShade'));
             blocks.push(block('flatLineEnds'));
-            // blocks.push(block('drawLogSpiral'));
+            blocks.push(block('drawLogSpiral'));
+            blocks.push(block('drawCircle'));
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));
 

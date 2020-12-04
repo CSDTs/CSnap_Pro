@@ -412,4 +412,46 @@ SpriteMorph.prototype.drawLogSpiral = function(c, endangle, getSize, penGrowth, 
 
 }
 
+SpriteMorph.prototype.drawCircle = function(diameter, sweep){
+    var anglecount, stepinc, numbsides, cdirection; 
+    this.down();
+
+    cdirection = 1;
+    if (sweep < 0){
+        cdirection = -1;
+    }
+
+    sweep = Math.abs(sweep);
+    anglecount = 0;
+    stepinc = 1;
+    numbsides = (3.141592653589) / Math.asin(stepinc / diameter);
+
+    var i;
+    
+    while (((360 / numbsides) + anglecount) <= sweep){
+        if ((anglecount + 6) > sweep){
+            while (((360 / numbsides) + anglecount) <= sweep) {
+                this.turnLeft(360.0000 * cdirection / numbsides);
+                this.forward(stepinc);
+                anglecount = anglecount + 360 / numbsides;
+            }
+        }
+        else{
+            
+            for (i = 0; i < 6; i++){
+                this.turnLeft(360 * cdirection / numbsides);
+                this.forward(stepinc);
+                anglecount += 360 / numbsides;
+            }
+        }
+    }
+    
+    if (cdirection = 1){
+        this.turnLeft(sweep - anglecount);
+    }
+    else {
+        this.turn(sweep - anglecount);
+    } 
+    this.up();
+}
 

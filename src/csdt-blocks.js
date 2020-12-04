@@ -346,7 +346,7 @@ SpriteMorph.prototype.drawLogSpiral = function(c, endangle, getSize, penGrowth, 
             yOrigin = this.yPosition() - ((r * Math.sin(radians(startingDirection - start))) - (roffset * Math.sin(radians(startingDirection))));
         }else{
             xOrigin = this.xPosition() - ((r * Math.cos(radians(start + startingDirection))) - (roffset * Math.cos(radians(startingDirection))));
-            yOrigin = this.yPosition() - ((r * Math.sin(radians(tart + startingDirection))) - (roffset * Math.sin(radians(startingDirection))));
+            yOrigin = this.yPosition() - ((r * Math.sin(radians(start + startingDirection))) - (roffset * Math.sin(radians(startingDirection))));
         }
     }else{
         start = 0;

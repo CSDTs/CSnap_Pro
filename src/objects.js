@@ -3362,7 +3362,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 x = 0;
                 y += block.height();
             }
-            console.log(block);
         });
     }
 
@@ -3383,7 +3382,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
             x = 0;
             y += block.height();
         }
-        console.log(block);
     });
 
     // inherited custom blocks:
@@ -3406,7 +3404,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 x = 0;
                 y += block.height();
             }
-            console.log(block);
         });
     }
 

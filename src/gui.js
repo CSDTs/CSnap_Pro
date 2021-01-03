@@ -204,6 +204,7 @@ IDE_Morph.prototype.setDefaultDesign();
 function IDE_Morph(isAutoFill) {
     this.init(isAutoFill);
 }
+// IDE_Morph.prototype.hideCorralBar = false;
 
 IDE_Morph.prototype.init = function (isAutoFill) {
     // global font setting
@@ -275,6 +276,21 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+
+    //CSDT Set Stage Scale (for tutorials and such)
+    this.initialScaleSize = 1;
+
+    //CSDT Manuplicate Components for Tutorials and Workbooks
+    this.hideCorralBar = false;
+    this.hideCloudBtn = false;
+    this.hideFileBtn = false;
+    this.hideControlBtns = false;
+    this.hideSpriteBar = false;
+
+    this.renderBlocks = true;
+    this.renderKeyboardButton = true;
+
+    
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -765,7 +781,11 @@ IDE_Morph.prototype.createControlBar = function () {
     button.fixLayout();
     button.refresh();
     stageSizeButton = button;
-    this.controlBar.add(stageSizeButton);
+
+    if(!IDE_Morph.prototype.hideControlBtns){
+       this.controlBar.add(stageSizeButton); 
+    }
+    
     this.controlBar.stageSizeButton = button; // for refreshing
 
     //appModeButton
@@ -795,7 +815,12 @@ IDE_Morph.prototype.createControlBar = function () {
     button.fixLayout();
     button.refresh();
     appModeButton = button;
-    this.controlBar.add(appModeButton);
+
+    // CSDT Render app button
+    if(!IDE_Morph.prototype.hideControlBtns){
+        this.controlBar.add(appModeButton);
+    }
+    
     this.controlBar.appModeButton = appModeButton; // for refreshing
 
     //steppingButton
@@ -824,7 +849,11 @@ IDE_Morph.prototype.createControlBar = function () {
     button.fixLayout();
     button.refresh();
     steppingButton = button;
-    this.controlBar.add(steppingButton);
+
+    // CSDT render steps button
+    if(!IDE_Morph.prototype.hideControlBtns){
+        this.controlBar.add(steppingButton);
+    }
     this.controlBar.steppingButton = steppingButton; // for refreshing
 
     // stopButton
@@ -960,7 +989,10 @@ IDE_Morph.prototype.createControlBar = function () {
     // button.hint = 'open, save, & annotate project';
     button.fixLayout();
     projectButton = button;
-    this.controlBar.add(projectButton);
+    if(!IDE_Morph.prototype.hideFileBtn){
+        this.controlBar.add(projectButton);
+    }
+    
     this.controlBar.projectButton = projectButton; // for menu positioning
 
     // settingsButton
@@ -983,7 +1015,11 @@ IDE_Morph.prototype.createControlBar = function () {
     // button.hint = 'edit settings';
     button.fixLayout();
     settingsButton = button;
-    this.controlBar.add(settingsButton);
+
+    // CSDT Render settings button
+    if(!IDE_Morph.prototype.hideControlBtns){
+        this.controlBar.add(settingsButton);
+    }
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
     // cloudButton
@@ -1013,7 +1049,12 @@ IDE_Morph.prototype.createControlBar = function () {
     button.fixLayout();
     button.refresh();
     cloudButton = button;
-    this.controlBar.add(cloudButton);
+
+    // CSDT Render cloud button
+    if(!IDE_Morph.prototype.hideCloudBtn){
+        this.controlBar.add(cloudButton);
+    }
+    
     this.controlBar.cloudButton = cloudButton; // for menu positioning & refresh
 
     this.controlBar.fixLayout = function () {
@@ -1306,7 +1347,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     };
 
     this.palette.setWidth(this.logo.width());
-    this.add(this.palette);
+    
+        this.add(this.palette);
+    
+    
     return this.palette;
 };
 
@@ -1372,6 +1416,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     this.spriteBar = new Morph();
     this.spriteBar.color = this.frameColor;
+   
+
+  
     this.add(this.spriteBar);
 
     function addRotationStyleButton(rotationStyle) {
@@ -1413,7 +1460,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
         button.setTop(button.top() +
             ((rotationStyleButtons.length - 1) * (button.height() + 2))
         );
-        myself.spriteBar.add(button);
+
+        if(!IDE_Morph.prototype.hideSpriteBar){
+            myself.spriteBar.add(button);
+        }
         if (myself.currentSprite instanceof StageMorph) {
             button.hide();
         }
@@ -1432,8 +1482,11 @@ IDE_Morph.prototype.createSpriteBar = function () {
     thumbnail.setPosition(
         rotationStyleButtons[0].topRight().add(new Point(5, 3))
     );
-    this.spriteBar.add(thumbnail);
 
+    // CSDT Render sprite bar
+    if(!IDE_Morph.prototype.hideSpriteBar){
+        this.spriteBar.add(thumbnail);
+    }
     thumbnail.fps = 3;
 
     thumbnail.step = function () {
@@ -1451,7 +1504,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
     nameField.setWidth(100); // fixed dimensions
     nameField.contrast = 90;
     nameField.setPosition(thumbnail.topRight().add(new Point(10, 3)));
-    this.spriteBar.add(nameField);
+    if(!IDE_Morph.prototype.hideSpriteBar){
+        this.spriteBar.add(nameField);
+    }
     this.spriteBar.nameField = nameField;
     nameField.fixLayout();
     nameField.accept = function () {
@@ -1486,7 +1541,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     padlock.setPosition(nameField.bottomLeft().add(2));
     padlock.fixLayout();
-    this.spriteBar.add(padlock);
+    if(!IDE_Morph.prototype.hideSpriteBar){
+        this.spriteBar.add(padlock);
+    }
     if (this.currentSprite instanceof StageMorph) {
         padlock.hide();
     }
@@ -1551,7 +1608,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelColor = this.buttonLabelColor;
 
 
-    // CSDT - Show Costumes Tab (for tutorials)
+    // CSDT Show costumes tab
     if (!StageMorph.prototype.hideCostumesTab) {
         tab.fixLayout();
         tabBar.add(tab);
@@ -1570,8 +1627,12 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
-    tab.fixLayout();
-    tabBar.add(tab);
+
+    // CSDT Show Sounds Tab
+    if (!StageMorph.prototype.hideSoundsTab) {
+        tab.fixLayout();
+        tabBar.add(tab);
+    }
 
     tabBar.fixLayout();
     tabBar.children.forEach(each =>
@@ -1709,7 +1770,11 @@ IDE_Morph.prototype.createCorralBar = function () {
     newbutton.fixLayout();
     newbutton.setCenter(this.corralBar.center());
     newbutton.setLeft(this.corralBar.left() + padding);
-    this.corralBar.add(newbutton);
+
+    // CSDT Render new turtle button
+    if(!IDE_Morph.prototype.hideCorralBar){
+        this.corralBar.add(newbutton);
+    }
 
     paintbutton = new PushButtonMorph(
         this,
@@ -1732,7 +1797,10 @@ IDE_Morph.prototype.createCorralBar = function () {
     paintbutton.setLeft(
         this.corralBar.left() + padding + newbutton.width() + padding
     );
-    this.corralBar.add(paintbutton);
+    // CSDT render paint button
+    if(!IDE_Morph.prototype.hideCorralBar){
+        this.corralBar.add(paintbutton);
+    }
 
     if (CamSnapshotDialogMorph.prototype.enableCamera && cameraOn) {
         cambutton = new PushButtonMorph(
@@ -1829,24 +1897,44 @@ IDE_Morph.prototype.updateCorralBar = function () {
         MouseY > StageMorph.prototype.dimensions.y / 2 ||
         MouseX < StageMorph.prototype.dimensions.x / -2 ||
         MouseY < StageMorph.prototype.dimensions.y / -2) {
-        this.corralBar.children[2].text = "";
-        this.corralBar.children[3].text = "";
+        if(!IDE_Morph.prototype.hideCorralBar){
+            this.corralBar.children[2].text = "";
+            this.corralBar.children[3].text = "";
+        }else{
+            this.corralBar.children[0].text = "";
+            this.corralBar.children[1].text = "";
+        }
     } else {
-        this.corralBar.children[2].text = "X: " + Math.round(this.stage.reportMouseX());
-        this.corralBar.children[3].text = "Y: " + Math.round(this.stage.reportMouseY());
+        if(!IDE_Morph.prototype.hideCorralBar){
+            this.corralBar.children[2].text = "X: " + Math.round(this.stage.reportMouseX());
+            this.corralBar.children[3].text = "Y: " + Math.round(this.stage.reportMouseY());
+        }else{
+            this.corralBar.children[0].text = "X: " + Math.round(this.stage.reportMouseX());
+            this.corralBar.children[1].text = "Y: " + Math.round(this.stage.reportMouseY());
+        }
     }
     Morph.prototype.trackChanges = true;
 
     //update only if the coordinates have changed to save CPU
-    if (this.corralBarOldX != this.corralBar.children[2].text || this.corralBarOldY != this.corralBar.children[3].text) {
-        this.corralBarOldX = this.corralBar.children[2].text;
-        this.corralBarOldY = this.corralBar.children[3].text;
-        this.corralBar.children[2].rerender();
-        this.corralBar.children[3].rerender();
+    if(!IDE_Morph.prototype.hideCorralBar){
+        if (this.corralBarOldX != this.corralBar.children[2].text || this.corralBarOldY != this.corralBar.children[3].text) {
+            this.corralBarOldX = this.corralBar.children[2].text;
+            this.corralBarOldY = this.corralBar.children[3].text;
+            this.corralBar.children[2].rerender();
+            this.corralBar.children[3].rerender();
 
-        this.corralBar.changed();
+            this.corralBar.changed();
+        }
+    }else{
+        if (this.corralBarOldX != this.corralBar.children[0].text || this.corralBarOldY != this.corralBar.children[1].text) {
+            this.corralBarOldX = this.corralBar.children[0].text;
+            this.corralBarOldY = this.corralBar.children[1].text;
+            this.corralBar.children[0].rerender();
+            this.corralBar.children[1].rerender();
+
+            this.corralBar.changed();
+        }
     }
-
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -1869,7 +1957,12 @@ IDE_Morph.prototype.createCorral = function () {
 
     this.corral.stageIcon = new SpriteIconMorph(this.stage);
     this.corral.stageIcon.isDraggable = false;
-    this.corral.add(this.corral.stageIcon);
+
+    //CSDT Corral Stage Icon
+    if(!IDE_Morph.prototype.hideCorralBar){
+        this.corral.add(this.corral.stageIcon);
+    }
+    
 
     frame = new ScrollFrameMorph(null, null, this.sliderColor);
     frame.acceptsDrops = false;
@@ -1889,7 +1982,11 @@ IDE_Morph.prototype.createCorral = function () {
     });
 
     this.corral.frame = frame;
-    this.corral.add(frame);
+
+    //CSDT Corral Frame
+    if(!IDE_Morph.prototype.hideCorralBar){
+        this.corral.add(frame);
+    }
 
     this.corral.fixLayout = function () {
         this.stageIcon.setCenter(this.center());
@@ -2006,7 +2103,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             ) * 10) / 10);
             this.stage.setCenter(this.center());
         } else {
-            this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
+            this.stage.setScale(this.isSmallStage ? this.stageRatio : (this.initialScaleSize));
             this.stage.setTop(this.logo.bottom() + padding);
             this.stage.setRight(this.right());
             maxPaletteWidth = Math.max(

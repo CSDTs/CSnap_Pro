@@ -3019,7 +3019,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             // blocks.push(block('degreesToRadians'));
             blocks.push(this.makeBlockButton());
         }
-    } else {
+    } else{
+        if(myself.parentThatIsA(IDE_Morph).renderBlocks){
         blocks.push(block('receiveGo'));
         blocks.push(block('doRepeat'));
         blocks.push(block('receiveMessage'));
@@ -3067,6 +3068,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportBoolean'));
         blocks.push(block('reportRandom'));
+    }
     }
     return blocks;
 };
@@ -3331,6 +3333,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
             }
             block.setPosition(new Point(x, y));
             palette.addContents(block);
+
             if (block instanceof ToggleMorph ||
                 (block instanceof RingMorph)) {
                 x = block.right() + unit / 2;
@@ -3358,7 +3361,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 block = definition.templateInstance();
                 y += unit * 0.3;
                 block.setPosition(new Point(x, y));
+          if(stage.parent.renderBlocks){
+
+        
                 palette.addContents(block);
+            }
                 x = 0;
                 y += block.height();
             }
@@ -7894,6 +7901,7 @@ StageMorph.prototype.frameRate = 0; // unscheduled per default
 // StageMorph tutorial settings CSDT
 StageMorph.prototype.tutorial = false;
 StageMorph.prototype.hideCostumesTab = false;
+StageMorph.prototype.hideSoundsTab = false;
 StageMorph.prototype.decategorize = false;
 StageMorph.prototype.changeBlocks = false;
 StageMorph.prototype.enableGlide = false;

@@ -391,6 +391,36 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode, remixID) {
     } else {
         StageMorph.prototype.hideCostumesTab = false;
     }
+    if (model.stage.attributes.hideSoundsTab) {
+        StageMorph.prototype.hideSoundsTab = model.stage.attributes.hideSoundsTab === 'true';
+    } else {
+        StageMorph.prototype.hideSoundsTab = false;
+    }
+    if (model.stage.attributes.hideCorralBar) {
+        IDE_Morph.prototype.hideCorralBar = model.stage.attributes.hideCorralBar === 'true';
+    } else {
+        IDE_Morph.prototype.hideCorralBar = false;
+    }
+    if (model.stage.attributes.hideFileBtn) {
+        IDE_Morph.prototype.hideFileBtn = model.stage.attributes.hideFileBtn === 'true';
+    } else {
+        IDE_Morph.prototype.hideFileBtn = false;
+    }
+    if (model.stage.attributes.hideCloudBtn) {
+        IDE_Morph.prototype.hideCloudBtn = model.stage.attributes.hideCloudBtn === 'true';
+    } else {
+        IDE_Morph.prototype.hideCloudBtn = false;
+    }
+    if (model.stage.attributes.hideControlBtns) {
+        IDE_Morph.prototype.hideControlBtns = model.stage.attributes.hideControlBtns === 'true';
+    } else {
+        IDE_Morph.prototype.hideControlBtns = false;
+    }
+    if (model.stage.attributes.hideSpriteBar) {
+        IDE_Morph.prototype.hideSpriteBar = model.stage.attributes.hideSpriteBar === 'true';
+    } else {
+        IDE_Morph.prototype.hideSpriteBar = false;
+    }
     if (model.stage.attributes.decategorize) {
         StageMorph.prototype.decategorize = model.stage.attributes.decategorize === 'true';
     } else {
@@ -1757,7 +1787,9 @@ StageMorph.prototype.toXML = function (serializer) {
         '<thumbnail>$</thumbnail>' +
         '<stage name="@" width="@" height="@" ' +
         'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
-        'tutorial="@" hideCostumesTab="@" decategorize="@" changeBlocks="@" enableGlide="@" ' +
+        'tutorial="@" ' + 
+        'hideCostumesTab="@" hideSoundsTab="@" hideCorralBar="@" hideFileBtn="@" hideCloudBtn="@" hideControlBtns="@" hideSpriteBar="@" ' + 
+        'decategorize="@" changeBlocks="@" enableGlide="@" ' +
         'penlog="@" ' +
         '%' +
         'volume="@" ' +
@@ -1800,6 +1832,12 @@ StageMorph.prototype.toXML = function (serializer) {
         this.isThreadSafe,
         StageMorph.prototype.tutorial,
         StageMorph.prototype.hideCostumesTab,
+        StageMorph.prototype.hideSoundsTab,
+        IDE_Morph.prototype.hideCorralBar,
+        IDE_Morph.prototype.hideFileBtn,
+        IDE_Morph.prototype.hideCloudBtn,
+        IDE_Morph.prototype.hideControlBtns,
+        IDE_Morph.prototype.hideSpriteBar,
         StageMorph.prototype.decategorize,
         StageMorph.prototype.changeBlocks,
         StageMorph.prototype.enableGlide,

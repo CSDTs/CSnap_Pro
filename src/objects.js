@@ -2561,8 +2561,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(watcherToggle('getScale'));
             blocks.push(block('getScale', this.inheritsAttribute('size')));
             blocks.push('-');
-            blocks.push(block('show'));
-            blocks.push(block('hide'));
+            // blocks.push(block('show'));
+            // blocks.push(block('hide'));
             blocks.push(watcherToggle('reportShown'));
             blocks.push(block('reportShown', this.inheritsAttribute('shown?')));
             blocks.push('-');

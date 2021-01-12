@@ -412,6 +412,19 @@ SpriteMorph.prototype.drawLogSpiral = function(c, endangle, getSize, penGrowth, 
 
 }
 
+SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClockwise, branchAt){
+    if (branchAt > 0 && branchAt < Math.abs(endangle)){
+        console.log(branchAt);
+    }
+
+    else{//just finish a regugar log spiral and then report
+        this.drawLogSpiral(c, endangle, getSize, penGrowth, isClockwise);
+        this.doThink("please enter a value more than 0 and less than the degree swept");
+    }
+   
+}
+
+
 SpriteMorph.prototype.drawCircle = function(diameter, sweep){
     var anglecount, stepinc, numbsides, cdirection; 
     this.down();

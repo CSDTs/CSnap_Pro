@@ -341,6 +341,13 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: "tanu: c %n sweep %n size %n pen growth %n clockwise? %bool depth %n percentage %n",
             defaults: [0.2, 360, 38, 0.1, false, 3, 0.618]
         },
+        drawLimitedTanu:{
+            only: SpriteMorph,
+            type: "command",
+            category: "pen",
+            spec: "LimitedTanu: c %n sweep %n size %n pen growth %n clockwise? %bool",
+            defaults: [0.2, 360, 38, 0.1, false]
+        },
         degreesToRadians: {
             only: SpriteMorph,
             type: 'reporter',
@@ -2703,6 +2710,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('flatLineEnds'));
             blocks.push(block('drawLogSpiral'));
             blocks.push(block('drawTanu'));
+            blocks.push(block('drawLimitedTanu'));
             blocks.push(block('drawCircle'));
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));

@@ -5253,6 +5253,8 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     ) {
         var pixels, index, l, r, g, b, max, min, span,
             h, s, v, i, f, p, q, t, newR, newG, newB;
+
+
         pixels = imagedata.data;
         for (index = 0, l = pixels.length; index < l; index += 4) {
             r = pixels[index];
@@ -5279,6 +5281,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
             }
             v = max / 255;
 
+            // Adjusting color range from 200 to 100 for easier classroom comprehension
             h = (h + hueShift * 360 / 100) % 360;
             s = Math.max(0, Math.min(s + saturationShift / 100, 1));
             v = Math.max(0, Math.min(v + brightnessShift / 100, 1));
@@ -5469,9 +5472,8 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
     } else {
-        // CSDT Enable saturation change whenever color is selected.
+        // // CSDT Enable saturation change whenever color is selected.
         if (eff === 'color') {
-
             this.graphicsValues['saturation'] = this.graphicsValues['saturation'] === 0 ? 100 : this.graphicsValues['saturation'];
             this.graphicsValues['brightness'] = this.graphicsValues['brightness'] === 0 ? 35 : this.graphicsValues['brightness'];
         }

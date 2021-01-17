@@ -290,7 +290,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.renderBlocks = true;
     this.renderKeyboardButton = true;
 
-    
+
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -782,10 +782,10 @@ IDE_Morph.prototype.createControlBar = function () {
     button.refresh();
     stageSizeButton = button;
 
-    if(!IDE_Morph.prototype.hideControlBtns){
-       this.controlBar.add(stageSizeButton); 
+    if (!IDE_Morph.prototype.hideControlBtns) {
+        this.controlBar.add(stageSizeButton);
     }
-    
+
     this.controlBar.stageSizeButton = button; // for refreshing
 
     //appModeButton
@@ -817,10 +817,10 @@ IDE_Morph.prototype.createControlBar = function () {
     appModeButton = button;
 
     // CSDT Render app button
-    if(!IDE_Morph.prototype.hideControlBtns){
+    if (!IDE_Morph.prototype.hideControlBtns) {
         this.controlBar.add(appModeButton);
     }
-    
+
     this.controlBar.appModeButton = appModeButton; // for refreshing
 
     //steppingButton
@@ -851,7 +851,7 @@ IDE_Morph.prototype.createControlBar = function () {
     steppingButton = button;
 
     // CSDT render steps button
-    if(!IDE_Morph.prototype.hideControlBtns){
+    if (!IDE_Morph.prototype.hideControlBtns) {
         this.controlBar.add(steppingButton);
     }
     this.controlBar.steppingButton = steppingButton; // for refreshing
@@ -989,10 +989,10 @@ IDE_Morph.prototype.createControlBar = function () {
     // button.hint = 'open, save, & annotate project';
     button.fixLayout();
     projectButton = button;
-    if(!IDE_Morph.prototype.hideFileBtn){
+    if (!IDE_Morph.prototype.hideFileBtn) {
         this.controlBar.add(projectButton);
     }
-    
+
     this.controlBar.projectButton = projectButton; // for menu positioning
 
     // settingsButton
@@ -1017,7 +1017,7 @@ IDE_Morph.prototype.createControlBar = function () {
     settingsButton = button;
 
     // CSDT Render settings button
-    if(!IDE_Morph.prototype.hideControlBtns){
+    if (!IDE_Morph.prototype.hideControlBtns) {
         this.controlBar.add(settingsButton);
     }
     this.controlBar.settingsButton = settingsButton; // for menu positioning
@@ -1051,10 +1051,10 @@ IDE_Morph.prototype.createControlBar = function () {
     cloudButton = button;
 
     // CSDT Render cloud button
-    if(!IDE_Morph.prototype.hideCloudBtn){
+    if (!IDE_Morph.prototype.hideCloudBtn) {
         this.controlBar.add(cloudButton);
     }
-    
+
     this.controlBar.cloudButton = cloudButton; // for menu positioning & refresh
 
     this.controlBar.fixLayout = function () {
@@ -1347,10 +1347,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     };
 
     this.palette.setWidth(this.logo.width());
-    
-        this.add(this.palette);
-    
-    
+
+    this.add(this.palette);
+
+
     return this.palette;
 };
 
@@ -1416,9 +1416,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     this.spriteBar = new Morph();
     this.spriteBar.color = this.frameColor;
-   
 
-  
+
+
     this.add(this.spriteBar);
 
     function addRotationStyleButton(rotationStyle) {
@@ -1461,7 +1461,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
             ((rotationStyleButtons.length - 1) * (button.height() + 2))
         );
 
-        if(!IDE_Morph.prototype.hideSpriteBar){
+        if (!IDE_Morph.prototype.hideSpriteBar) {
             myself.spriteBar.add(button);
         }
         if (myself.currentSprite instanceof StageMorph) {
@@ -1484,7 +1484,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     );
 
     // CSDT Render sprite bar
-    if(!IDE_Morph.prototype.hideSpriteBar){
+    if (!IDE_Morph.prototype.hideSpriteBar) {
         this.spriteBar.add(thumbnail);
     }
     thumbnail.fps = 3;
@@ -1504,7 +1504,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     nameField.setWidth(100); // fixed dimensions
     nameField.contrast = 90;
     nameField.setPosition(thumbnail.topRight().add(new Point(10, 3)));
-    if(!IDE_Morph.prototype.hideSpriteBar){
+    if (!IDE_Morph.prototype.hideSpriteBar) {
         this.spriteBar.add(nameField);
     }
     this.spriteBar.nameField = nameField;
@@ -1541,7 +1541,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     padlock.setPosition(nameField.bottomLeft().add(2));
     padlock.fixLayout();
-    if(!IDE_Morph.prototype.hideSpriteBar){
+    if (!IDE_Morph.prototype.hideSpriteBar) {
         this.spriteBar.add(padlock);
     }
     if (this.currentSprite instanceof StageMorph) {
@@ -1772,7 +1772,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     newbutton.setLeft(this.corralBar.left() + padding);
 
     // CSDT Render new turtle button
-    if(!IDE_Morph.prototype.hideCorralBar){
+    if (!IDE_Morph.prototype.hideCorralBar) {
         this.corralBar.add(newbutton);
     }
 
@@ -1798,7 +1798,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         this.corralBar.left() + padding + newbutton.width() + padding
     );
     // CSDT render paint button
-    if(!IDE_Morph.prototype.hideCorralBar){
+    if (!IDE_Morph.prototype.hideCorralBar) {
         this.corralBar.add(paintbutton);
     }
 
@@ -1897,18 +1897,18 @@ IDE_Morph.prototype.updateCorralBar = function () {
         MouseY > StageMorph.prototype.dimensions.y / 2 ||
         MouseX < StageMorph.prototype.dimensions.x / -2 ||
         MouseY < StageMorph.prototype.dimensions.y / -2) {
-        if(!IDE_Morph.prototype.hideCorralBar){
+        if (!IDE_Morph.prototype.hideCorralBar) {
             this.corralBar.children[2].text = "";
             this.corralBar.children[3].text = "";
-        }else{
+        } else {
             this.corralBar.children[0].text = "";
             this.corralBar.children[1].text = "";
         }
     } else {
-        if(!IDE_Morph.prototype.hideCorralBar){
+        if (!IDE_Morph.prototype.hideCorralBar) {
             this.corralBar.children[2].text = "X: " + Math.round(this.stage.reportMouseX());
             this.corralBar.children[3].text = "Y: " + Math.round(this.stage.reportMouseY());
-        }else{
+        } else {
             this.corralBar.children[0].text = "X: " + Math.round(this.stage.reportMouseX());
             this.corralBar.children[1].text = "Y: " + Math.round(this.stage.reportMouseY());
         }
@@ -1916,7 +1916,7 @@ IDE_Morph.prototype.updateCorralBar = function () {
     Morph.prototype.trackChanges = true;
 
     //update only if the coordinates have changed to save CPU
-    if(!IDE_Morph.prototype.hideCorralBar){
+    if (!IDE_Morph.prototype.hideCorralBar) {
         if (this.corralBarOldX != this.corralBar.children[2].text || this.corralBarOldY != this.corralBar.children[3].text) {
             this.corralBarOldX = this.corralBar.children[2].text;
             this.corralBarOldY = this.corralBar.children[3].text;
@@ -1925,7 +1925,7 @@ IDE_Morph.prototype.updateCorralBar = function () {
 
             this.corralBar.changed();
         }
-    }else{
+    } else {
         if (this.corralBarOldX != this.corralBar.children[0].text || this.corralBarOldY != this.corralBar.children[1].text) {
             this.corralBarOldX = this.corralBar.children[0].text;
             this.corralBarOldY = this.corralBar.children[1].text;
@@ -1959,10 +1959,10 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.stageIcon.isDraggable = false;
 
     //CSDT Corral Stage Icon
-    if(!IDE_Morph.prototype.hideCorralBar){
+    if (!IDE_Morph.prototype.hideCorralBar) {
         this.corral.add(this.corral.stageIcon);
     }
-    
+
 
     frame = new ScrollFrameMorph(null, null, this.sliderColor);
     frame.acceptsDrops = false;
@@ -1984,7 +1984,7 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.frame = frame;
 
     //CSDT Corral Frame
-    if(!IDE_Morph.prototype.hideCorralBar){
+    if (!IDE_Morph.prototype.hideCorralBar) {
         this.corral.add(frame);
     }
 
@@ -3838,9 +3838,9 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-
+    // localize(graphicsName)
     menu.addItem(
-        localize(graphicsName) + '...',
+        'Sprite Images...',
         () => {
             if (location.protocol === 'file:') {
                 this.importLocalFile();
@@ -3848,7 +3848,8 @@ IDE_Morph.prototype.projectMenu = function () {
             }
             this.importMedia(graphicsName);
         },
-        'Select a costume from the media library'
+        'Select an image from the media library'
+        // 'Select a costume from the media library'
     );
     menu.addItem(
         localize('Sounds') + '...',
@@ -3968,7 +3969,7 @@ IDE_Morph.prototype.importLocalFile = function () {
 IDE_Morph.prototype.importMedia = function (folderName) {
     // open a dialog box letting the user browse available "built-in"
     // costumes, backgrounds or sounds
-    var msg = this.showMessage('Opening ' + folderName + '...');
+    var msg = this.showMessage('Opening ' + folderName === 'Costumes' ? 'Sprite Images' : folderName  + '...');
     this.getMediaList(
         folderName,
         items => {
@@ -3988,15 +3989,124 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         turtle = new SymbolMorph('turtle', 60),
         myself = this,
         world = this.world(),
-        handle;
+        handle,
+        content = new ScrollFrameMorph(),
+        section,
+        msg,
+        listFieldWidth = 100;
+
+    let uniqueSections = [...new Set(items.map(item => item.description))];
+    uniqueSections.push('All');
+
+
+    // Create the media sections
+    var listField = new ListMorph(
+        uniqueSections,
+        function (element) {
+                return element;
+        }
+    );
+
+    listField.setWidth(listFieldWidth);
+    listField.contents.children[0].children.forEach(function (x) {
+
+        x.action = function () {
+
+            let msg = myself.showMessage((localize('Loading') + '\n' + localize(x.labelString)), 1);
+
+            frame.destroy();
+            frame = new ScrollFrameMorph();
+            frame.acceptsDrops = false;
+            frame.contents.acceptsDrops = false;
+            frame.color = myself.groupColor;
+            frame.fixLayout = nop;
+
+            // Filters costume by category
+           let currentSection = (x.labelString === 'All') ? items : items.filter(y => y.description == x.labelString);
+
+            // Note to self: need to convert to generic function...
+            currentSection.forEach(item => {
+                // Caution: creating very many thumbnails can take a long time!
+                var url = myself.resourceURL(folderName, item.fileName),
+                    img = new Image(),
+                    suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
+                    isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
+                    isSound = contains(['wav', 'mp3'], suffix),
+                    icon;
+
+                if (isSound) {
+                    icon = new SoundIconMorph(new Sound(new Audio(), item.name));
+                } else {
+                    icon = new CostumeIconMorph(
+                        new Costume(turtle.getImage(), item.name)
+                    );
+                }
+                icon.isDraggable = false;
+                icon.userMenu = nop;
+                icon.action = function () {
+                    if (selectedIcon === icon) {
+                        return;
+                    }
+                    var prevSelected = selectedIcon;
+                    selectedIcon = icon;
+                    if (prevSelected) {
+                        prevSelected.refresh();
+                    }
+                };
+                icon.doubleClickAction = dialog.ok;
+                icon.query = function () {
+                    return icon === selectedIcon;
+                };
+                frame.addContents(icon);
+                if (isSound) {
+                    icon.object.audio.onloadeddata = function () {
+                        icon.createThumbnail();
+                        icon.fixLayout();
+                        icon.refresh();
+                    };
+
+                    icon.object.audio.src = url;
+                    icon.object.audio.load();
+                } else if (isSVG) {
+                    img.onload = function () {
+                        icon.object = new SVG_Costume(img, item.name);
+                        icon.refresh();
+
+                    };
+                    this.getURL(
+                        url,
+                        txt => img.src = 'data:image/svg+xml;base64,' +
+                        window.btoa(txt)
+                    );
+                } else {
+                    img.onload = function () {
+                        var canvas = newCanvas(new Point(img.width, img.height), true);
+                        canvas.getContext('2d').drawImage(img, 0, 0);
+                        icon.object = new Costume(canvas, item.name);
+                        icon.refresh();
+                    };
+                    img.src = url;
+                }
+            });
+
+            content.add(frame);
+            dialog.fixLayout();
+
+        };
+    });
+
+
+    listField.fixLayout = nop;
 
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
     frame.color = myself.groupColor;
     frame.fixLayout = nop;
-    dialog.labelString = folderName;
+    dialog.labelString = folderName === 'Costumes' ? 'Sprite Images' : folderName;
     dialog.createLabel();
-    dialog.addBody(frame);
+    content.add(frame);
+    content.add(listField);
+    dialog.addBody(content);
     dialog.addButton('ok', 'Import');
     dialog.addButton('cancel', 'Cancel');
 
@@ -4045,25 +4155,45 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
             x = 0,
             y = 0,
-            fp, fw;
+            lw = listFieldWidth,
+            margin = 15,
+            cp, ce,
+            lp, le,
+            fp, fe, fw;
         this.buttons.fixLayout();
-        this.body.setPosition(this.position().add(new Point(
+
+        cp = this.position().add(new Point(
             this.padding,
             th + this.padding
-        )));
-        this.body.setExtent(new Point(
+        ));
+        ce = new Point(
             this.width() - this.padding * 2,
             this.height() - this.padding * 3 - th - this.buttons.height()
-        ));
-        fp = this.body.position();
-        fw = this.body.width();
+        );
+        content.setPosition(cp);
+        content.setExtent(ce);
+
+        this.body.setPosition(new Point(cp.x, cp.y));
+        this.body.setExtent(new Point(ce.x, ce.y));
+
+        fp = new Point(cp.x + lw + margin, cp.y);
+        lp = new Point(cp.x, cp.y);
+
+        fe = new Point(ce.x - lw - margin, ce.y);
+        le = new Point(lw, ce.y);
+
+        frame.setPosition(fp);
+        frame.setExtent(fe);
+        listField.setPosition(lp);
+        listField.setExtent(le);
+
         frame.contents.children.forEach(function (icon) {
-            icon.setPosition(fp.add(new Point(x, y)));
+            icon.setPosition(fp.add(new Point(x + 5, y + 5)));
             x += icon.width();
-            if (x + icon.width() > fw) {
+            if (x + icon.width() > fe.x) {
                 x = 0;
-                y += icon.height();
-            }
+                y += icon.height() + 4;
+            };
         });
         frame.contents.adjustBounds();
         this.label.setCenter(this.center());
@@ -4139,7 +4269,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         }
     });
     dialog.popUp(world);
-    dialog.setExtent(new Point(400, 300));
+    dialog.setExtent(new Point(600, 500));
     dialog.setCenter(world.center());
 
     handle = new HandleMorph(

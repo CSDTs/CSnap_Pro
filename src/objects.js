@@ -346,7 +346,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: "command",
             category: "pen",
             spec: "LimitedTanu: c %n sweep %n size %n pen growth %n clockwise? %bool",
-            defaults: [0.2, 360, 38, 0.1, false]
+            defaults: [0.3, 550, 38, 0.05, true]
         },
         degreesToRadians: {
             only: SpriteMorph,

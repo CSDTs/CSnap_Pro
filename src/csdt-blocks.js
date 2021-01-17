@@ -522,7 +522,7 @@ SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClo
     for (let i = 1; i < depth; i++){
         this.gotoXY(nextx, nexty);
         this.size = temppensize;
-        var newspiralsize = getsize * percentage;
+        var newspiralsize = getSize * percentage;
         var newclockwize = !isClockwise;
         var newdepth = depth - 1;
         temppengrowth = penGrowth * (-1); //will have to reverse the pengrowth
@@ -589,6 +589,8 @@ SpriteMorph.prototype.drawLimitedTanu = function(c, endangle, getSize, penGrowth
     }
 
     let repeatCounter = Math.abs((end - start) / tinc) / segments;
+    let stoppingpoint = (repeatCounter * segments * 0.7).toFixed(0);
+
 
     for (let i = 0; i < repeatCounter; i ++){
         //  Find way to do warp
@@ -608,17 +610,16 @@ SpriteMorph.prototype.drawLimitedTanu = function(c, endangle, getSize, penGrowth
             }else{
                 this.turnLeft(tinc);
             }
-        }
-        if (i == (repeatCounter * 0.5).toFixed(0)){
-            tempx= this.xPosition;
-            tempy= this.yPosition;
-            //nextx.push(this.xPosition);//push an xposition element in the array of x location
-            //nexty.push(this.yPosition);
-            temppensize = this.size;//this is the pensize, not the size of the spiral
-            tempdirection = this.direction;
+
+            if ((i * 5 + j) == stoppingpoint){
+                tempx= this.xPosition();
+                tempy= this.yPosition();
+                temppensize = this.size; //this is the pensize, not the size of the spiral
+                tempdirection = 180 - this.direction();
+            }
+            
         }
     }
-
     let modCounter =  Math.abs((end - start) / tinc) % segments;
 
     for (let k = 0; k < modCounter; k++){
@@ -641,13 +642,14 @@ SpriteMorph.prototype.drawLimitedTanu = function(c, endangle, getSize, penGrowth
     this.up();
 
     this.gotoXY(tempx, tempy);
-    this.size = temppensize;
-    var newspiralsize = getsize * percentage;
+    this.setSize(temppensize);//temppensize
+    var newspiralsize = getSize * 0.375;
     var newclockwize = !isClockwise;
-    var newdepth = depth - 1;
-    temppengrowth = penGrowth * (-1); //will have to reverse the pengrowth
-    this.drawLogSpiral(c, endangle, newspiralsize, temppengrowth, newclockwize);
-
+    var temppengrowth = penGrowth * (-1); //will have to reverse the pengrowth
+    this.pointAtAngle(180 - tempdirection);
+    var newsweep = endangle * (-0.618);
+    this.drawLogSpiral(c, newsweep, newspiralsize, temppengrowth, newclockwize);
+    
 }
 
 

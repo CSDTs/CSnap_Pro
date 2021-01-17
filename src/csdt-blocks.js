@@ -310,7 +310,7 @@ SpriteMorph.prototype.degreesToRadians = function(degrees){
 }
 
 SpriteMorph.prototype.drawLogSpiral = function(c, endangle, getSize, penGrowth, isClockwise){
-    var xOrigin, yOrigin, startingDirection, beta, t, tinc, roffset, r, h, start, end, segments, startAngle, clockwise, size; 
+    var xOrigin, yOrigin, startingDirection, t, tinc, roffset, r, start, end, segments, clockwise, size; 
     this.down();
     segments = 5;
  
@@ -411,17 +411,125 @@ SpriteMorph.prototype.drawLogSpiral = function(c, endangle, getSize, penGrowth, 
     
 
 }
-
-SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClockwise, branchAt){
-    if (branchAt > 0 && branchAt < Math.abs(endangle)){
-        console.log(branchAt);
+// iterative depth and (2) percentage change
+SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClockwise, depth, percentage){
+    var xOrigin, yOrigin, startingDirection, t, tinc, roffset, r, start, end, segments, clockwise, size, nextx, nexty, temppensize, tempclockwize; 
+    this.down();
+    segments = 5;
+ 
+    if(isClockwise === null || typeof isClockwise === undefined){
+        clockwise = false;
+    }else{
+        clockwise = isClockwise;
     }
 
-    else{//just finish a regugar log spiral and then report
-        this.drawLogSpiral(c, endangle, getSize, penGrowth, isClockwise);
-        this.doThink("please enter a value more than 0 and less than the degree swept");
+    if(clockwise){
+        if(endangle < 0){
+            startingDirection = ((((90 - this.direction()) - endangle) + degrees(Math.atan(1 / c))) - 180);
+        }else{
+            startingDirection = ((90 - this.direction()) + degrees(Math.atan(1 / c)));
+        }
+    }else{
+        if(endangle < 0){
+            startingDirection = (((90 - this.direction()) + endangle) + (180 - degrees(Math.atan(1 / c))));
+        }else{
+            startingDirection = (90 - this.direction()) - degrees(Math.atan(1 / c));
+        }
     }
-   
+
+    size = 2 * (getSize / Math.exp(c * this.degreesToRadians(Math.abs(endangle))));
+    roffset = size * Math.exp(c * this.degreesToRadians(0));
+
+    if(endangle < 0){
+        start = Math.abs(endangle);
+        end = 0;
+        r = size * Math.exp(c * this.degreesToRadians(Math.abs(endangle)));
+        if(clockwise){
+            xOrigin = this.xPosition() - ((r * Math.cos(radians(startingDirection - start))) - (roffset * Math.cos(radians(startingDirection))));
+            yOrigin = this.yPosition() - ((r * Math.sin(radians(startingDirection - start))) - (roffset * Math.sin(radians(startingDirection))));
+        }else{
+            xOrigin = this.xPosition() - ((r * Math.cos(radians(start + startingDirection))) - (roffset * Math.cos(radians(startingDirection))));
+            yOrigin = this.yPosition() - ((r * Math.sin(radians(start + startingDirection))) - (roffset * Math.sin(radians(startingDirection))));
+        }
+    }else{
+        start = 0;
+        end = endangle;
+        xOrigin = this.xPosition();
+        yOrigin = this.yPosition();
+
+    }
+
+
+    t = start;
+    if(end > start){
+        tinc = 1;
+    }else{
+        tinc = -1;
+    }
+
+    let repeatCounter = Math.abs((end - start) / tinc) / segments;
+
+    for (let i = 0; i < repeatCounter; i ++){
+        //  Find way to do warp
+        for (let j = 0; j < segments; j++){
+            r = size * Math.exp(c * this.degreesToRadians(t));
+            if(!clockwise){
+                this.gotoXY(((xOrigin + (r * Math.cos(radians(t + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                            ((yOrigin + (r * Math.sin(radians(t + startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+            }else{
+                this.gotoXY(((xOrigin + (r * Math.cos(radians((t * -1) + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                            ((yOrigin + (r * Math.sin(radians((t * -1 )+ startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+            }
+            t = t + tinc;
+            this.changeSize(penGrowth);
+            if(clockwise){
+                this.turn(tinc);
+            }else{
+                this.turnLeft(tinc);
+            }
+        }
+        if (i = (repeatCounter * 0.7).toFixed()){
+            nextx= this.xPosition;
+            nexty= this.yPosition;
+            //nextx.push(this.xPosition);//push an xposition element in the array of x location
+            //nexty.push(this.yPosition);
+            temppensize = this.size;//this is the pensize, not the size of the spiral
+            tempdirection = this.direction;
+        }
+    }
+
+    let modCounter =  Math.abs((end - start) / tinc) % segments;
+
+    for (let k = 0; k < modCounter; k++){
+        r = size * Math.exp(c * this.degreesToRadians(t));
+        if(!clockwise){
+            this.gotoXY(((xOrigin + (r * Math.cos(radians(t + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                        ((yOrigin + (r * Math.sin(radians(t + startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+        }else{
+            this.gotoXY(((xOrigin + (r * Math.cos(radians((t * -1) + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                        ((yOrigin + (r * Math.sin(radians((t * -1)+ startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+        }
+        t = t + tinc;
+        this.changeSize(penGrowth);
+        if(clockwise){
+            this.turn(tinc);
+        }else{
+            this.turnLeft(tinc);
+        }
+    }
+
+    this.up();
+    for (let i = 1; i < depth; i++){
+        this.gotoXY(nextx, nexty);
+        this.size = temppensize;
+        var newspiralsize = getsize * percentage;
+        var newclockwize = !isClockwise;
+        var newdepth = depth - 1;
+        temppengrowth = penGrowth * (-1); //will have to reverse the pengrowth
+        this.drawTanu(c, endangle, newspiralsize, temppengrowth, newclockwize, newdepth, percentage);
+        this.drawLogSpiral(c, endangle, daughterspiralsize, temppengrowth, tempclockwize);
+    }
+    
 }
 
 

@@ -589,8 +589,15 @@ SpriteMorph.prototype.drawLimitedTanu = function(c, endangle, getSize, penGrowth
     }
 
     let repeatCounter = Math.abs((end - start) / tinc) / segments;
-    let stoppingpoint = (repeatCounter * segments * 0.7).toFixed(0);
-
+    let stoppingpoint = 0;
+    //distinguish two different mother spiral drawing patterns
+    if (endangle < 0){
+        stoppingpoint = (repeatCounter * segments * 0.3).toFixed(0);
+    }
+    else{
+        stoppingpoint = (repeatCounter * segments * 0.7).toFixed(0);
+    }
+    
 
     for (let i = 0; i < repeatCounter; i ++){
         //  Find way to do warp
@@ -615,7 +622,22 @@ SpriteMorph.prototype.drawLimitedTanu = function(c, endangle, getSize, penGrowth
                 tempx= this.xPosition();
                 tempy= this.yPosition();
                 temppensize = this.size; //this is the pensize, not the size of the spiral
-                tempdirection = 180 - this.direction();
+                //tempdirection = 135 - this.getAngle();
+
+                if (endangle > 0){
+                    if (isClockwise){
+                        tempdirection = 180 + this.getAngle();
+                    }
+                    else{
+                        tempdirection = 180 + this.getAngle();
+                    }
+                }
+                else{
+                    tempdirection = this.getAngle();
+                }
+                
+                //tempdirection = this.direction();
+                //This is the direction variable, not where the pen is pointing at this point
             }
             
         }
@@ -644,10 +666,12 @@ SpriteMorph.prototype.drawLimitedTanu = function(c, endangle, getSize, penGrowth
     this.gotoXY(tempx, tempy);
     this.setSize(temppensize);//temppensize
     var newspiralsize = getSize * 0.375;
-    var newclockwize = !isClockwise;
-    var temppengrowth = penGrowth * (-1); //will have to reverse the pengrowth
-    this.pointAtAngle(180 - tempdirection);
-    var newsweep = endangle * (-0.618);
+    var newclockwize = !isClockwise; //reverse the clockwise
+    var temppengrowth = Math.abs(penGrowth) * (-1); //pengrawth will always be negative - drawing outside to inside
+    this.pointAtAngle(tempdirection);
+    
+    
+    var newsweep = Math.abs(endangle) * (-0.618);
     this.drawLogSpiral(c, newsweep, newspiralsize, temppengrowth, newclockwize);
     
 }

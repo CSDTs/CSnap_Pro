@@ -62,47 +62,21 @@ SpriteMorph.prototype.rotateByDegrees = function (angle) {
 };
 
 SpriteMorph.prototype.reflectXAxis = function () {
-    this.flipVertical();
+    this.flipHorizontal();
     this.gotoXY(this.xPosition(), (this.yPosition() * -1));
-
-    let val =  ((90 - this.direction())* -1);
-    this.pointAtAngle(val);
 };
 
 SpriteMorph.prototype.reflectYAxis = function () {
-    this.flipHorizontal();
+    this.flipVertical();
     this.gotoXY((this.xPosition() * -1), this.yPosition());
-
-    let val =  ((90 - this.direction())* -1);
-    this.pointAtAngle(val);
-   ;
 };
 
 SpriteMorph.prototype.getAngle = function () {
     return (90 - this.direction());
 };
 
-SpriteMorph.prototype.flipVertical = function () {
-    // var costume = this.costumes.contents[this.getCostumeIdx()-1],
-    // canvas = newCanvas(costume.extent()),
-    // ctx = canvas.getContext('2d');
 
-    // ctx.translate(0, costume.height());
-    // ctx.scale(1, -1);
-    // ctx.drawImage(costume.contents, 0, 0);
-    // costume.contents=canvas;
-    // costume.rotationCenter = new Point(
-    //        costume.rotationCenter.x,
-    //        costume.height() - costume.rotationCenter.y
-    // );
-
-    // this.costumes.contents[this.getCostumeIdx()-1] = costume;
-    // this.costume = costume;
-    // this.flippedX = !this.flippedX;
-    // this.changed();
-    // this.rerender();
-    // this.changed();
-    // this.positionTalkBubble();
+SpriteMorph.prototype.flip = function(){
     var cst;
     var xP = 100;
     var yP = -100;
@@ -123,31 +97,16 @@ SpriteMorph.prototype.flipVertical = function () {
     }
 
     this.doSwitchToCostume(cst);
+}
+
+SpriteMorph.prototype.flipVertical = function () {
+    this.flip();
+    this.pointAtAngle(180 - this.getAngle())
 };
 
 SpriteMorph.prototype.flipHorizontal = function () {
-    var cst;
-    var xP = -100;
-    var yP = 100;
-    cst = this.costume;
-
-    if (!isFinite(+xP * +yP) || isNaN(+xP * +yP)) {
-        throw new Error(
-            'expecting a finite number\nbut getting Infinity or NaN'
-        );
-    }
-
-    // If the costume is a turtle, don't do this stretch...
-    if (cst != null) {
-        cst = cst.stretched(
-            Math.round(cst.width() * +xP / 100),
-            Math.round(cst.height() * +yP / 100)
-        );
-    }
-
-
-    this.doSwitchToCostume(cst);
-
+    this.flip();
+    this.pointAtAngle((this.getAngle() * -1));
 }
 
 

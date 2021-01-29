@@ -550,7 +550,7 @@ SpriteMorph.prototype.drawLimitedTanu = function(c, endangle, getSize, penGrowth
 }
 
 //Below is the tanu prototype
-SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClockwise, depth, percentage){
+SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClockwise, depth, percentage, branch){
     var xOrigin, yOrigin, startingDirection, t, tinc, roffset, r, start, end, segments, clockwise, size, tempx, tempy, temppensize, tempclockwize; 
     
     if (depth >= 1){//implement the below function if the depth value is one (one spiral) or more. end if not
@@ -611,10 +611,10 @@ SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClo
     let stoppingpoint = 0;
     //distinguish two different mother spiral drawing patterns
     if (endangle < 0){
-        stoppingpoint = (repeatCounter * segments * 0.3).toFixed(0);
+        stoppingpoint = (repeatCounter * segments * (1 - branch)).toFixed(0);
     }
     else{
-        stoppingpoint = (repeatCounter * segments * 0.7).toFixed(0);
+        stoppingpoint = (repeatCounter * segments * branch).toFixed(0);
     }
     
 
@@ -687,7 +687,7 @@ SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClo
         var newdepth = depth - 1;
     
         var newsweep = Math.abs(endangle) * (-0.618);
-        this.drawTanu(c, newsweep, newspiralsize, temppengrowth, newclockwize, newdepth, percentage);
+        this.drawTanu(c, newsweep, newspiralsize, temppengrowth, newclockwize, newdepth, percentage, branch);
     }
 
     }

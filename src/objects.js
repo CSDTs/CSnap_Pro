@@ -338,8 +338,8 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: "command",
             category: "pen",
-            spec: "tanu: c %n sweep %n size %n pen growth %n clockwise? %bool depth %n percentage %n",
-            defaults: [0.2, 360, 38, 0, false, 3, 0.375]
+            spec: "tanu: c %n sweep %n size %n pen growth %n clockwise? %bool depth %n percentage %n branch at %n",
+            defaults: [0.2, 360, 38, 0, false, 3, 0.375, 0.7]
         },
         drawLimitedTanu:{
             only: SpriteMorph,

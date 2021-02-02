@@ -101,12 +101,13 @@ SpriteMorph.prototype.flip = function(){
 
 SpriteMorph.prototype.flipVertical = function () {
     this.flip();
-    this.pointAtAngle(180 - this.getAngle());
+    this.pointAtAngle((this.getAngle() * -1));
 };
 
 SpriteMorph.prototype.flipHorizontal = function () {
     this.flip();
-    this.pointAtAngle((this.getAngle() * -1));
+    this.pointAtAngle(180 - this.getAngle());
+    
 }
 
 

@@ -205,13 +205,13 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: "command",
             category: "looks",
-            spec: "reflect x axis"
+            spec: "reflect across x axis"
         },
         reflectYAxis: {
             only: SpriteMorph,
             type: "command",
             category: "looks",
-            spec: "reflect y axis"
+            spec: "reflect across y axis"
         },
         newSizeOfCurrent: {
             only: SpriteMorph,

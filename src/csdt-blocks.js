@@ -62,12 +62,12 @@ SpriteMorph.prototype.rotateByDegrees = function (angle) {
 };
 
 SpriteMorph.prototype.reflectXAxis = function () {
-    this.flipHorizontal();
+    this.flipVertical();
     this.gotoXY(this.xPosition(), (this.yPosition() * -1));
 };
 
 SpriteMorph.prototype.reflectYAxis = function () {
-    this.flipVertical();
+    this.flipHorizontal();
     this.gotoXY((this.xPosition() * -1), this.yPosition());
 };
 

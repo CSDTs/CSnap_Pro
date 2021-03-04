@@ -338,7 +338,7 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: "command",
             category: "pen",
-            spec: "tanu: c %n sweep %n size %n pen growth %n clockwise? %bool depth %n percentage %n branch at %n",
+            spec: "tanu: c %n sweep %n size %n pen growth %n clockwise? %bool depth %n branch scaling %n branch at percentage %n",
             defaults: [0.2, 360, 38, 0, false, 3, 0.375, 0.7]
         },
         drawLimitedTanu:{
@@ -348,6 +348,13 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: "LimitedTanu: c %n sweep %n size %n pen growth %n clockwise? %bool",
             defaults: [0.3, 550, 38, 0, true]
         },
+        /*drawTestTano:{
+            only: SpriteMorph,
+            type: "command",
+            category: "pen",
+            spec: "TestTano: c %n sweep %n size %n pen growth %n clockwise? %bool branches %n %c",
+            defaults: [0.3, 550, 38, 0, true, 0]
+        },*/
         degreesToRadians: {
             only: SpriteMorph,
             type: 'reporter',
@@ -2711,6 +2718,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('drawLogSpiral'));
             blocks.push(block('drawTanu'));
             blocks.push(block('drawLimitedTanu'));
+            // blocks.push(block('drawTestTano'));
+            
             blocks.push(block('drawCircle'));
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));

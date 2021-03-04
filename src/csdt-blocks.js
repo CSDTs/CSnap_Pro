@@ -694,6 +694,151 @@ SpriteMorph.prototype.drawTanu = function(c, endangle, getSize, penGrowth, isClo
     this.up();
 }
 
+/*
+SpriteMorph.prototype.drawTestTano = function(c, endangle, getSize, penGrowth, isClockwise, depth, percentage, branch){
+    var xOrigin, yOrigin, startingDirection, t, tinc, roffset, r, start, end, segments, clockwise, size, tempx, tempy, temppensize, tempclockwize; 
+    
+    if (depth >= 1){//implement the below function if the depth value is one (one spiral) or more. end if not
+    this.down();
+    segments = 5;
+ 
+    if(isClockwise === null || typeof isClockwise === undefined){
+        clockwise = false;
+    }else{
+        clockwise = isClockwise;
+    }
+
+    if(clockwise){
+        if(endangle < 0){
+            startingDirection = ((((90 - this.direction()) - endangle) + degrees(Math.atan(1 / c))) - 180);
+        }else{
+            startingDirection = ((90 - this.direction()) + degrees(Math.atan(1 / c)));
+        }
+    }else
+        if(endangle < 0){
+            startingDirection = (((90 - this.direction()) + endangle) + (180 - degrees(Math.atan(1 / c))));
+        }else{
+            startingDirection = (90 - this.direction()) - degrees(Math.atan(1 / c));
+        }
+    }
+
+    size = 2 * (getSize / Math.exp(c * this.degreesToRadians(Math.abs(endangle))));
+    roffset = size * Math.exp(c * this.degreesToRadians(0));
+
+    if(endangle < 0){
+        start = Math.abs(endangle);
+        end = 0;
+        r = size * Math.exp(c * this.degreesToRadians(Math.abs(endangle)));
+        if(clockwise){
+            xOrigin = this.xPosition() - ((r * Math.cos(radians(startingDirection - start))) - (roffset * Math.cos(radians(startingDirection))));
+            yOrigin = this.yPosition() - ((r * Math.sin(radians(startingDirection - start))) - (roffset * Math.sin(radians(startingDirection))));
+        }else{
+            xOrigin = this.xPosition() - ((r * Math.cos(radians(start + startingDirection))) - (roffset * Math.cos(radians(startingDirection))));
+            yOrigin = this.yPosition() - ((r * Math.sin(radians(start + startingDirection))) - (roffset * Math.sin(radians(startingDirection))));
+        }
+    }else{
+        start = 0;
+        end = endangle;
+        xOrigin = this.xPosition();
+        yOrigin = this.yPosition();
+
+    }
+
+
+    t = start;
+    if(end > start){
+        tinc = 1;
+    }else{
+        tinc = -1;
+    }
+
+    let repeatCounter = Math.abs((end - start) / tinc) / segments;
+    let stoppingpoint = 0;
+    //distinguish two different mother spiral drawing patterns
+    if (endangle < 0){
+        stoppingpoint = (repeatCounter * segments * (1 - branch)).toFixed(0);
+    }
+    else{
+        stoppingpoint = (repeatCounter * segments * branch).toFixed(0);
+    }
+    
+
+    for (let i = 0; i < repeatCounter; i ++){
+        //  Find way to do warp
+        for (let j = 0; j < segments; j++){
+            r = size * Math.exp(c * this.degreesToRadians(t));
+            if(!clockwise){
+                this.gotoXY(((xOrigin + (r * Math.cos(radians(t + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                            ((yOrigin + (r * Math.sin(radians(t + startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+            }else{
+                this.gotoXY(((xOrigin + (r * Math.cos(radians((t * -1) + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                            ((yOrigin + (r * Math.sin(radians((t * -1 )+ startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+            }
+            t = t + tinc;
+            this.changeSize(penGrowth);
+            if(clockwise){
+                this.turn(tinc);
+            }else{
+                this.turnLeft(tinc);
+            }
+
+            if ((i * 5 + j) == stoppingpoint){
+                tempx= this.xPosition();
+                tempy= this.yPosition();
+                temppensize = this.size; //this is the pensize, not the size of the spiral
+                //tempdirection = 135 - this.getAngle();
+
+                if (endangle > 0){
+                    tempdirection = 180 + this.getAngle();
+                }
+                else{
+                    tempdirection = this.getAngle();
+                }
+                
+                //tempdirection = this.direction();
+                //This is the direction variable, not where the pen is pointing at this point
+            }
+            
+        }
+    }
+    let modCounter =  Math.abs((end - start) / tinc) % segments;
+
+    for (let k = 0; k < modCounter; k++){
+        r = size * Math.exp(c * this.degreesToRadians(t));
+        if(!clockwise){
+            this.gotoXY(((xOrigin + (r * Math.cos(radians(t + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                        ((yOrigin + (r * Math.sin(radians(t + startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+        }else{
+            this.gotoXY(((xOrigin + (r * Math.cos(radians((t * -1) + startingDirection)))) - (roffset * Math.cos(radians(startingDirection)))), 
+                        ((yOrigin + (r * Math.sin(radians((t * -1)+ startingDirection)))) - (roffset * Math.sin(radians(startingDirection)))));
+        }
+        t = t + tinc;
+        this.changeSize(penGrowth);
+        if(clockwise){
+            this.turn(tinc);
+        }else{
+            this.turnLeft(tinc);
+        }
+    }
+    this.up();
+    
+
+    if (depth > 1){//this means it has to go to the branching point
+        this.gotoXY(tempx, tempy); this.setSize(temppensize);//temppensize
+        var newspiralsize = getSize * percentage;
+        var newclockwize = !isClockwise; //reverse the clockwise
+        var temppengrowth = Math.abs(penGrowth) * (-1); //pengrawth will always be negative - drawing outside to inside
+        this.pointAtAngle(tempdirection);
+        var newdepth = depth - 1;
+    
+        var newsweep = Math.abs(endangle) * (-0.618);
+        this.drawTestTano(c, newsweep, newspiralsize, temppengrowth, newclockwize, newdepth, percentage, branch);
+    }
+
+    }
+    this.up();
+}*/
+
 
 
 SpriteMorph.prototype.drawCircle = function(diameter, sweep){

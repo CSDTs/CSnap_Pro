@@ -2708,10 +2708,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             // blocks.push(block('getBorderShade'));
             // blocks.push(block('changeBorderShade'));
             blocks.push(block('flatLineEnds'));
-            blocks.push(block('drawLogSpiral'));
-            blocks.push(block('drawTanu'));
-            blocks.push(block('drawLimitedTanu'));
-            blocks.push(block('drawCircle'));
+            // blocks.push(block('drawLogSpiral'));
+            // blocks.push(block('drawTanu'));
+            // blocks.push(block('drawLimitedTanu'));
+            // blocks.push(block('drawCircle'));
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));
 

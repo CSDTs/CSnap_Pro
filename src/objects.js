@@ -4831,6 +4831,7 @@ SpriteMorph.prototype.clear = function () {
     // CSDT Clear border list
     this.lineList = [];
     this.clearEffects();
+    this.setVisibility(true);
         // // // CSDT Reflect XY
         // if (this.flippedY) {
         //     this.flipHorizontal();
@@ -5535,6 +5536,7 @@ SpriteMorph.prototype.clearEffects = function () {
         }
     }
     this.setEffect(['ghost'], 0);
+    this.setVisibility(true);
 };
 
 // SpriteMorph talk bubble

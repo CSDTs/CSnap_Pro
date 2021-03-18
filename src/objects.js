@@ -2016,6 +2016,8 @@ SpriteMorph.prototype.init = function (globals) {
 
     // CSDT
     this.originalPixels = null;
+    this.hasSaturation = false;
+    this.hasBrightness = false;
     // this.flippedX = false;
     // this.flippedY = false;
     // this.isNotFlipBack = true;
@@ -5279,6 +5281,9 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         var pixels, index, l, r, g, b, max, min, span,
             h, s, v, i, f, p, q, t, newR, newG, newB;
 
+            // CSDT Brightness/Saturation
+            let sat = (-100 + (saturationShift * 2));
+            let bri = (-100 + (brightnessShift * 2));
 
         pixels = imagedata.data;
         for (index = 0, l = pixels.length; index < l; index += 4) {
@@ -5308,8 +5313,8 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 
             // Adjusting color range from 200 to 100 for easier classroom comprehension
             h = (h + hueShift * 360 / 100) % 360;
-            s = Math.max(0, Math.min(s + saturationShift / 100, 1));
-            v = Math.max(0, Math.min(v + brightnessShift / 100, 1));
+            s = Math.max(0, Math.min(s + sat / 100, 1));
+            v = Math.max(0, Math.min(v + bri / 100, 1));
 
             i = Math.floor(h / 60);
             f = (h / 60) - i;
@@ -5496,11 +5501,18 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
     }
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
-    } else {
+
+    }else {
         // // CSDT Enable saturation change whenever color is selected.
         if (eff === 'color') {
-            this.graphicsValues['saturation'] = this.graphicsValues['saturation'] === 0 ? 100 : this.graphicsValues['saturation'];
-            this.graphicsValues['brightness'] = this.graphicsValues['brightness'] === 0 ? 35 : this.graphicsValues['brightness'];
+            this.graphicsValues['saturation'] = this.hasSaturation ? this.graphicsValues['saturation'] : 100;
+            this.graphicsValues['brightness'] = this.hasBrightness ? this.graphicsValues['brightness'] : 68;
+
+            console.log(this.hasSaturation);
+        }else if(eff === 'saturation'){
+            this.hasSaturation = true;
+        }else if(eff === 'brightness'){
+            this.hasBrightness = true;
         }
         this.graphicsValues[eff] = +value;
     }
@@ -5537,6 +5549,10 @@ SpriteMorph.prototype.clearEffects = function () {
     }
     this.setEffect(['ghost'], 0);
     this.setVisibility(true);
+    this.hasBrightness = false;
+    this.hasSaturation = false;
+    this.graphicsValues['saturation'] = 50;
+    this.graphicsValues['brightness'] = 50;
 };
 
 // SpriteMorph talk bubble

@@ -4134,10 +4134,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     dialog.cancel = function () {
 
         // CSDT Kill Audio Sampling (need to clean up...)
-        let audioKill = dialog.children.filter(c => c instanceof ScrollFrameMorph)[0];
-        let audioContents = audioKill.contents;
-        let audioArray = audioContents.children.filter(a => a instanceof SoundIconMorph);
-
+        let audioArray = frame.children[0].children.filter(a => a instanceof SoundIconMorph);
         for (let i = 0; i < audioArray.length; i++) {
             try {
                 audioArray[i].object.previewAudio.pause()

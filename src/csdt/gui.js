@@ -41,7 +41,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.serializer = new SnapSerializer();
 
     // Applying correct asset path for projects
-    this.asset_path = '/static/csnap_pro/';
+    this.asset_path = '/';
 
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
@@ -1394,7 +1394,7 @@ IDE_Morph.prototype.projectMenu = function () {
         world = this.world(),
         pos = this.controlBar.projectButton.bottomLeft(),
         graphicsName = this.currentSprite instanceof SpriteMorph ?
-        'Sprites' : 'Stages',
+        'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16),
         backup = this.availableBackup(shiftClicked);
 
@@ -1543,7 +1543,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 this.importLocalFile();
                 return;
             }
-            this.importMedia('Music');
+            this.importMedia('Sounds');
         },
         'Select a sound from the media library'
     );

@@ -2125,4 +2125,3 @@ VectorPaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
         shape.drawOn(this);
     }
 };
-

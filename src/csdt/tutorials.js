@@ -48,7 +48,7 @@ IDE_Morph.prototype.renderTutorialLayout = function(){
 
     this.fixLayout();
 
-   if(StageMorph.prototype.basicLayout || StageMorph.prototype.decategorize)this.toggleStageSize();
+   if(StageMorph.prototype.basicLayout || StageMorph.prototype.decategorize)this.toggleStageSize(true);
 
 }
 

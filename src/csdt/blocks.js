@@ -45,10 +45,13 @@ let csdtMigrations = {
         offset: 1
     }
 }
-SpriteMorph.prototype.blockMigrations = {
-    ...csdtMigrations,
-    ...jensMigrations
-};
+
+SpriteMorph.prototype.initBlockMigrations = function () {
+    SpriteMorph.prototype.blockMigrations = {
+        ...csdtMigrations,
+        ...jensMigrations
+    };
+}
 
 //You add the block definitions here.  This basically adds the block to the software,
 //but it isn't visible unless you add it to blockTemplates() or search in GUI(Ctrl+F)
@@ -112,50 +115,50 @@ let csdtBlocks = {
         category: 'motion',
         spec: 'angle'
     },
-    setBorderSize: {
-        type: 'command',
-        category: 'pen',
-        spec: 'set border size to %n',
-        defaults: [0]
-    },
-    getBorderSize: {
-        type: 'reporter',
-        category: 'pen',
-        spec: 'border size',
-    },
-    smoothBorders: {
-        type: 'command',
-        category: 'pen',
-        spec: 'fix borders'
-    },
-    setBorderHue: {
-        type: 'command',
-        category: 'pen',
-        spec: 'set border color to %n',
-        defaults: [0]
-    },
-    getBorderHue: {
-        type: 'reporter',
-        category: 'pen',
-        spec: 'border color',
-    },
-    setBorderShade: {
-        type: 'command',
-        category: 'pen',
-        spec: 'set border shade to %n',
-        defaults: [0]
-    },
-    changeBorderShade: {
-        type: 'command',
-        category: 'pen',
-        spec: 'change border shade by %n',
-        defaults: [0]
-    },
-    getBorderShade: {
-        type: 'reporter',
-        category: 'pen',
-        spec: 'border shade',
-    },
+    // setBorderSize: {
+    //     type: 'command',
+    //     category: 'pen',
+    //     spec: 'set pen border: size %n color %n',
+    //     defaults: [0, 0]
+    // },
+    // getBorderSize: {
+    //     type: 'reporter',
+    //     category: 'pen',
+    //     spec: 'pen border size',
+    // },
+    // setBorderHue: {
+    //     type: 'command',
+    //     category: 'pen',
+    //     spec: 'set pen border color to %n',
+    // },
+    // getBorderHue: {
+    //     type: 'reporter',
+    //     category: 'pen',
+    //     spec: 'pen border color',
+    // },
+    // smoothBorders: {
+    //     type: 'command',
+    //     category: 'pen',
+    //     spec: 'fix borders'
+    // },
+
+    // setBorderShade: {
+    //     type: 'command',
+    //     category: 'pen',
+    //     spec: 'set border shade to %n',
+    //     defaults: [0]
+    // },
+    // changeBorderShade: {
+    //     type: 'command',
+    //     category: 'pen',
+    //     spec: 'change border shade by %n',
+    //     defaults: [0]
+    // },
+    // getBorderShade: {
+    //     type: 'reporter',
+    //     category: 'pen',
+    //     spec: 'border shade',
+    // },
     flatLineEnds: {
         type: 'command',
         category: 'pen',
@@ -168,34 +171,34 @@ let csdtBlocks = {
         spec: "scale %scft by factor %n percent",
         defaults: [null, 100]
     },
-    drawLogSpiral: {
-        only: SpriteMorph,
-        type: "command",
-        category: "pen",
-        spec: "log spiral: c %n sweep %n size %n pen growth %n clockwise? %bool",
-        defaults: [0.2, 360, 38, 0.1, false]
-    },
-    drawCircle: {
-        only: SpriteMorph,
-        type: "command",
-        category: "pen",
-        spec: "circle: diameter %n sweep %n",
-        defaults: [50, 360]
-    },
-    drawTanu: {
-        only: SpriteMorph,
-        type: "command",
-        category: "pen",
-        spec: "tanu: c %n sweep %n size %n pen growth %n clockwise? %bool depth %n percentage %n",
-        defaults: [0.2, 360, 38, 0, false, 3, 0.375]
-    },
-    drawLimitedTanu: {
-        only: SpriteMorph,
-        type: "command",
-        category: "pen",
-        spec: "LimitedTanu: c %n sweep %n size %n pen growth %n clockwise? %bool",
-        defaults: [0.3, 550, 38, 0, true]
-    },
+    // drawLogSpiral: {
+    //     only: SpriteMorph,
+    //     type: "command",
+    //     category: "pen",
+    //     spec: "log spiral: c %n sweep %n size %n pen growth %n clockwise? %bool",
+    //     defaults: [0.2, 360, 38, 0.1, false]
+    // },
+    // drawCircle: {
+    //     only: SpriteMorph,
+    //     type: "command",
+    //     category: "pen",
+    //     spec: "circle: diameter %n sweep %n",
+    //     defaults: [50, 360]
+    // },
+    // drawTanu: {
+    //     only: SpriteMorph,
+    //     type: "command",
+    //     category: "pen",
+    //     spec: "tanu: c %n sweep %n size %n pen growth %n clockwise? %bool depth %n percentage %n",
+    //     defaults: [0.2, 360, 38, 0, false, 3, 0.375]
+    // },
+    // drawLimitedTanu: {
+    //     only: SpriteMorph,
+    //     type: "command",
+    //     category: "pen",
+    //     spec: "LimitedTanu: c %n sweep %n size %n pen growth %n clockwise? %bool",
+    //     defaults: [0.3, 550, 38, 0, true]
+    // },
     degreesToRadians: {
         only: SpriteMorph,
         type: 'reporter',
@@ -203,12 +206,39 @@ let csdtBlocks = {
         spec: 'degrees to radians %n',
         defaults: [0]
     },
-}
-SpriteMorph.prototype.blocks = {
-    ...csdtBlocks,
-    ...jensBlocks
-};
+    getBorderState: {
+        only: SpriteMorph,
+        type: 'reporter',
+        category: 'pen',
+        spec: 'pen border'
+    },
+    setBorder: {
+        type: 'command',
+        category: 'pen',
+        spec: 'set pen border: size %n color %n',
+        defaults: [0, 0]
+    },
+    borderPathLengthHelp: {
+        type: 'command',
+        category: 'pen',
+        spec: 'path length rotate length %n flip %b',
+        defaults: [0, false]
+    },
+    getPenBorderAttribute: {
+        type: 'reporter',
+        category: 'pen',
+        spec: 'pen border %penBorder',
+        defaults: [['size']]
+    },
 
+}
+
+SpriteMorph.prototype.initBlocks = function () {
+    SpriteMorph.prototype.blocks = {
+        ...csdtBlocks,
+        ...jensBlocks
+    };
+}
 
 
 /** Custom block definitions
@@ -271,6 +301,55 @@ SpriteMorph.prototype.getAngle = function () {
     return (90 - this.direction());
 };
 
+// Returns the current border state
+SpriteMorph.prototype.getBorderState = function () {
+    return this.hasBorder;
+};
+
+SpriteMorph.prototype.setBorder = function (size, color) {
+    if (size != 0){
+        this.hasBorder = true;
+    }else{
+        this.hasBorder = false;
+    }
+    this.borderSize = size;
+    this.borderColor = color;
+}
+SpriteMorph.prototype.getPenBorderAttribute = function (attrib) {
+    var name = attrib instanceof Array ? attrib[0] : attrib.toString(),
+        options = ['active', 'size', 'hue'];
+    if (name === 'size') {
+        return this.borderSize;
+    }else if (name =='hue'){
+        return this.borderColor;
+    }
+    return this.hasBorder;
+};
+
+
+// SpriteMorph.prototype.setBorderSize = function (size, color) {
+//     if (size != 0){
+//         this.hasBorder = true;
+//     }else{
+//         this.hasBorder = false;
+//     }
+//     this.borderSize = size;
+//     this.borderColor = color;
+// };
+
+
+
+SpriteMorph.prototype.borderPathLengthHelp = function (length, flip) {
+    this.rotateByDegrees(flip ? 90 : -90);
+    this.forward((length * (flip ? 0.5 : 1)) + (this.borderSize / (flip ? 2 : 1)));
+    this.rotateByDegrees(flip ? -90 : 90);
+    this.down();
+    this.forward(1);
+    this.up();
+    if (flip) {
+        this.forward(-1);
+    }
+}
 // Alternative to direction, rotates sprite to a specific angle
 SpriteMorph.prototype.pointAtAngle = function (angle) {
     let val = (0 - angle) + (90);
@@ -710,7 +789,7 @@ SpriteMorph.prototype.smoothBorders = function (start, dest) {
     var tempSize = this.size,
         tempColor = this.color;
 
-    // console.log(this.lineList);
+
     for (line = 0; line < this.lineList.length; line++) {
         this.size = this.lineList[line][2];
         this.color = this.lineList[line][3];
@@ -726,31 +805,17 @@ SpriteMorph.prototype.getBorderSize = function () {
     return this.borderSize;
 };
 
-SpriteMorph.prototype.setBorderSize = function (size) {
-    this.borderSize = size;
-};
 
 SpriteMorph.prototype.changeHue = function (delta) {
     this.setHue(this.getHue() + (+delta || 0));
 };
 
 SpriteMorph.prototype.getBorderHue = function () {
-    return this.borderColor.hsv()[0] * 100;
+    return this.borderColor;
 };
 
-SpriteMorph.prototype.setBorderHue = function (num) {
-    var hsv = this.borderColor.hsv(),
-        x = this.xPosition(),
-        y = this.yPosition();
-
-    hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
-    hsv[1] = 1; // we gotta fix this at some time
-    this.borderColor.set_hsv.apply(this.borderColor, hsv);
-    if (!this.costume) {
-        this.drawNew();
-        this.changed();
-    }
-    this.gotoXY(x, y);
+SpriteMorph.prototype.setBorderHue = function (clr) {
+    this.borderColor = clr;
 };
 
 SpriteMorph.prototype.getBorderShade = function () {
@@ -1368,6 +1433,7 @@ SpriteMorph.prototype.clear = function () {
     this.lineList = [];
     this.clearEffects();
     this.setVisibility(true);
+    this.hasBorder = false;
     // // // CSDT Reflect XY
     // if (this.flippedY) {
     //     this.flipHorizontal();
@@ -1646,14 +1712,28 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('=');
             blocks.push(this.makeBlockButton(cat));
             // blocks.push(block('smoothBorders'));
+            blocks.push(block('flatLineEnds'));
+            blocks.push('=');
             // blocks.push(block('setBorderSize'));
+            blocks.push(block('setBorder'));
+
+            blocks.push(block('getPenBorderAttribute'));
+
             // blocks.push(block('getBorderSize'));
-            // blocks.push(block('setBorderHue'));
+            // blocks.push(watcherToggle('getBorderState'));
+            // blocks.push(block('getBorderState'));
+            // blocks.push(watcherToggle('getBorderHue'));
             // blocks.push(block('getBorderHue'));
+            // blocks.push(block('setBorderHue'));            
+
             // blocks.push(block('setBorderShade'));
             // blocks.push(block('getBorderShade'));
             // blocks.push(block('changeBorderShade'));
-            blocks.push(block('flatLineEnds'));
+
+            // blocks.push(block('borderPathLengthHelp'));
+
+
+
             // blocks.push(block('drawLogSpiral'));
             // blocks.push(block('drawTanu'));
             // blocks.push(block('drawLimitedTanu'));
@@ -2115,4 +2195,3 @@ SpriteMorph.prototype.clearEffects = function () {
     this.graphicsValues['saturation'] = 50;
     this.graphicsValues['brightness'] = 50;
 };
-

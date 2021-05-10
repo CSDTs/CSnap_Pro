@@ -1,3 +1,4 @@
+
 // Tutorial CSDT
 StageMorph.prototype.tutorial = false;
 StageMorph.prototype.hideCostumesTab = false;

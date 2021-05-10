@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2020 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -83,9 +83,9 @@
 StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, BLACK, WHITE,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
-ScrollFrameMorph, MenuItemMorph, Note, useBlurredShadows*/
+ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2021-January-05';
+modules.widgets = '2020-July-27';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3100,7 +3100,7 @@ InputFieldMorph.prototype.getValue = function () {
     var num,
         contents = this.contents();
     if (this.isNumeric) {
-        num = parseFloat(contents.text.text);
+        num = parseFloat(contents.text);
         if (!isNaN(num)) {
             return num;
         }
@@ -3154,11 +3154,9 @@ InputFieldMorph.prototype.drawRectBorder = function (ctx) {
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    if (useBlurredShadows) {
-        ctx.shadowOffsetY = shift;
-        ctx.shadowBlur = this.edge * 4;
-        ctx.shadowColor = this.cachedClrDark;
-    }
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge * 4;
+    ctx.shadowColor = this.cachedClrDark;
 
     gradient = ctx.createLinearGradient(
         0,

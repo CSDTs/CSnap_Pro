@@ -1,10 +1,10 @@
 /*
 
-    lang-ta.js
+    lang-de.js
 
-    Tamil translation for SNAP!
+    German translation for SNAP!
 
-    written by Barthdry and One More
+    written by Jens Mönig
 
     Copyright (C) 2014 by Jens Mönig
 
@@ -181,18 +181,18 @@ SnapTranslator.dict.ta = {
     'language_name':
         'Tamil', // the name as it should appear in the language menu
     'language_translator':
-        'vinayakumar R, Barthdry', // your name for the Translators tab
+        'vinayakumar R', // your name for the Translators tab
     'translator_e-mail':
         'vnkmr7620@gmail.com', // optional
     'last_changed':
-        '2021-01-25', // this, too, will appear in the Translators tab
+        '2015-02-20', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'பெயர் இல்லாதது',
+        'Unbenannt',
     'development mode':
-        'டெவோலோப்மென்ட் பயன்முறை',
+        'Hackermodus',
 
     // categories:
     'Motion':
@@ -214,15 +214,15 @@ SnapTranslator.dict.ta = {
     'Lists':
         'பட்டியல்',
     'Other':
-        'மற்றொன்று',
+        'Andere',
 
     // editor:
     'draggable':
-        'இழுக்கக்கூடியது',
+        'greifbar',
 
     // tabs:
     'Scripts':
-        'லிபி',
+        'Skripte',
     'Costumes':
         'உடைகள்',
     'Sounds':
@@ -230,7 +230,7 @@ SnapTranslator.dict.ta = {
 
     // names:
     'Sprite':
-        'ஸ்ப்ரைட்',
+        'Objekt',
     'Stage':
         'மேட',
 
@@ -240,18 +240,18 @@ SnapTranslator.dict.ta = {
     'can rotate':
         'சுழற்ற முடியும்',
     'only face left/right':
-        'வலது மற்றும் இடது முகம் மட்டுமே',
+        'kann sich nur nach\nlinks/rechts drehen',
 
     // new sprite button:
     'add a new sprite':
-        'புதிய மனிதனைச் சேர்க்கவும்',
+        'ein neues Objekt\nhinzuf\u00fcgen',
 
     // tab help
     'costumes tab help':
-        'மற்றொரு வலைப்பக்கத்திலிருந்து படத்தை எடுக்கவும்\n'
-            + 'அல்லது கணினியிலிருந்து இங்கே கைவிடுவதன் மூலம்',
+        'Bilder durch hereinziehen von einer anderen\n'
+            + 'Webseite or vom Computer importieren',
     'import a sound from your computer\nby dragging it into here':
-        'இங்கே இழுப்பதன் மூலம் கணினியிலிருந்து ஒரு ஒலியை இறக்குமதி செய்க',
+        'Kl\u00e4nge durch hereinziehen importieren',
 
     // primitive blocks:
 
@@ -287,14 +287,15 @@ SnapTranslator.dict.ta = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'நிலை தேர்ந்தெடுக்கப்பட்டது. மோஷன் பிளாக்ஸ் இல்லை',
+        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
+            + 'vorhanden',
 
     'move %n steps':
         '%n அடிகள் நகரவும்',
     'turn %clockwise %n degrees':
-        'திரும்பவும் %clockwise %n அளவு',
+        'drehe %clockwise %n Grad',
     'turn %counterclockwise %n degrees':
-        'திரும்பவும் %counterclockwise %n அளவு',
+        'drehe %counterclockwise %n Grad',
     'point in direction %dir':
         '%dir திசையை சுட்டிக்கட்டவும்',
     'point towards %dst':
@@ -314,7 +315,7 @@ SnapTranslator.dict.ta = {
     'set y to %n':
         'y %n ஆக்கவும்',
     'if on edge, bounce':
-        'விளிம்பில் பவுன்ஸ்',
+        'pralle vom Rand ab',
     'x position':
         'x இடம்',
     'y position':
@@ -417,7 +418,7 @@ SnapTranslator.dict.ta = {
     'when %keyHat key pressed':
         '%keyHat கீ அழுத்தும்பொழுது',
     'when I am clicked':
-        'நான் சொடுக்கும் போது',
+        'Wenn ich angeklickt werde',
     'when I receive %msgHat':
         '%msgHat பெறுகையில்',
     'broadcast %msg':
@@ -425,11 +426,11 @@ SnapTranslator.dict.ta = {
     'broadcast %msg and wait':
         '%msg செலித்தி காத்திருக்கவும்',
     'Message name':
-        'செய்தி பெயர்',
+        'Nachricht',
     'message':
-        'செய்தி',
+        'Nachricht',
     'any message':
-        'எந்த செய்தியும்',
+        'eine beliebige Nachricht',
     'wait %n secs':
         '%n விநாடிகள் காத்திருக்கவும்',
     'wait until %b':
@@ -445,23 +446,23 @@ SnapTranslator.dict.ta = {
     'if %b %c else %c':
         '%b என்றால் அல்லது %c',
     'report %s':
-        'அறிக்கை %s',
+        'berichte %s',
     'stop %stopChoices':
         'நிருத்து %stopChoices',
     'all':
-        'அனைத்தும்',
+        'alles',
     'this script':
         'இந்த ச்கிரிப்ட்ட',
     'this block':
-        'இது Block',
+        'diesen Block',
     'stop %stopOthersChoices':
-        'நிறுத்து %stopOthersChoices',
+        'stoppe %stopOthersChoices',
     'all but this script':
-        'அனைத்தும் ஆனால் இந்த ஸ்கிரிப்ட்',
+        'alles au\u00dfer diesem Skript',
     'other scripts in sprite':
-        'ஸ்பிரிட்டில் பிற ஸ்கிரிப்ட்கள்',
+        'andere Skripte in diesem Objekt',
     'pause all %pause':
-        'அனைத்தையும் இடைநிறுத்துங்கள் %pause',
+        'pausiere alles %pause',
     'run %cmdRing %inputs':
         'f\u00fchre %cmdRing aus %inputs',
     'launch %cmdRing %inputs':
@@ -473,15 +474,15 @@ SnapTranslator.dict.ta = {
     'call %cmdRing w/continuation':
         'rufe %cmdRing mit Continuation auf',
     'warp %c':
-        'போரிடு %c',
+        'Warp %c',
     'when I start as a clone':
-        'நான் குளோனைத் தொடங்கும்போது',
+        'Wenn ich geklont werde',
     'create a clone of %cln':
-        'குளோன் %cln',
+        'klone %cln',
     'myself':
-        'நானே',
+        'mich',
     'delete this clone':
-        'குளோனை நீக்கு',
+        'entferne diesen Klon',
 
     // sensing:
     'touching %col ?':
@@ -501,7 +502,7 @@ SnapTranslator.dict.ta = {
     'mouse y':
         'மவுஸ் y',
     'mouse down?':
-        'சுட்டி கீழே?',
+        'Maustaste gedr\u00fcckt?',
     'key %key pressed?':
         '%key கீ அழுத்தி இருக்கிரதா',
     'distance to %dst':
@@ -515,7 +516,7 @@ SnapTranslator.dict.ta = {
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'turbo mode?',
+        'Turbomodus?',
     'set turbo mode to %b':
         'setze Turbomodus auf %b',
 
@@ -534,7 +535,7 @@ SnapTranslator.dict.ta = {
     '%fun of %n':
         '%fun ன் %n',
     'pick random %n to %n':
-        'இளஞ்சிவப்பு சீரற்ற %n to %n',
+        'Zufallszahl von %n bis %n',
     '%b and %b':
         '%b மற்றும் %b',
     '%b or %b':
@@ -558,16 +559,16 @@ SnapTranslator.dict.ta = {
     'length of %s':
         '%s ன் நீளம்',
     'unicode of %s':
-        'யூனிகோட் %s',
+        'Unicode Wert von %s',
     'unicode %n as letter':
-        'யூனிகோட் %n கடிதமாக',
+        'Unicode %n als Buchstabe',
     'is %s a %typ ?':
-        'இது %s ஒரு %typ ?',
+        'ist %s ein(e) %typ ?',
     'is %s identical to %s ?':
-        'இது %s ஒத்த %s ?',
+        'ist %s identisch mit %s ?',
 
     'type of %s':
-        'வகை %s',
+        'Typ von %s',
 
     // variables:
     'Make a variable':
@@ -584,15 +585,15 @@ SnapTranslator.dict.ta = {
     'change %var by %n':
         '%var %n அளவு மாற்றவும்',
     'show variable %var':
-        '%var மாறி காண்பி',
+        '%var வேரியபிலை காண்பி',
     'hide variable %var':
-        '%var மாறி மறைக்கவும்',
+        '%var வேரியபிலை மறைக்கவும்',
     'script variables %scriptVars':
-        'ஸ்கிரிப்ட் மாறி %scriptVars',
+        'Skriptvariablen %scriptVars',
 
     // lists:
     'list %exp':
-        'பட்டியல் %exp',
+        'Liste %exp',
     '%s in front of %l':
         '%s am Anfang von %l',
     'item %idx of %l':
@@ -616,30 +617,30 @@ SnapTranslator.dict.ta = {
 
     // other
     'Make a block':
-        'ஒரு தொகுதி செய்யுங்கள்',
+        'Neuer Block',
 
     // menus
     // snap menu
     'About...':
-        'பற்றி . . . ',
+        '\u00dcber Snap!...',
     'Reference manual':
         'Handbuch lesen',
     'Snap! website':
-        'Snap! website',
+        'Snap! Webseite',
     'Download source':
-        'மூலத்தைப் பதிவிறக்குங்கள்',
+        'Quellcode runterladen',
     'Switch back to user mode':
-        'பயனர் பயன்முறைக்கு மாறவும்',
+        'zur\u00fcck zum Benutzermodus',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
         'verl\u00e4sst Morphic',
     'Switch to dev mode':
-        'தேவ் பயன்முறைக்கு மாறவும்',
+        'zum Hackermodus wechseln',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'erm\u00f6glicht Morphic Funktionen',
 
     // project menu
     'Project notes...':
-        'திட்ட குறிப்பு ...',
+        'Projektanmerkungen...',
     'New':
         'புதிய புதிய பின்னணி',
     'Open...':
@@ -649,19 +650,19 @@ SnapTranslator.dict.ta = {
     'Save As...':
         'எனச் சேம...',
     'Import...':
-        'இறக்குமதி...',
+        'Importieren...',
     'file menu import hint':
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken\n'
             + 'ein Kost\u00fcm oder einen Klang',
     'Export project as plain text...':
-        'திட்டத்தை எளிய உரையாக ஏற்றுமதி செய்க',
+        'Projekt als normalen Text exportieren...',
     'Export project...':
-        'ஏற்றுமதி திட்டம்...',
+        'Projekt exportieren...',
     'show project data as XML\nin a new browser window':
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
     'Export blocks...':
-        'Export Blocks...',
+        'Bl\u00f6cke exportieren...',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
     'Import tools':
@@ -669,31 +670,31 @@ SnapTranslator.dict.ta = {
     'load the official library of\npowerful blocks':
         'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
     'Libraries...':
-        'நூலகங்கள்...',
+        'Module...',
     'Import library':
-        'நூலகங்கள் நூலகங்கள்',
+        'Modul laden',
 
     // cloud menu
     'Login...':
-        'உள்நுழைய...',
+        'Anmelden...',
     'Signup...':
-        'பதிவுபெறுதல்...',
+        'Benutzerkonto einrichten...',
 
     // settings menu
     'Language...':
         'மொழ...',
     'Zoom blocks...':
-        'Zoom blocks...',
+        'Bl\u00f6cke vergr\u00f6\u00dfern...',
     'Stage size...':
-        'Stage size...',
+        'B\u00fchnengr\u00f6\u00dfe...',
     'Stage size':
-        'Stage size',
+        'B\u00fchnengr\u00f6\u00dfe',
     'Stage width':
-        'Stage width',
+        'B\u00fchnenbreite',
     'Stage height':
-        'Stage height',
+        'B\u00fchnenh\u00f6he',
     'Default':
-        'Default',
+        'Normal',
     'Blurred shadows':
         'Weiche Schatten',
     'uncheck to use solid drop\nshadows and highlights':
@@ -721,85 +722,87 @@ SnapTranslator.dict.ta = {
         'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
             + 'zu erm\u00f6glichen',
     'Long form input dialog':
-        'Long form input dialog',
+        'Ausf\u00fchrlicher Input-Dialog',
     'Plain prototype labels':
-        'Plain prototype labels',
+        'Einfache Prototyp-Beschriftung',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'uncheck to always show (+) symbols\nin block prototype labels',
+        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
     'check to hide (+) symbols\nin block prototype labels':
-        'check to hide (+) symbols\nin block prototype labels',
+        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
     'check to always show slot\ntypes in the input dialog':
-        'check to always show slot\ntypes in the input dialog',
+        'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
     'uncheck to use the input\ndialog in short form':
-        'uncheck to use the input\ndialog in short form',
+        'ausschalten f\u00fcr kurzen\nInput-Dialog',
     'Virtual keyboard':
-        'Virtual keyboard',
+        'Virtuelle Tastatur',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'uncheck to disable\nvirtual keyboard support\nfor mobile devices',
+        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
+            + 'zu sperren',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'check to enable\nvirtual keyboard support\nfor mobile devices',
+        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
+            + 'zu erm\u00f6glichen',
     'Input sliders':
-        'Input Slider',
+        'Eingabeschieber',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'uncheck to disable\ninput sliders for\nentry fields',
+        'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
     'check to enable\ninput sliders for\nentry fields':
-        'check to enable\ninput sliders for\nentry fields',
+        'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
     'Clicking sound':
-        'Clicking sound',
+        'Akustisches Klicken',
     'uncheck to turn\nblock clicking\nsound off':
-        'uncheck to turn\nblock clicking\nsound off',
+        'ausschalten um akustisches\nKlicken zu deaktivieren',
     'check to turn\nblock clicking\nsound on':
-        'check to turn\nblock clicking\nsound on',
+        'einschalten um akustisches\nKlicken zu aktivieren',
     'Animations':
-        'Animations',
+        'Animationen',
     'uncheck to disable\nIDE animations':
-        'uncheck to disable\nIDE animations',
+        'ausschalten um IDE-\nAnimationen zu verhindern',
     'Turbo mode':
-        'Turbo mode',
+        'Turbomodus',
     'check to prioritize\nscript execution':
-        'check to prioritize\nscript execution',
+        'einschalten, um Skripte\nzu priorisieren',
     'uncheck to run scripts\nat normal speed':
-        'uncheck to run scripts\nat normal speed',
+        'ausschalten, um Skripte\nnormal auszuf\u00fchren',
     'check to enable\nIDE animations':
-        'check to enable\nIDE animations',
+        'einschalten um IDE-\nAnimationen zu erlauben',
     'Thread safe scripts':
-        'Thread safe scripts',
+        'Threadsicherheit',
     'uncheck to allow\nscript reentrance':
-        'uncheck to allow\nscript reentrance',
+        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
     'check to disallow\nscript reentrance':
-        'check to disallow\nscript reentrance',
+        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
     'Prefer smooth animations':
-        'Prefer smooth animations',
+        'Fixe Framerate',
     'uncheck for greater speed\nat variable frame rates':
-        'uncheck for greater speed\nat variable frame rates',
+        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
     'check for smooth, predictable\nanimations across computers':
-        'check for smooth, predictable\nanimations across computers',
+        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
     'Flat line ends':
-        'Flat line ends',
+        'Flache Pinselstriche',
     'check for flat ends of lines':
-        'check for flat ends of lines',
+        'einschalten f\u00fcr flache\nPinselstrichenden',
     'uncheck for round ends of lines':
-        'uncheck for round ends of lines',
+        'auschalten f\u00fcr runde\nPinselstrichenden',
 
     // inputs
     'with inputs':
-        'உள்ளீட்டுடன்',
+        'mit Eingaben',
     'input names:':
-        'உள்ளீட்டு பெயர்கள்:',
+        'Eingaben:',
     'Input Names:':
-        'உள்ளீட்டு பெயர்கள்:',
+        'Eingaben:',
     'input list:':
-        'உள்ளீட்டு பட்டியல்:',
+        'Eingabeliste:',
 
     // context menus:
     'help':
-        'உதவி',
+        'Hilfe',
 
     // palette:
     'hide primitives':
-        'hide primitive',
+        'Basisbl\u00f6cke ausblenden',
     'show primitives':
-        'show primitive',
+        'Basisbl\u00f6cke anzeigen',
 
     // blocks:
     'help...':
@@ -819,15 +822,15 @@ SnapTranslator.dict.ta = {
     'open a new window\nwith a picture of this script':
         'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
     'ringify':
-        'வளையமாக ஆக்குங்கள்',
+        'Umringen',
     'unringify':
-        'வளையத்திலிருந்து உடைக்க',
+        'Entringen',
 
     // custom blocks:
     'delete block definition...':
         'Blockdefinition l\u00f6schen',
     'edit...':
-        'தொகு...',
+        'Bearbeiten...',
 
     // sprites:
     'edit':
@@ -835,17 +838,17 @@ SnapTranslator.dict.ta = {
     'move':
         'நகர்த்து',
     'detach from':
-        'இருந்து பிரிக்கவும்',
+        'Abtrennen von',
     'detach all parts':
-        'எல்லாம் பிரிக்கவும்',
+        'Alle Teile abtrennen',
     'export...':
-        'ஏற்றுமதி...',
+        'Exportieren...',
 
     // stage:
     'show all':
-        'அனைத்தையும் காட்டு',
+        'Alles zeigen',
     'pic...':
-        'ஏற்றுமதி மேடை...',
+        'Bild exportieren...',
     'open a new window\nwith a picture of the stage':
         'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
 
@@ -853,9 +856,9 @@ SnapTranslator.dict.ta = {
     'clean up':
         'சுத்தம் செய்',
     'arrange scripts\nvertically':
-        'arrange scripts\nvertically',
+        'Skripte der Reihe nach\nanordnen',
     'add comment':
-        'add comment',
+        'Anmerkung hinzuf\u00fcgen',
     'undrop':
         'R\u00fcckg\u00e4ngig',
     'undo the last\nblock drop\nin this pane':
@@ -869,30 +872,30 @@ SnapTranslator.dict.ta = {
 
     // costumes
     'rename':
-        'மறுபெயரிடு',
+        'Umbenennen',
     'export':
-        'ஏற்றுமதி',
+        'Exportieren',
     'rename costume':
-        'ஆடை மறுபெயரிடு',
+        'Kost\u00fcm umbenennen',
 
     // sounds
     'Play sound':
-        'ஒலியைத் தொடங்குங்கள்',
+        'Klang\nabspielen',
     'Stop sound':
-        'ஒலியை நிறுத்துங்கள்',
+        'Klang\nanhalten',
     'Stop':
-        'நிறுத்து',
+        'நிறுத்த',
     'Play':
-        'தொடங்கு',
+        'Los',
     'rename sound':
-        'ஒலி மறுபெயரிடு',
+        'Klang umbenennen',
 
     // dialogs
     // buttons
     'OK':
-        'சரி',
+        'சர',
     'Ok':
-        'சரி',
+        'சர',
     'Cancel':
         'கென்செல்',
     'Yes':
@@ -908,110 +911,110 @@ SnapTranslator.dict.ta = {
     'Zoom blocks':
         'Bl\u00f6cke vergr\u00f6\u00dfern',
     'build':
-        'கட்ட',
+        'baue',
     'your own':
-        'உங்கள் சொந்தமானது',
+        'eigene',
     'blocks':
-        'தொகுதி',
+        'Bl\u00f6cke',
     'normal (1x)':
         'normal (1x)',
     'demo (1.2x)':
         'Demo (1.2x)',
     'presentation (1.4x)':
-        'presentation (1.4x)',
+        'Pr\u00e4sentation (1.4x)',
     'big (2x)':
-        'big (2x)',
+        'gro\u00df (2x)',
     'huge (4x)':
-        'huge (4x)',
+        'riesig (4x)',
     'giant (8x)':
-        'giant (8x)',
+        'gigantisch (8x)',
     'monstrous (10x)':
-        'Ultra Giant (10x)',
+        'ungeheuerlich (10x)',
 
     // Project Manager
     'Untitled':
-        'பெயரிடப்படாதது',
+        'Unbenannt',
     'Open Project':
-        'திறந்த வேலை',
+        'Project \u00f6ffnen',
     '(empty)':
-        'காலியாக',
+        '(leer)',
     'Saved!':
-        'Saved!',
+        'Gesichert!',
     'Delete Project':
-        'Delete Project',
+        'Projekt l\u00f6schen',
     'Are you sure you want to delete':
-        'Are you sure you want to delete',
+        'Wirklich l\u00f6schen?',
     'rename...':
-        'மறுபெயரிடு...',
+        'Umbenennen...',
 
     // costume editor
     'Costume Editor':
-        'ஆடை ஆசிரியர்',
+        'Kost\u00fcmeditor',
     'click or drag crosshairs to move the rotation center':
-        'சுழற்சி மையத்தை நகர்த்த குறுக்கு நாற்காலிகள் கிளிக் செய்யவும் அல்லது இழுக்கவும்',
+        'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
 
     // project notes
     'Project Notes':
-        'வேலை குறிப்புகள்',
+        'Projektanmerkungen',
 
     // new project
     'New Project':
-        'புதிய திட்டம்',
+        'Neues Projekt',
     'Replace the current project with a new one?':
-        'தற்போதைய திட்டத்தை புதியதாக மாற்றவா?',
+        'Das aktuelle Projekt durch ein neues ersetzen?',
 
     // save project
     'Save Project As...':
-        'திட்டத்தை சேமிக்கவும்...',
+        'Projekt Sichern Als...',
 
     // export blocks
     'Export blocks':
-        'Export blocks',
+        'Bl\u00f6cke exportieren',
     'Import blocks':
-        'Import blocks',
+        'Bl\u00f6cke importieren',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'this project doesn\'t have any\ncustom global blocks yet',
+        'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
     'select':
-        'தேர்ந்தெடுக்கவும்',
+        'ausw\u00e4hlen',
     'none':
-        'எதுவும் இல்லை',
+        'nichts',
 
     // variable dialog
     'for all sprites':
-        'எல்லா உருவங்களுக்கும்',
+        'f\u00fcr alle',
     'for this sprite only':
-        'இந்த உருவங்களுக்கு',
+        'nur f\u00fcr dieses Objekt',
 
     // block dialog
     'Change block':
-        'தொகுதி மாற்ற',
+        'Block ver\u00e4ndern',
     'Command':
-        'Command:',
+        'Befehl',
     'Reporter':
-        'Reporter',
+        'Funktion',
     'Predicate':
-        'Predicate',
+        'Pr\u00e4dikat',
 
     // block editor
     'Block Editor':
-        'Block Editor',
+        'Blockeditor',
     'Apply':
-        'விண்ணப்பிக்கவும்',
+        'Anwenden',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Delete Custom Block',
+        'Block L\u00f6schen',
     'block deletion dialog text':
         'Soll dieser Block mit allen seinen Exemplare\n' +
             'wirklich gel\u00f6scht werden?',
 
     // input dialog
     'Create input name':
-        'Create input name',
+        'Eingabe erstellen',
     'Edit input name':
-        'Edit input name',
+        'Eingabe bearbeiten',
     'Edit label fragment':
-        'Edit label fragment',
+        'Beschriftung bearbeiten',
     'Title text':
         'Beschriftung',
     'Input name':
@@ -1047,102 +1050,102 @@ SnapTranslator.dict.ta = {
     'Upvar - make internal variable visible to caller':
         'Interne Variable au\u00dfen sichtbar machen',
 
-    // About Snap and contributors 
+    // About Snap
     'About Snap':
-        'ஸ்னாப் பற்றி',
+        '\u00dcber Snap',
     'Back...':
-        'பின்புறம்..',
+        'Zur\u00fcck...',
     'License...':
-        'License...',
+        'Lizenz...',
     'Modules...':
-        'Modules...',
+        'Komponenten...',
     'Credits...':
-        'Credits...',
+        'Mitwirkende...',
     'Translators...':
-        'Translators',
+        '\u00dcbersetzer',
     'License':
-        'License',
+        'Lizenz',
     'current module versions:':
-        'current module versions',
+        'Komponenten-Versionen',
     'Contributors':
-        'Contributors',
+        'Mitwirkende',
     'Translations':
-        'Translations',
+        '\u00dcbersetzungen',
 
     // variable watchers
     'normal':
-        'இயல்பான',
+        'normal',
     'large':
-        'பெரியது',
+        'gro\u00df',
     'slider':
-        'ஸ்லைடர்',
+        'Regler',
     'slider min...':
-        'குறைந்தபட்ச ஸ்லைடு...',
+        'Minimalwert...',
     'slider max...':
-        'அதிகபட்ச ஸ்லைடு...',
+        'Maximalwert...',
     'import...':
-        'இறக்குமதி...',
+        'Importieren...',
     'Slider minimum value':
-        'குறைந்தபட்ச ஸ்லைடு',
+        'Minimalwert des Reglers',
     'Slider maximum value':
-        'அதிகபட்ச ஸ்லைடு',
+        'Maximalwert des Reglers',
 
     // list watchers
     'length: ':
-        'நீளம்: ',
+        'L\u00e4nge: ',
 
-    // comments
+    // coments
     'add comment here...':
-        'add comment here',
+        'Anmerkung hier hinzuf\u00fcgen',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) right',
+        '(90) rechts',
     '(-90) left':
-        '(-90) left',
+        '(-90) links',
     '(0) up':
-        '(0) up',
+        '(0) oben',
     '(180) down':
-        '(180) down',
+        '(180) unten',
 
     // collision detection
     'mouse-pointer':
-        'mouse-pointer',
+        'Mauszeiger',
     'edge':
-        'edge',
+        'Kante',
     'pen trails':
-        'pen trails',
+        'Malspuren',
 
     // costumes
     'Turtle':
-        'Turtle',
+        'Richtungszeiger',
     'Empty':
-        'Empty',
+        'Leer',
 
     // graphical effects
     'brightness':
-        'brightness',
+        'Helligeit',
     'ghost':
-        'ghost',
+        'Durchsichtigkeit',
     'negative':
-        'negative',
+        'Farbumkehr',
     'comic':
-        'comic',
+        'Moire',
     'confetti':
-        'confetti',
+        'Farbverschiebung',
 
     // keys
     'space':
-        'space',
+        'இடைவெள',
     'up arrow':
-        'up arrow',
+        'மேல் அம்புக்குற',
     'down arrow':
-        'down arrow',
+        'Pfeil nach unten',
     'right arrow':
-        'right  arrow',
+        'வலது அம்புக்குற',
     'left arrow':
-        'left arrow',
+        'Pfeil nach links',
     'a':
         'a',
     'b':
@@ -1218,15 +1221,15 @@ SnapTranslator.dict.ta = {
 
     // messages
     'new...':
-        'புதியது...',
+        'Neu...',
 
     // math functions
     'abs':
-        'abs',
+        'Betrag',
     'floor':
-        'floor',
+        'Abgerundet',
     'sqrt':
-        'sqrt',
+        'Wurzel',
     'sin':
         'sin',
     'cos':
@@ -1246,38 +1249,35 @@ SnapTranslator.dict.ta = {
 
     // delimiters
     'letter':
-        'letter',
+        'Buchstabe',
     'whitespace':
-        'whitespace',
+        'Leerraum',
     'line':
-        'line',
+        'Zeilenvorschub',
     'tab':
-        'tab',
+        'Tabulator',
     'cr':
-        'cr',
+        'Wagenr\u00fccklauf',
 
     // data types
     'number':
-        'number',
+        'Zahl',
     'text':
-        'text',
+        'Text',
     'Boolean':
-        'Boolean',
+        'Boole',
     'list':
-        'list',
+        'Liste',
     'command':
-        'command',
+        'Befehlsblock',
     'reporter':
-        'reporter',
+        'Funktionsblock',
     'predicate':
-        'predicate',
+        'Pr\u00e4dikat',
 
     // list indices
     'last':
-        'last',
+        'letztes',
     'any':
-        'any'
+        'beliebiges'
 };
-/* Tamil Language locale is completed upto 85% by 
-Revision 1 and 2:- vinayakumar 40
- Revision 3 to 5 :- barthdry   45 */

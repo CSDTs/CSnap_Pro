@@ -50,6 +50,7 @@ SpriteMorph.prototype.blockMigrations = {
     ...jensMigrations
 };
 
+
 //You add the block definitions here.  This basically adds the block to the software,
 //but it isn't visible unless you add it to blockTemplates() or search in GUI(Ctrl+F)
 let jensBlocks = SpriteMorph.prototype.blocks;
@@ -156,6 +157,7 @@ let csdtBlocks = {
         category: 'pen',
         spec: 'border shade',
     },
+
     flatLineEnds: {
         type: 'command',
         category: 'pen',

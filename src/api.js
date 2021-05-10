@@ -330,6 +330,7 @@ IDE_Morph.prototype.testTutorialLayout = function () {
 
     this.fixLayout();
 
+    // Test tutorial layout
     return this.stage.tutorial;
 }
 

@@ -43,34 +43,13 @@ let csdtMigrations = {
             ['brightness']
         ],
         offset: 1
-    },
-    setCostumeColor:{
-        selector: 'setEffect',
-        inputs: [
-            ['color']
-        ],
-        offset: 1
-    },
-    setCostumeOpacity:{
-        selector: 'setEffect',
-        inputs: [
-            ['brightness']
-        ],
-        offset: 1
-    },
-    changeCostumeOpacity:{
-        selector: 'setEffect',
-        inputs: [
-            ['brightness']
-        ],
-        offset: 1
     }
 }
 
 SpriteMorph.prototype.initBlockMigrations = function () {
     SpriteMorph.prototype.blockMigrations = {
-        ...jensMigrations,
-        ...csdtMigrations
+        ...csdtMigrations,
+        ...jensMigrations
     };
 }
 
@@ -157,11 +136,11 @@ let csdtBlocks = {
     //     category: 'pen',
     //     spec: 'pen border color',
     // },
-    smoothBorders: {
-        type: 'command',
-        category: 'pen',
-        spec: 'fix borders'
-    },
+    // smoothBorders: {
+    //     type: 'command',
+    //     category: 'pen',
+    //     spec: 'fix borders'
+    // },
 
     // setBorderShade: {
     //     type: 'command',
@@ -261,7 +240,6 @@ SpriteMorph.prototype.initBlocks = function () {
     };
 }
 
-SpriteMorph.prototype.initBlockMigrations ();
 
 /** Custom block definitions
  *

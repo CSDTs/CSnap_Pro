@@ -262,6 +262,9 @@ SpriteMorph.prototype.initBlocks = function () {
 }
 
 SpriteMorph.prototype.initBlockMigrations ();
+SpriteMorph.prototype.initBlocks();
+
+
 
 /** Custom block definitions
  *

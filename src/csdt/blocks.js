@@ -251,13 +251,30 @@ let csdtBlocks = {
         spec: 'pen border %penBorder',
         defaults: [['size']]
     },
-
+    setEffect: {
+        type: 'command',
+        category: 'looks',
+        spec: 'set %eff effect to %n',
+        defaults: [['color'], 0]
+    },
+    changeEffect: {
+        type: 'command',
+        category: 'looks',
+        spec: 'change %eff effect by %n',
+        defaults: [['color'], 25]
+    },
+    getEffect: {
+        type: 'reporter',
+        category: 'looks',
+        spec: '%eff effect',
+        defaults: [['color']]
+    },
 }
 
 SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks = {
-        ...csdtBlocks,
-        ...jensBlocks
+        ...jensBlocks,
+        ...csdtBlocks
     };
 }
 

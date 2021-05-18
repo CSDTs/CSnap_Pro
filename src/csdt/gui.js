@@ -858,7 +858,7 @@ IDE_Morph.prototype.createCorralBar = function () {
 
     xlabel.fixLayout();
 
-    if (!IDE_Morph.prototype.hideControlBtns) {
+    if (!IDE_Morph.prototype.hideCorralBar) {
         xlabel.setLeft(
             this.corralBar.left() + padding + (newbutton.width() + padding) * 2
         );
@@ -872,7 +872,7 @@ IDE_Morph.prototype.createCorralBar = function () {
 
     ylabel.fixLayout();
 
-    if (!IDE_Morph.prototype.hideControlBtns) {
+    if (!IDE_Morph.prototype.hideCorralBar) {
         ylabel.setLeft(
             this.corralBar.left() + padding + (newbutton.width() + padding) * 2 + 100
         );

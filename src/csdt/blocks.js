@@ -262,6 +262,18 @@ let csdtBlocks = {
         "category": "variables",
         "spec": "display %l and %l as a CSV"
       },
+    changeEffect: {
+        type: 'command',
+        category: 'looks',
+        spec: 'change %eff effect by %n',
+        defaults: [['color'], 25]
+    },
+    getEffect: {
+        type: 'reporter',
+        category: 'looks',
+        spec: '%eff effect',
+        defaults: [['color']]
+    },
 }
 
 SpriteMorph.prototype.initBlocks = function () {

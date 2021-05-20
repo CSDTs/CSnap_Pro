@@ -2137,7 +2137,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
             blocks.push(block('clear'));
             blocks.push(block('doStamp'));
-
+            blocks.push(block('setSize'));
+            
             blocks.push('-');
 
             varNames = this.reachableGlobalVariableNames(true);

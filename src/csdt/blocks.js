@@ -2128,6 +2128,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('rotateByDegrees'));
             blocks.push(block('translatePercent'));
             blocks.push(block('changeXPosition'));
+            blocks.push(block('turnLeft'));
+            blocks.push(block('forward'));
 
             blocks.push(block('doSwitchToCostume'));
             blocks.push(block('setEffect'));

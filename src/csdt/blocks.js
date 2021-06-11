@@ -44,21 +44,21 @@ let csdtMigrations = {
         ],
         offset: 1
     },
-    setCostumeColor:{
+    setCostumeColor: {
         selector: 'setEffect',
         inputs: [
             ['color']
         ],
         offset: 1
     },
-    setCostumeOpacity:{
+    setCostumeOpacity: {
         selector: 'setEffect',
         inputs: [
             ['brightness']
         ],
         offset: 1
     },
-    changeCostumeOpacity:{
+    changeCostumeOpacity: {
         selector: 'setEffect',
         inputs: [
             ['brightness']
@@ -249,7 +249,9 @@ let csdtBlocks = {
         type: 'reporter',
         category: 'pen',
         spec: 'pen border %penBorder',
-        defaults: [['size']]
+        defaults: [
+            ['size']
+        ]
     },
 
 }
@@ -261,7 +263,7 @@ SpriteMorph.prototype.initBlocks = function () {
     };
 }
 
-SpriteMorph.prototype.initBlockMigrations ();
+SpriteMorph.prototype.initBlockMigrations();
 SpriteMorph.prototype.initBlocks();
 
 
@@ -332,9 +334,9 @@ SpriteMorph.prototype.getBorderState = function () {
 };
 
 SpriteMorph.prototype.setBorder = function (size, color) {
-    if (size != 0){
+    if (size != 0) {
         this.hasBorder = true;
-    }else{
+    } else {
         this.hasBorder = false;
     }
     this.borderSize = size;
@@ -345,7 +347,7 @@ SpriteMorph.prototype.getPenBorderAttribute = function (attrib) {
         options = ['active', 'size', 'hue'];
     if (name === 'size') {
         return this.borderSize;
-    }else if (name =='hue'){
+    } else if (name == 'hue') {
         return this.borderColor;
     }
     return this.hasBorder;
@@ -480,15 +482,21 @@ SpriteMorph.prototype.doSetScaleFactor = function (direction, percent) {
     if (direction[0] === 'x') {
         xP = percent;
         yP = 100;
+        this.hasScaledX = true;
     } else if (direction[0] === 'y') {
         xP = 100;
         yP = percent;
+        this.hasScaledY = true;
     } else if (direction[0] === 'x_and_y') {
         xP = percent;
         yP = percent;
+        this.hasScaledX = true;
+        this.hasScaledY = true;
     } else {
         xP = percent;
         yP = percent;
+        this.hasScaledX = true;
+        this.hasScaledY = true;
     }
 
     if (!isFinite(+xP * +yP) || isNaN(+xP * +yP)) {
@@ -2150,6 +2158,68 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
 
 SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
+    
+// Store current costume if the current costume isn't scaled by factor
+if(!this.hasScaledY && !this.hasScaledX){
+    this.scaleByFactorCostume = id;
+}
+
+    var w, h;
+    if (id instanceof List) { // try to turn a list of pixels into a costume
+        if (this.costume) {
+            // recycle dimensions of current costume
+            w = this.costume.width();
+            h = this.costume.height();
+        } else {
+            // assume stage's dimensions
+            w = StageMorph.prototype.dimensions.x;
+            h = StageMorph.prototype.dimensions.y;
+        }
+        id = Process.prototype.reportNewCostume(
+            id,
+            w,
+            h,
+            this.newCostumeName(localize('snap'))
+        );
+    }
+    if (id instanceof Costume) { // allow first-class costumes
+        this.wearCostume(id, noShadow);
+        return;
+    }
+    if (id instanceof Array && (id[0] === 'current')) {
+        return;
+    }
+
+    var num,
+        arr = this.costumes.asArray(),
+        costume;
+    if (
+        contains(
+            [localize('Turtle'), localize('Empty')],
+            (id instanceof Array ? id[0] : null)
+        )
+    ) {
+        costume = null;
+    } else {
+        if (id === -1) {
+            this.doWearPreviousCostume();
+            return;
+        }
+        costume = detect(arr, cst => cst.name === id);
+        if (costume === null) {
+            num = parseFloat(id);
+            if (num === 0) {
+                costume = null;
+            } else {
+                costume = arr[num - 1] || null;
+            }
+        }
+    }
+    this.wearCostume(costume, noShadow);
+    this.clearEffects();
+};
+
+SpriteMorph.prototype.doSwitchToCostumeScaleFactor = function (id, noShadow) {
     var w, h;
     if (id instanceof List) { // try to turn a list of pixels into a costume
         if (this.costume) {
@@ -2219,4 +2289,57 @@ SpriteMorph.prototype.clearEffects = function () {
     this.hasSaturation = false;
     this.graphicsValues['saturation'] = 50;
     this.graphicsValues['brightness'] = 50;
+};
+
+SpriteMorph.prototype.setScale = function (percentage, noShadow) {
+    // Handle scaled costumes
+    let myself = this;
+    if (myself.hasScaledX || myself.hasScaledY) {
+        myself.doSwitchToCostume(myself.scaleByFactorCostume);
+        myself.hasScaledX = false;
+        myself.hasScaledY = false;
+    }
+
+
+    // set my (absolute) scale in percent
+    var x = this.xPosition(),
+        y = this.yPosition(),
+        realScale,
+        growth;
+
+    realScale = (+percentage || 0) / 100;
+    growth = realScale / this.nestingScale;
+    this.nestingScale = realScale;
+    this.scale = Math.max(realScale, 0.01);
+
+    // apply to myself
+    this.changed();
+    this.fixLayout();
+    this.rerender();
+
+    this.silentGotoXY(x, y, true); // just me
+    this.positionTalkBubble();
+
+    // propagate to nested parts
+    this.parts.forEach(part => {
+        var xDist = part.xPosition() - x,
+            yDist = part.yPosition() - y;
+        part.setScale(part.scale * 100 * growth);
+        part.silentGotoXY(
+            x + (xDist * growth),
+            y + (yDist * growth)
+        );
+    });
+
+    // propagate to children that inherit my scale
+    if (!noShadow) {
+        this.shadowAttribute('size');
+    }
+    this.instances.forEach(instance => {
+        if (instance.cachedPropagation) {
+            if (instance.inheritsAttribute('size')) {
+                instance.setScale(percentage, true);
+            }
+        }
+    });
 };

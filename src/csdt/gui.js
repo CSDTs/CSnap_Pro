@@ -216,6 +216,11 @@ SpriteMorph.prototype.init = function (globals) {
     this.borderSize = 0;
     this.normalExtent = new Point(60, 60); // only for costume-less situation
     this.lineList = []; //For borders
+
+    // This is used by the new scale by factor block to switch back the costume
+    this.scaleByFactorCostume = "";
+    this.hasScaledX = false;
+    this.hasScaledY = false;
 };
 
 // Overrides palette with tutorial functionaliity (objects.js)

@@ -5231,3 +5231,268 @@ StageMorph.prototype.trailsLogAsSVG = function () {
     rot: new Point(-box.origin.x, box.corner.y),
   };
 };
+
+IDE_Morph.prototype.launchVisualizer = function () {
+  let myself = this;
+  // myself.prompt(
+  //   "Image Style Transfer Tool",
+  //   myself.sendVisualizerData,
+  //   {
+  //     "block-solid (0)": 0,
+  //     "medium (50)": 50,
+  //     "light (70)": 70,
+  //     "shimmering (80)": 80,
+  //     "elegant (90)": 90,
+  //     "subtle (95)": 95,
+  //     "text-only (100)": 100,
+  //   },
+  //   null
+  // );
+
+  new DialogBoxMorph(null, myself.sendVisualizerData).promptVisualizerInput(
+    "Image Style Transfer Tool",
+    "signup",
+    null,
+    null,
+    null,
+    null,
+    "check to make the call to the \nvisualizer",
+    world,
+    null,
+    null
+  );
+};
+
+IDE_Morph.prototype.sendVisualizerData = function (data) {
+  console.log(data);
+};
+
+DialogBoxMorph.prototype.promptVisualizerInput = function (
+  title,
+  purpose,
+  tosURL,
+  tosLabel,
+  prvURL,
+  prvLabel,
+  checkBoxLabel,
+  world,
+  pic,
+  msg
+) {
+  var contentImg = new InputFieldMorph(
+      "images/night.jpg",
+      false,
+      {
+        Beach: ["images/beach.jpg"],
+        Chicago: ["images/chicago.jpg"],
+        GoldenGate: ["images/golden_gate.jpg"],
+        NightSky: ["images/night.jpg"],
+        SeaPort: ["images/seaport.jpg"],
+        StatueOfLiberty: ["images/statue_of_liberty.jpg"],
+        Towers: ["images/towers.jpg"],
+      },
+      true
+    ),
+    styleModel,
+    transformModel,
+    sourceImg = new InputFieldMorph(),
+    contentImgSize = new InputFieldMorph(),
+    sourceImgSize = new InputFieldMorph(),
+    agree = false,
+    chk,
+    dof = new AlignmentMorph("row", 4),
+    styleModelColumn = new AlignmentMorph("column", 2),
+    transformModelColumn = new AlignmentMorph("column", 2),
+    instructions = new TextMorph(
+      "\nMockup of CSDT image style\ntransference. Source img comes\nfrom the current stage.\n",
+      12
+    );
+  (inp = new AlignmentMorph("column", 2)),
+    (lnk = new AlignmentMorph("row", 4)),
+    (bdy = new AlignmentMorph("column", this.padding)),
+    (myself = this);
+
+  function labelText(string) {
+    return new TextMorph(
+      localize(string),
+      10,
+      null, // style
+      false, // bold
+      null, // italic
+      null, // alignment
+      null, // width
+      null, // font name
+      MorphicPreferences.isFlat ? null : new Point(1, 1),
+      WHITE // shadowColor
+    );
+  }
+
+  function linkButton(label, url) {
+    var btn = new PushButtonMorph(
+      myself,
+      () => window.open(url),
+      "  " + localize(label) + "  "
+    );
+    btn.fontSize = 10;
+    btn.corner = myself.buttonCorner;
+    btn.edge = myself.buttonEdge;
+    btn.outline = myself.buttonOutline;
+    btn.outlineColor = myself.buttonOutlineColor;
+    btn.outlineGradient = myself.buttonOutlineGradient;
+    btn.padding = myself.buttonPadding;
+    btn.contrast = myself.buttonContrast;
+    btn.fixLayout();
+    return btn;
+  }
+
+  styleModel = new InputFieldMorph(
+    "mobilenet", // text
+    false, // numeric?
+    {
+      Fast: ["mobilenet"],
+      High: ["inception"],
+    },
+    true // read-only
+  );
+
+  transformModel = new InputFieldMorph(
+    "separable", // text
+    false, // numeric?
+    {
+      Fast: ["separable"],
+      High: ["original"],
+    },
+    true // read-only
+  );
+
+  inp.alignment = "left";
+  inp.setColor(this.color);
+  bdy.setColor(this.color);
+
+  styleModelColumn.alignment = "left";
+  styleModelColumn.setColor(this.color);
+  transformModelColumn.alignment = "left";
+  transformModelColumn.setColor(this.color);
+
+  contentImg.setWidth(200);
+  styleModel.setWidth(100);
+  transformModel.contents().minWidth = 80;
+  transformModel.setWidth(80);
+  sourceImg.setWidth(200);
+  contentImgSize.setWidth(200);
+  sourceImgSize.setWidth(200);
+
+  if (purpose === "signup") {
+    inp.add(instructions);
+    inp.add(labelText("Content Image Source:"));
+    inp.add(contentImg);
+    // inp.add(labelText("Content Image Size:"));
+    // inp.add(contentImgSize);
+    // inp.add(labelText("Source Image Source:"));
+    // inp.add(sourceImg);
+    // inp.add(labelText("Source Image Size:"));
+    // inp.add(sourceImgSize);
+    styleModelColumn.add(labelText("Style Model:"));
+    styleModelColumn.add(styleModel);
+    transformModelColumn.add(labelText("Transform Model:"));
+    transformModelColumn.add(transformModel);
+    dof.add(styleModelColumn);
+    dof.add(transformModelColumn);
+    inp.add(dof);
+  }
+
+  if (msg) {
+    bdy.add(labelText(msg));
+  }
+
+  bdy.add(inp);
+
+  if (tosURL || prvURL) {
+    bdy.add(lnk);
+  }
+  if (tosURL) {
+    lnk.add(linkButton(tosLabel, tosURL));
+  }
+  if (prvURL) {
+    lnk.add(linkButton(prvLabel, prvURL));
+  }
+
+  if (checkBoxLabel) {
+    chk = new ToggleMorph(
+      "checkbox",
+      this,
+      () => (agree = !agree), // action,
+      checkBoxLabel,
+      () => agree //query
+    );
+    chk.edge = this.buttonEdge / 2;
+    chk.outline = this.buttonOutline / 2;
+    chk.outlineColor = this.buttonOutlineColor;
+    chk.outlineGradient = this.buttonOutlineGradient;
+    chk.contrast = this.buttonContrast;
+    chk.fixLayout();
+    bdy.add(chk);
+  }
+
+  dof.fixLayout();
+  styleModelColumn.fixLayout();
+  transformModelColumn.fixLayout();
+  inp.fixLayout();
+  lnk.fixLayout();
+  bdy.fixLayout();
+
+  this.labelString = title;
+  this.createLabel();
+
+  if (pic) {
+    this.setPicture(pic);
+  }
+
+  this.addBody(bdy);
+
+  this.addButton("ok", "Transfer Style");
+  this.addButton("cancel", "Cancel");
+  this.fixLayout();
+
+  this.accept = function () {
+    DialogBoxMorph.prototype.accept.call(myself);
+  };
+
+  this.getInput = function () {
+    let ide = world.children[0];
+    let stage = ide.stage.fullImage();
+    // console.log();
+    let payload = {
+      // contentImage: stage.toDataURL(),
+      contentImage: contentImg.getValue(),
+
+      // choiceImageSize: contentImgSize.getValue(),
+      // sourceImage: sourceImg.getValue(),
+      sourceImage: stage.toDataURL(),
+
+      // sourceImageSize: sourceImgSize.getValue(),
+      styleModel: styleModel.getValue(),
+      transformModel: transformModel.getValue(),
+      // choice: agree,
+      styleRatio: 1.0,
+    };
+    if (agree) {
+      // let ide = world.children[0];
+
+      // console.log(ide.stage.fullImage());
+      console.log(window.application);
+      window.application.generateStylizedImage();
+    } else {
+      console.log(window.application);
+      window.application.generateStylizedImage(payload);
+    }
+    console.log(payload);
+    return payload;
+  };
+
+  if (!this.key) {
+    this.key = "credentials" + title + purpose;
+  }
+
+  this.popUp(world);
+};

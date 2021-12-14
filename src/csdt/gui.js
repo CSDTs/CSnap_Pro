@@ -4287,6 +4287,59 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
   );
 };
 
+
+// Save and export as STL
+IDE_Morph.prototype.saveAndExportAsSTL= function (name) {
+  var projectBody, projectSize;
+
+  this.confirm(
+    localize("You need to save first. Are you sure you want to replace") + '\n"' + name + '"?',
+    "STL Export",
+    () => {
+      if (name) {
+        this.setProjectName(name);
+      }
+      this.showMessage("Saving project\nto the cloud...");
+      projectBody = this.buildProjectRequest();
+      projectSize = this.verifyProject(projectBody);
+      if (!projectSize) {
+        return;
+      } // Invalid Projects don't return anything.
+      this.showMessage(
+        "Uploading " + Math.round(projectSize / 1024) + " KB..."
+      );
+      this.cloud.saveProject(
+        this.projectName,
+        projectBody,
+        (data) => {
+          this.showMessage("saved.", 2);
+          this.cloud.updateURL(data.id);
+          this.cloud.project_id = data.id;
+          this.cloud.project_approved = data.approved;
+          this.hasUnsavedEdits = false;
+          this.controlBar.updateLabel();
+          // let projectID = parseInt(window.location.pathname.match(/projects\/(\d+)/)[1])
+          window.onbeforeunload = nop;
+          this.showMessage("exporting as STL...", 2);
+          window.location.pathname = `/stl/${this.cloud.project_id}`
+          window.onbeforeunload = (evt) => {
+            var e = evt || window.event,
+                msg = "Are you sure you want to leave?";
+            // For IE and Firefox
+            if (e) {
+                e.returnValue = msg;
+            }
+            // For Safari / chrome
+            return msg;
+        };
+        },
+        this.cloudError()
+      );
+    }
+  );
+};
+
+
 ProjectDialogMorph.prototype.saveCloudProject = function () {
   this.ide.source = "cloud";
   this.ide.saveAsProjectToCloud();
@@ -5263,6 +5316,37 @@ IDE_Morph.prototype.launchVisualizer = function () {
   );
 };
 
+IDE_Morph.prototype.launchSTLPrompt = function () {
+  let myself = this;
+  // myself.prompt(
+  //   "Image Style Transfer Tool",
+  //   myself.sendVisualizerData,
+  //   {
+  //     "block-solid (0)": 0,
+  //     "medium (50)": 50,
+  //     "light (70)": 70,
+  //     "shimmering (80)": 80,
+  //     "elegant (90)": 90,
+  //     "subtle (95)": 95,
+  //     "text-only (100)": 100,
+  //   },
+  //   null
+  // );
+
+  new DialogBoxMorph(null, myself.sendVisualizerData).promptSTLDownload(
+    "STL Download",
+    "signup",
+    null,
+    null,
+    null,
+    null,
+    "check to make the call to the \nvisualizer",
+    world,
+    null,
+    null
+  );
+};
+
 IDE_Morph.prototype.sendVisualizerData = function (data) {
   console.log(data);
 };
@@ -5495,4 +5579,52 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
   }
 
   this.popUp(world);
+};
+
+StageMorph.prototype.userMenu = function () {
+  var ide = this.parentThatIsA(IDE_Morph),
+      menu = new MenuMorph(this);
+
+  if (ide && ide.isAppMode) {
+      // menu.addItem('help', 'nop');
+      return menu;
+  }
+  menu.addItem("edit", 'edit');
+  menu.addItem("show all", 'showAll');
+  menu.addItem(
+      "pic...",
+      () => ide.saveCanvasAs(this.fullImage(), this.name),
+      'save a picture\nof the stage'
+  );
+  menu.addItem(
+    "stl...",
+    () => {
+      ide.saveAndExportAsSTL(ide.projectName);
+    },
+    'save a stl\nof the stage \n(High Contrast Required)\n'
+  );
+  menu.addLine();
+  menu.addItem(
+      'pen trails',
+      () => {
+          var costume = ide.currentSprite.reportPenTrailsAsCostume().copy();
+          ide.currentSprite.addCostume(costume);
+          ide.currentSprite.wearCostume(costume);
+          ide.hasChangedMedia = true;
+          ide.spriteBar.tabBar.tabTo('costumes');
+      },
+      ide.currentSprite instanceof SpriteMorph ?
+          'turn all pen trails and stamps\n' +
+              'into a new costume for the\ncurrently selected sprite'
+                  : 'turn all pen trails and stamps\n' +
+                      'into a new background for the stage'
+  );
+  if (this.trailsLog.length) {
+      menu.addItem(
+          'svg...',
+          'exportTrailsLogAsSVG',
+          'export pen trails\nline segments as SVG'
+      );
+  }
+  return menu;
 };

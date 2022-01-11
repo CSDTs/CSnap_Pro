@@ -260,10 +260,10 @@ let csdtBlocks = {
     spec: "%eff effect",
     defaults: [["color"]],
   },
-  exportToVisualizer: {
+  createImageUsingAI: {
     type: "command",
     category: "looks",
-    spec: "export stage to visualizer",
+    spec: "create image using AI",
   },
 };
 
@@ -1822,7 +1822,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       blocks.push(block("reflectYAxis"));
       blocks.push(block("newSizeOfCurrent"));
       blocks.push(block("doSetScaleFactor"));
-      blocks.push(block("exportToVisualizer"));
+      blocks.push(block("createImageUsingAI"));
 
       // for debugging: ///////////////
 
@@ -2483,10 +2483,13 @@ SpriteMorph.prototype.exportAsCSV = function (radius_data, angle_data) {
   writeToWindow(points);
 };
 
-SpriteMorph.prototype.exportToVisualizer = function () {
+SpriteMorph.prototype.createImageUsingAI = function () {
   var ide = this.parentThatIsA(IDE_Morph);
   //   new ProjectDialogMorph(ide, "visualizer").popUp();
-  ide.launchVisualizer();
+  // ide.launchVisualizer();
+  // ide.promptAiImage("content", []);
+  ide.promptAiImage("content", []);
+  // ide.createAiImage();
   // ide.saveCanvasAs(ide.stage.fullImage(), ide.stage.name);
 };
 

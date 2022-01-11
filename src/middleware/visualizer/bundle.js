@@ -72,7 +72,9 @@ var Core = function () {
         sourceImage: "images/statue_of_liberty.jpg",
         styleModel: "mobilenet",
         transformModel: "separable",
-        styleRatio: 0.5
+        styleRatio: 0.5,
+        contentSize: "400px",
+        sourceSize: "400px"
       };
 
       if (options) {
@@ -80,12 +82,12 @@ var Core = function () {
       }
 
       this.contentImg = document.createElement("IMG");
-      this.contentImg.style.height = "400px";
+      this.contentImg.style.height = generic.contentSize;
       this.contentImg.style.width = "100%";
-      this.contentImg.src = "src/middleware/visualizer/" + generic.contentImage;
+      this.contentImg.src = generic.contentImage;
 
       this.styleImg = document.createElement("IMG");
-      this.styleImg.style.height = "400px";
+      this.styleImg.style.height = generic.sourceSize;
       this.styleImg.style.width = "100%";
       this.styleImg.src = generic.sourceImage;
 
@@ -159,7 +161,7 @@ var Core = function () {
               }
 
               _context3.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("src/middleware/visualizer/saved_model_style_js/model.json"));
+              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/src/middleware/visualizer/saved_model_style_js/model.json"));
 
             case 3:
               this.mobileStyleNet = _context3.sent;
@@ -187,7 +189,7 @@ var Core = function () {
               }
 
               _context4.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("src/middleware/visualizer/saved_model_style_inception_js/model.json"));
+              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/src/middleware/visualizer/saved_model_style_inception_js/model.json"));
 
             case 3:
               this.inceptionStyleNet = _context4.sent;
@@ -215,7 +217,7 @@ var Core = function () {
               }
 
               _context5.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("src/middleware/visualizer/saved_model_transformer_js/model.json"));
+              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/src/middleware/visualizer/saved_model_transformer_js/model.json"));
 
             case 3:
               this.originalTransformNet = _context5.sent;
@@ -243,7 +245,7 @@ var Core = function () {
               }
 
               _context6.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("src/middleware/visualizer/saved_model_transformer_separable_js/model.json"));
+              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/src/middleware/visualizer/saved_model_transformer_separable_js/model.json"));
 
             case 3:
               this.separableTransformNet = _context6.sent;

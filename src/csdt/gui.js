@@ -5135,6 +5135,15 @@ let csdtSyntax = {
       height: ["height"],
     },
   },
+  "%ast": {
+    type: "input",
+    tags: "read-only static",
+    menu: {
+      "§_ast": null,
+      target: ["target"],
+      source: ["source"],
+    },
+  },
   "%scft": {
     type: "input",
     tags: "read-only static",

@@ -260,15 +260,63 @@ let csdtBlocks = {
     spec: "%eff effect",
     defaults: [["color"]],
   },
-  createImageUsingAI: {
-    type: "command",
-    category: "looks",
-    spec: "create image using AI",
-  },
+
   setDreamImageForAI: {
     type: "command",
     category: "looks",
-    spec: "set %var image for AI",
+    spec: "set %ast image - AI",
+  },
+
+  useStageForStyleTransferImage: {
+    type: "command",
+    category: "looks",
+    spec: "use stage image for %ast - AI",
+  },
+  clearStyleTransferImage: {
+    type: "command",
+    category: "looks",
+    spec: "clear %ast image - AI",
+  },
+  importImageOnlyStyleTransfer: {
+    type: "command",
+    category: "looks",
+    spec: "import image for %ast - AI",
+  },
+  checkIfImageWasGenerated: {
+    type: "reporter",
+    category: "control",
+    spec: "was %ast image created - AI",
+  },
+
+  toggleASTProgress: {
+    type: "command",
+    category: "looks",
+    spec: "show progress bar - AI %b",
+  },
+  sizeErrorHandlingAST: {
+    type: "command",
+    category: "looks",
+    spec: "image sizing error",
+  },
+  createImageUsingAI: {
+    type: "command",
+    category: "looks",
+    spec: "create image using AST - AI",
+  },
+  getCurrentFilePicker: {
+    type: "reporter",
+    category: "looks",
+    spec: "has file picker",
+  },
+  getCurrentPaintEditor: {
+    type: "reporter",
+    category: "looks",
+    spec: "is paint editor visible",
+  },
+  getWorldChildren: {
+    type: "reporter",
+    category: "looks",
+    spec: "is world children",
   },
 };
 
@@ -1789,6 +1837,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       blocks.push(block("rotateByDegrees"));
       blocks.push("=");
       blocks.push(this.makeBlockButton(cat));
+      blocks.push("=");
+      blocks.push(block("useStageForStyleTransferImage"));
+      blocks.push(block("importImageOnlyStyleTransfer"));
+      blocks.push(block("toggleASTProgress"));
+      blocks.push(block("setDreamImageForAI"));
+      blocks.push(block("createImageUsingAI"));
+      blocks.push(block("getCurrentFilePicker"));
+      blocks.push(block("getCurrentPaintEditor"));
+      blocks.push(block("getWorldChildren"));
     } else if (cat === "looks") {
       blocks.push(block("doSwitchToCostume"));
       blocks.push(block("doWearNextCostume"));
@@ -1827,7 +1884,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       blocks.push(block("reflectYAxis"));
       blocks.push(block("newSizeOfCurrent"));
       blocks.push(block("doSetScaleFactor"));
-      blocks.push(block("createImageUsingAI"));
 
       // for debugging: ///////////////
 
@@ -1950,7 +2006,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       // blocks.push(block('drawTanu'));
       // blocks.push(block('drawLimitedTanu'));
       // blocks.push(block('drawCircle'));
-      blocks.push(block("setDreamImageForAI"));
     } else if (cat === "control") {
       blocks.push(block("receiveGo"));
       blocks.push(block("receiveKey"));
@@ -2489,195 +2544,31 @@ SpriteMorph.prototype.exportAsCSV = function (radius_data, angle_data) {
   writeToWindow(points);
 };
 
-SpriteMorph.prototype.createImageUsingAI = function () {
-  var ide = this.parentThatIsA(IDE_Morph);
-  //   new ProjectDialogMorph(ide, "visualizer").popUp();
-  // ide.launchVisualizer();
-  // ide.promptAiImage("content", []);
-  ide.promptAiImage("content", []);
-  // ide.createAiImage();
-  // ide.saveCanvasAs(ide.stage.fullImage(), ide.stage.name);
-};
-
 //# sourceURL=exportAsCSV.js
 
-SpriteMorph.prototype.setDreamImageForAI = function (userVar) {
-  var inp = document.createElement("input"),
-    world = this.world();
-
-  if (this.filePicker) {
-    document.body.removeChild(this.filePicker);
-    this.filePicker = null;
-  }
-  inp.accept = "image/png, image/gif, image/jpeg";
-  inp.type = "file";
-  inp.style.color = "transparent";
-  inp.style.backgroundColor = "transparent";
-  inp.style.border = "none";
-  inp.style.outline = "none";
-  inp.style.position = "absolute";
-  inp.style.top = "0px";
-  inp.style.left = "0px";
-  inp.style.width = "0px";
-  inp.style.height = "0px";
-  inp.style.display = "none";
-  inp.addEventListener(
-    "change",
-    () => {
-      document.body.removeChild(inp);
-      this.filePicker = null;
-      console.log(userVar);
-      world.hand.processDreamImageDrop(inp.files, userVar);
-
-      // console.log(targetImg)
-    },
-    false
-  );
-  document.body.appendChild(inp);
-  this.filePicker = inp;
-  inp.click();
+//Work around for image selection and edits for AI
+SpriteMorph.prototype.getCurrentFilePicker = function () {
+  return this.filePicker == null;
 };
 
-HandMorph.prototype.processDreamImageDrop = function (event, userVar) {
-  /*
-      find out whether an external image or audio file was dropped
-      onto the world canvas, turn it into an offscreen canvas or audio
-      element and dispatch the
-  
-          droppedImage(canvas, name)
-          droppedSVG(image, name)
-          droppedAudio(audio, name)
-          droppedText(text, name, type)
-  
-      events to interested Morphs at the mouse pointer
-  */
-  var files =
-      event instanceof FileList
-        ? event
-        : event.target.files || event.dataTransfer.files,
-    file,
-    url = event.dataTransfer ? event.dataTransfer.getData("URL") : null,
-    txt = event.dataTransfer ? event.dataTransfer.getData("Text/HTML") : null,
-    suffix,
-    src,
-    target = this.morphAtPointer(),
-    img = new Image(),
-    canvas,
-    i;
-
-  function readSVG(aFile) {
-    var pic = new Image(),
-      frd = new FileReader();
-    while (!target.droppedSVG) {
-      target = target.parent;
+SpriteMorph.prototype.getCurrentPaintEditor = function () {
+  let ide = this.parentThatIsA(IDE_Morph);
+  let world = ide.world();
+  if (world.children.length > 1) {
+    if (world.children[1].labelString == "Paint Editor") {
+      return true;
     }
-    pic.onload = () => target.droppedSVG(pic, aFile.name);
-    frd = new FileReader();
-    frd.onloadend = (e) => (pic.src = e.target.result);
-    frd.readAsDataURL(aFile);
   }
 
-  function readImage(aFile) {
-    var pic = new Image(),
-      frd = new FileReader();
-    while (!target.droppedImage) {
-      target = target.parent;
-    }
-    let img = "";
-    pic.onload = () => {
-      canvas = newCanvas(new Point(pic.width, pic.height), true);
-      canvas.getContext("2d").drawImage(pic, 0, 0);
-      img = target.droppedDreamImage(canvas, aFile.name, userVar);
-      console.log(pic);
-    };
-    frd = new FileReader();
-    frd.onloadend = (e) => (pic.src = e.target.result);
-
-    frd.readAsDataURL(aFile);
-  }
-
-  if (files.length > 0) {
-    for (i = 0; i < files.length; i += 1) {
-      file = files[i];
-      suffix = file.name.slice(file.name.lastIndexOf(".") + 1).toLowerCase();
-      if (
-        file.type.indexOf("svg") !== -1 &&
-        !MorphicPreferences.rasterizeSVGs
-      ) {
-        readSVG(file);
-      } else if (file.type.indexOf("image") === 0) {
-        let imgResult = readImage(file);
-        return imgResult;
-      }
-    }
-  } else {
-    return "not an image";
-  }
+  return false;
 };
 
-IDE_Morph.prototype.droppedDreamImage = function (aCanvas, name, userVar) {
-  var costume = new Costume(
-    aCanvas,
-    this.currentSprite.newCostumeName(
-      name ? name.split(".")[0] : "" // up to period
-    )
-  );
-
-  if (costume.isTainted()) {
-    this.inform(
-      "Unable to import this image",
-      "The picture you wish to import has been\n" +
-        "tainted by a restrictive cross-origin policy\n" +
-        "making it unusable for costumes in Snap!. \n\n" +
-        "Try downloading this picture first to your\n" +
-        "computer, and import it from there."
-    );
-    return;
+SpriteMorph.prototype.getWorldChildren = function () {
+  let ide = this.parentThatIsA(IDE_Morph);
+  let world = ide.world();
+  if (world.children.length > 1) {
+    return true;
   }
 
-  this.currentSprite.addCostume(costume);
-  costume.editDreamImage(
-    this.world(),
-    this.parentThatIsA(IDE_Morph),
-    false // not a new costume, retain existing rotation center,
-  );
-
-  // this.currentSprite.wearCostume(costume);
-  // this.spriteBar.tabBar.tabTo('costumes');
-  this.hasChangedMedia = true;
-  this.recordUnsavedChanges();
-
-  this.setVar(userVar, costume);
-};
-
-Costume.prototype.editDreamImage = function (
-  aWorld,
-  anIDE,
-  isnew,
-  oncancel,
-  onsubmit
-) {
-  var editor = new PaintEditorMorph();
-  editor.oncancel = oncancel || nop;
-  editor.openIn(
-    aWorld,
-    isnew ? newCanvas(StageMorph.prototype.dimensions, true) : this.contents,
-    isnew ? null : this.rotationCenter,
-    (img, rc) => {
-      this.contents = img;
-      this.rotationCenter = rc;
-      this.version = Date.now();
-      aWorld.changed();
-      if (anIDE) {
-        if (anIDE.currentSprite instanceof SpriteMorph) {
-          // don't shrinkwrap stage costumes
-          this.shrinkWrap();
-        }
-        // anIDE.currentSprite.wearCostume(this, true); // don't shadow
-        // anIDE.hasChangedMedia = true;
-      }
-      (onsubmit || nop)();
-    },
-    anIDE
-  );
+  return false;
 };

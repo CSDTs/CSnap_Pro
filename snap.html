@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CSnap! Pro 6.7.4 - Snap! with Culture</title>
     <link rel="icon" href="src/favicon.ico">
+    <link rel="stylesheet" href="src/csdt/style.css">
     <script type="text/javascript">
         let config = {
             "modules": [],
@@ -40,7 +41,7 @@
 
     <script src="src/jquery-3.4.1.min.js"></script>
 
-    <script src="src/middleware/visualizer/bundle.min.js"></script>
+    <script src="src/middleware/visualizer/bundle.js"></script>
 
     <script src="src/csdt/blocks.js"></script>
     <script src="src/csdt/cloud.js"></script>
@@ -64,9 +65,25 @@
 </head>
 
 <body style="margin: 0;">
-    <main id='visualizer' hidden>
+    <main id='visualizer' hidden> </main>
+    <section id='vis-progress' hidden>
+        <p>Transferring Style. Please Wait...</p>
+        <div class="wrapper">
+            <div class="slider">
+                <div class="line"></div>
+                <div class="subline inc"></div>
+                <div class="subline dec"></div>
+            </div>
 
-    </main>
+            <!-- <div class="progress-bar">
+                <span class="progress-bar-fill" style="width: 70%;"></span>
+            </div> -->
+            <!-- <div class="progress progress-infinite">
+                <div class="progress-bar3">
+                </div>
+            </div> -->
+        </div>
+    </section>
     <canvas id="world" tabindex="1" style="position: absolute;"></canvas>
 </body>
 

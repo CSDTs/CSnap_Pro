@@ -260,10 +260,63 @@ let csdtBlocks = {
     spec: "%eff effect",
     defaults: [["color"]],
   },
+
+  setDreamImageForAI: {
+    type: "command",
+    category: "other",
+    spec: "set %ast image - AI",
+  },
+
+  useStageForStyleTransferImage: {
+    type: "command",
+    category: "other",
+    spec: "use stage image for %ast - AI",
+  },
+  clearStyleTransferImage: {
+    type: "command",
+    category: "other",
+    spec: "clear %ast image - AI",
+  },
+  importImageOnlyStyleTransfer: {
+    type: "command",
+    category: "other",
+    spec: "import image for %ast - AI",
+  },
+  checkIfImageWasGenerated: {
+    type: "reporter",
+    category: "other",
+    spec: "was %ast image created - AI",
+  },
+
+  toggleASTProgress: {
+    type: "command",
+    category: "other",
+    spec: "show progress bar - AI %b",
+  },
+  sizeErrorHandlingAST: {
+    type: "command",
+    category: "other",
+    spec: "image sizing error",
+  },
   createImageUsingAI: {
     type: "command",
-    category: "looks",
-    spec: "create image using AI",
+    category: "other",
+    spec: "create image using AST - AI",
+  },
+  getCurrentFilePicker: {
+    type: "reporter",
+    category: "other",
+    spec: "has file picker",
+  },
+  getCurrentPaintEditor: {
+    type: "reporter",
+    category: "other",
+    spec: "is paint editor visible",
+  },
+  getWorldChildren: {
+    type: "reporter",
+    category: "other",
+    spec: "is world children",
   },
 };
 
@@ -1822,7 +1875,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       blocks.push(block("reflectYAxis"));
       blocks.push(block("newSizeOfCurrent"));
       blocks.push(block("doSetScaleFactor"));
-      blocks.push(block("createImageUsingAI"));
 
       // for debugging: ///////////////
 
@@ -2230,6 +2282,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       blocks.push(block("doDeleteFromList"));
       blocks.push(block("doInsertInList"));
       blocks.push(block("doReplaceInList"));
+      blocks.push("=");
+      blocks.push(block("useStageForStyleTransferImage"));
+      blocks.push(block("importImageOnlyStyleTransfer"));
+      blocks.push(block("toggleASTProgress"));
+      blocks.push(block("setDreamImageForAI"));
+      blocks.push(block("createImageUsingAI"));
+      blocks.push(block("getCurrentFilePicker"));
+      blocks.push(block("getCurrentPaintEditor"));
+      blocks.push(block("getWorldChildren"));
 
       // for debugging: ///////////////
 
@@ -2483,14 +2544,31 @@ SpriteMorph.prototype.exportAsCSV = function (radius_data, angle_data) {
   writeToWindow(points);
 };
 
-SpriteMorph.prototype.createImageUsingAI = function () {
-  var ide = this.parentThatIsA(IDE_Morph);
-  //   new ProjectDialogMorph(ide, "visualizer").popUp();
-  // ide.launchVisualizer();
-  // ide.promptAiImage("content", []);
-  ide.promptAiImage("content", []);
-  // ide.createAiImage();
-  // ide.saveCanvasAs(ide.stage.fullImage(), ide.stage.name);
+//# sourceURL=exportAsCSV.js
+
+//Work around for image selection and edits for AI
+SpriteMorph.prototype.getCurrentFilePicker = function () {
+  return this.filePicker == null;
 };
 
-//# sourceURL=exportAsCSV.js
+SpriteMorph.prototype.getCurrentPaintEditor = function () {
+  let ide = this.parentThatIsA(IDE_Morph);
+  let world = ide.world();
+  if (world.children.length > 1) {
+    if (world.children[1].labelString == "Paint Editor") {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+SpriteMorph.prototype.getWorldChildren = function () {
+  let ide = this.parentThatIsA(IDE_Morph);
+  let world = ide.world();
+  if (world.children.length > 1) {
+    return true;
+  }
+
+  return false;
+};

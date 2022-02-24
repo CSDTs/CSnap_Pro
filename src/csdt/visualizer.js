@@ -151,12 +151,12 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
   if (purpose === "signup") {
     inp.add(instructions);
 
-    inp.add(labelText("Content Image:"));
-    inp.add(imageA);
+    // inp.add(labelText("Content Image:"));
+    // inp.add(imageA);
     inp.add(labelText("\nContent Size:"));
     inp.add(sizeSliderA);
-    inp.add(labelText("\nStyle Image:"));
-    inp.add(imageB);
+    // inp.add(labelText("\nStyle Image:"));
+    // inp.add(imageB);
     inp.add(labelText("\nStyle Size:"));
     inp.add(sizeSliderB);
     inp.add(labelText("\nStylization strength:"));
@@ -225,6 +225,7 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 
   this.accept = function () {
     DialogBoxMorph.prototype.accept.call(myself);
+    // world.children[0].showMessage("Creating image. One moment...", 5);
   };
 
   this.getInput = function () {
@@ -252,13 +253,14 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
       // let ide = world.children[0];
 
       // console.log(ide.stage.fullImage());
-      console.log(window.application);
+      // console.log(window.application);
       window.application.generateStylizedImage();
     } else {
-      console.log(window.application);
+      // console.log(window.application);
+
       window.application.generateStylizedImage(payload);
     }
-    console.log(payload);
+    // console.log(payload);
     return payload;
   };
 
@@ -269,17 +271,31 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
   this.popUp(world);
 };
 
-IDE_Morph.prototype.promptAiImage = function (imageType, payload) {
+IDE_Morph.prototype.promptAiImage = function (payload) {
   // open a dialog box letting the user browse available "built-in"
   // costumes, backgrounds or sounds
-  var msg = this.showMessage("Loading AI images...");
-  this.getMediaList("Costumes", (items) => {
-    msg.destroy();
-    this.getMediaList("Textures", (newitems) => {
-      items = items.concat(newitems);
-      this.selectAiImage("Costumes", items, imageType, payload);
+
+  let checkTarget = payload[0] != "";
+  let checkSource = payload[1] != "";
+  let imageType = "";
+
+  if (checkTarget && checkSource) {
+    this.launchVisualizer(payload);
+  } else {
+    if (checkTarget) {
+      imageType = "source";
+    } else {
+      imageType = "content";
+    }
+    var msg = this.showMessage("Loading AI images...");
+    this.getMediaList("Costumes", (items) => {
+      msg.destroy();
+      this.getMediaList("Textures", (newitems) => {
+        items = items.concat(newitems);
+        this.selectAiImage("Costumes", items, imageType, payload);
+      });
     });
-  });
+  }
 };
 
 IDE_Morph.prototype.selectAiImage = function (
@@ -355,10 +371,10 @@ IDE_Morph.prototype.selectAiImage = function (
     });
   };
 
-  console.log(items);
+  // console.log(items);
   let uniqueSections = [...new Set(items.map((item) => item.description))];
   uniqueSections.push("All");
-  console.log(items);
+  // console.log(items);
   // Create the media sections
   var listField = new ListMorph(uniqueSections, function (element) {
     return element;
@@ -408,13 +424,12 @@ IDE_Morph.prototype.selectAiImage = function (
   dialog.ok = function () {
     if (selectedIcon) {
       if (imageType == "content") {
-        payload.push(selectedIcon.url);
-        myself.promptAiImage("source", payload);
+        payload[0] = selectedIcon.url;
+        myself.promptAiImage(payload);
         dialog.destroy();
       } else if (imageType == "source") {
-        payload.push(selectedIcon.url);
-        myself.launchVisualizer(payload);
-        console.log(payload);
+        payload[1] = selectedIcon.url;
+        myself.promptAiImage(payload);
         dialog.destroy();
       }
     }
@@ -486,4 +501,405 @@ IDE_Morph.prototype.selectAiImage = function (
   dialog.setCenter(world.center());
 
   handle = new HandleMorph(dialog, 300, 280, dialog.corner, dialog.corner);
+};
+
+IDE_Morph.prototype.setAiImageByURL = function (url) {};
+
+////////////////////////////////////////////////////////////////
+
+SpriteMorph.prototype.useStageForStyleTransferImage = function (type) {
+  if (type == "") return;
+  this.clearStyleTransferImage(type);
+  let ide = this.parentThatIsA(IDE_Morph);
+
+  let finalImg = document.createElement("IMG");
+  let visualizer = document.getElementById("visualizer");
+  let data = ide.stage.fullImage().toDataURL();
+
+  finalImg.id = `${type}-img`;
+  finalImg.src = data;
+  finalImg.style.width = "auto";
+  finalImg.style.height = "auto";
+  visualizer.appendChild(finalImg);
+};
+
+SpriteMorph.prototype.clearStyleTransferImage = function (type) {
+  let vis = document.querySelector("#visualizer");
+  let target = document.querySelector(`#${type}-img`);
+
+  if (target) vis.removeChild(target);
+};
+
+SpriteMorph.prototype.checkIfImageWasGenerated = function (type) {
+  return document.querySelector(`#${type}-img`) != null;
+};
+
+SpriteMorph.prototype.importImageOnlyStyleTransfer = function (userVar) {
+  if (userVar == "") return;
+  this.clearStyleTransferImage(userVar);
+
+  var inp = document.createElement("input"),
+    world = this.world();
+
+  if (this.filePicker) {
+    document.body.removeChild(this.filePicker);
+    this.filePicker = null;
+  }
+  inp.accept = "image/png, image/gif, image/jpeg";
+  inp.type = "file";
+  inp.style.color = "transparent";
+  inp.style.backgroundColor = "transparent";
+  inp.style.border = "none";
+  inp.style.outline = "none";
+  inp.style.position = "absolute";
+  inp.style.top = "0px";
+  inp.style.left = "0px";
+  inp.style.width = "0px";
+  inp.style.height = "0px";
+  inp.style.display = "none";
+
+  inp.addEventListener(
+    "change",
+    () => {
+      document.body.removeChild(inp);
+      this.filePicker = null;
+      world.hand.processImageFromImport(inp.files, userVar);
+    },
+    false
+  );
+  document.body.appendChild(inp);
+  this.filePicker = inp;
+  inp.click();
+};
+
+HandMorph.prototype.processImageFromImport = function (event, userVar) {
+  /*
+      find out whether an external image or audio file was dropped
+      onto the world canvas, turn it into an offscreen canvas or audio
+      element and dispatch the
+  
+          droppedImage(canvas, name)
+          droppedSVG(image, name)
+          droppedAudio(audio, name)
+          droppedText(text, name, type)
+  
+      events to interested Morphs at the mouse pointer
+  */
+  var files =
+      event instanceof FileList
+        ? event
+        : event.target.files || event.dataTransfer.files,
+    file,
+    url = event.dataTransfer ? event.dataTransfer.getData("URL") : null,
+    txt = event.dataTransfer ? event.dataTransfer.getData("Text/HTML") : null,
+    suffix,
+    src,
+    target = this.morphAtPointer(),
+    img = new Image(),
+    canvas,
+    i;
+
+  function readSVG(aFile) {
+    var pic = new Image(),
+      frd = new FileReader();
+    while (!target.droppedSVG) {
+      target = target.parent;
+    }
+    pic.onload = () => target.droppedSVG(pic, aFile.name);
+    frd = new FileReader();
+    frd.onloadend = (e) => (pic.src = e.target.result);
+    frd.readAsDataURL(aFile);
+  }
+
+  function readImage(aFile) {
+    var pic = new Image(),
+      frd = new FileReader();
+    while (!target.droppedImage) {
+      target = target.parent;
+    }
+    let img = "";
+    let finalImg = document.createElement("IMG");
+    let visualizer = document.getElementById("visualizer");
+    // finalImg.src = pic.src;
+    finalImg.style.width = "auto";
+    finalImg.style.height = "auto";
+    finalImg.id = `${userVar}-img`;
+    pic.onload = () => {
+      console.log(pic.width, pic.height);
+      canvas = newCanvas(new Point(pic.width, pic.height), true);
+      canvas.getContext("2d").drawImage(pic, 0, 0);
+      // img = target.droppedDreamImage(canvas, aFile.name, userVar);
+
+      // let data = costume.contents.toDataURL("image/jpeg", 1.0);
+
+      visualizer.appendChild(finalImg);
+    };
+    frd = new FileReader();
+    frd.onloadend = (e) => {
+      pic.src = e.target.result;
+      finalImg.src = e.target.result;
+    };
+
+    frd.readAsDataURL(aFile);
+  }
+
+  if (files.length > 0) {
+    for (i = 0; i < files.length; i += 1) {
+      file = files[i];
+      suffix = file.name.slice(file.name.lastIndexOf(".") + 1).toLowerCase();
+      if (
+        file.type.indexOf("svg") !== -1 &&
+        !MorphicPreferences.rasterizeSVGs
+      ) {
+        readSVG(file);
+      } else if (file.type.indexOf("image") === 0) {
+        let imgResult = readImage(file);
+        return imgResult;
+      }
+    }
+  } else {
+    new DialogBoxMorph().inform("Help", null, myself.world(), help);
+    // let ide = this.parentThatIsA(IDE_Morph);
+    // ide.stopAllScripts();
+
+    return "not an image";
+  }
+};
+
+SpriteMorph.prototype.toggleASTProgress = function (bool) {
+  console.log(bool);
+  let progress = document.querySelector("#vis-progress");
+  if (bool) {
+    progress.style.display = "inline-flex";
+    progress.hidden = !bool;
+  } else {
+    progress.style.display = "none";
+    progress.hidden = bool;
+  }
+};
+
+SpriteMorph.prototype.sizeErrorHandlingAST = function () {
+  new DialogBoxMorph().inform(
+    "AI Image Sizing",
+    "One of your images is too big. Max size is 1080p. Please try again with smaller images.",
+    this.world()
+  );
+};
+
+SpriteMorph.prototype.createImageUsingAI = function () {
+  let ide = this.parentThatIsA(IDE_Morph);
+  let checkTarget = document.querySelector("#target-img");
+  let checkSource = document.querySelector("#source-img");
+  let target, source;
+  let payload = ["", ""];
+
+  if (checkTarget && checkSource) {
+    ide.launchVisualizer([checkTarget.src, checkSource.src]);
+  } else {
+    if (checkTarget) {
+      payload[0] = checkTarget.src;
+    } else if (checkSource) {
+      payload[1] = checkSource.src;
+    }
+    ide.promptAiImage(payload);
+  }
+};
+
+SpriteMorph.prototype.setDreamImageForAI = function (userVar) {
+  if (userVar == "") return;
+  this.clearStyleTransferImage(userVar);
+
+  var inp = document.createElement("input"),
+    world = this.world();
+
+  if (this.filePicker) {
+    document.body.removeChild(this.filePicker);
+    this.filePicker = null;
+  }
+  inp.accept = "image/png, image/gif, image/jpeg";
+  inp.type = "file";
+  inp.style.color = "transparent";
+  inp.style.backgroundColor = "transparent";
+  inp.style.border = "none";
+  inp.style.outline = "none";
+  inp.style.position = "absolute";
+  inp.style.top = "0px";
+  inp.style.left = "0px";
+  inp.style.width = "0px";
+  inp.style.height = "0px";
+  inp.style.display = "none";
+  inp.addEventListener(
+    "change",
+    () => {
+      document.body.removeChild(inp);
+      world.hand.processDreamImageDrop(inp.files, userVar);
+      this.filePicker = null;
+    },
+    false
+  );
+
+  document.body.appendChild(inp);
+  this.filePicker = inp;
+
+  inp.click();
+};
+
+HandMorph.prototype.processDreamImageDrop = function (event, userVar) {
+  /*
+      find out whether an external image or audio file was dropped
+      onto the world canvas, turn it into an offscreen canvas or audio
+      element and dispatch the
+  
+          droppedImage(canvas, name)
+          droppedSVG(image, name)
+          droppedAudio(audio, name)
+          droppedText(text, name, type)
+  
+      events to interested Morphs at the mouse pointer
+  */
+  var files =
+      event instanceof FileList
+        ? event
+        : event.target.files || event.dataTransfer.files,
+    file,
+    url = event.dataTransfer ? event.dataTransfer.getData("URL") : null,
+    txt = event.dataTransfer ? event.dataTransfer.getData("Text/HTML") : null,
+    suffix,
+    src,
+    target = this.morphAtPointer(),
+    img = new Image(),
+    canvas,
+    i;
+
+  function readSVG(aFile) {
+    var pic = new Image(),
+      frd = new FileReader();
+    while (!target.droppedSVG) {
+      target = target.parent;
+    }
+    pic.onload = () => target.droppedSVG(pic, aFile.name);
+    frd = new FileReader();
+    frd.onloadend = (e) => (pic.src = e.target.result);
+    frd.readAsDataURL(aFile);
+  }
+
+  function readImage(aFile) {
+    var pic = new Image(),
+      frd = new FileReader();
+    while (!target.droppedImage) {
+      target = target.parent;
+    }
+    let img = "";
+    pic.onload = () => {
+      console.log(pic.width, pic.height);
+      canvas = newCanvas(new Point(pic.width, pic.height), true);
+      canvas.getContext("2d").drawImage(pic, 0, 0);
+      img = target.droppedDreamImage(canvas, aFile.name, userVar);
+    };
+    frd = new FileReader();
+    frd.onloadend = (e) => (pic.src = e.target.result);
+
+    frd.readAsDataURL(aFile);
+  }
+
+  if (files.length > 0) {
+    for (i = 0; i < files.length; i += 1) {
+      file = files[i];
+      suffix = file.name.slice(file.name.lastIndexOf(".") + 1).toLowerCase();
+      if (
+        file.type.indexOf("svg") !== -1 &&
+        !MorphicPreferences.rasterizeSVGs
+      ) {
+        readSVG(file);
+      } else if (file.type.indexOf("image") === 0) {
+        let imgResult = readImage(file);
+        return imgResult;
+      }
+    }
+  } else {
+    return "not an image";
+  }
+};
+
+IDE_Morph.prototype.droppedDreamImage = function (aCanvas, name, userVar) {
+  var costume = new Costume(
+    aCanvas,
+    this.currentSprite.newCostumeName(
+      name ? name.split(".")[0] : "" // up to period
+    )
+  );
+
+  if (costume.isTainted()) {
+    this.inform(
+      "Unable to import this image",
+      "The picture you wish to import has been\n" +
+        "tainted by a restrictive cross-origin policy\n" +
+        "making it unusable for costumes in Snap!. \n\n" +
+        "Try downloading this picture first to your\n" +
+        "computer, and import it from there."
+    );
+    return;
+  }
+
+  // this.currentSprite.addCostume(costume);
+  costume.editDreamImage(
+    this.world(),
+    this.parentThatIsA(IDE_Morph),
+    false, // not a new costume, retain existing rotation center,
+    (e) => {
+      console.error(`An error has occured while editing the image: ${e}`);
+    },
+    () => {
+      let finalImg = document.createElement("IMG");
+      let visualizer = document.getElementById("visualizer");
+      let data = costume.contents.toDataURL("image/jpeg", 1.0);
+
+      finalImg.id = `${userVar}-img`;
+      finalImg.src = data;
+      finalImg.style.width = "auto";
+      finalImg.style.height = "auto";
+      visualizer.appendChild(finalImg);
+    }
+  );
+
+  // this.currentSprite.wearCostume(costume);
+  // this.spriteBar.tabBar.tabTo('costumes');
+  this.hasChangedMedia = true;
+  this.recordUnsavedChanges();
+
+  this.setVar(userVar, costume);
+};
+
+Costume.prototype.editDreamImage = function (
+  aWorld,
+  anIDE,
+  isnew,
+  oncancel,
+  onsubmit
+) {
+  var editor = new PaintEditorMorph();
+  let stageDimensions = new Point(1920, 1080);
+  console.log(isnew);
+  editor.oncancel = oncancel || nop;
+  editor.openIn(
+    aWorld,
+    isnew ? newCanvas(stageDimensions, true) : this.contents,
+    isnew ? null : this.rotationCenter,
+    (img, rc) => {
+      this.contents = img;
+      this.rotationCenter = rc;
+      this.version = Date.now();
+      aWorld.changed();
+      if (anIDE) {
+        if (anIDE.currentSprite instanceof SpriteMorph) {
+          // don't shrinkwrap stage costumes
+          // this.shrinkWrap();
+        }
+        // anIDE.currentSprite.wearCostume(this, true); // don't shadow
+        // anIDE.hasChangedMedia = true;
+      }
+      (onsubmit || nop)();
+    },
+    anIDE
+  );
 };

@@ -263,59 +263,59 @@ let csdtBlocks = {
 
   setDreamImageForAI: {
     type: "command",
-    category: "looks",
+    category: "other",
     spec: "set %ast image - AI",
   },
 
   useStageForStyleTransferImage: {
     type: "command",
-    category: "looks",
+    category: "other",
     spec: "use stage image for %ast - AI",
   },
   clearStyleTransferImage: {
     type: "command",
-    category: "looks",
+    category: "other",
     spec: "clear %ast image - AI",
   },
   importImageOnlyStyleTransfer: {
     type: "command",
-    category: "looks",
+    category: "other",
     spec: "import image for %ast - AI",
   },
   checkIfImageWasGenerated: {
     type: "reporter",
-    category: "control",
+    category: "other",
     spec: "was %ast image created - AI",
   },
 
   toggleASTProgress: {
     type: "command",
-    category: "looks",
+    category: "other",
     spec: "show progress bar - AI %b",
   },
   sizeErrorHandlingAST: {
     type: "command",
-    category: "looks",
+    category: "other",
     spec: "image sizing error",
   },
   createImageUsingAI: {
     type: "command",
-    category: "looks",
+    category: "other",
     spec: "create image using AST - AI",
   },
   getCurrentFilePicker: {
     type: "reporter",
-    category: "looks",
+    category: "other",
     spec: "has file picker",
   },
   getCurrentPaintEditor: {
     type: "reporter",
-    category: "looks",
+    category: "other",
     spec: "is paint editor visible",
   },
   getWorldChildren: {
     type: "reporter",
-    category: "looks",
+    category: "other",
     spec: "is world children",
   },
 };
@@ -1837,15 +1837,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       blocks.push(block("rotateByDegrees"));
       blocks.push("=");
       blocks.push(this.makeBlockButton(cat));
-      blocks.push("=");
-      blocks.push(block("useStageForStyleTransferImage"));
-      blocks.push(block("importImageOnlyStyleTransfer"));
-      blocks.push(block("toggleASTProgress"));
-      blocks.push(block("setDreamImageForAI"));
-      blocks.push(block("createImageUsingAI"));
-      blocks.push(block("getCurrentFilePicker"));
-      blocks.push(block("getCurrentPaintEditor"));
-      blocks.push(block("getWorldChildren"));
     } else if (cat === "looks") {
       blocks.push(block("doSwitchToCostume"));
       blocks.push(block("doWearNextCostume"));
@@ -2291,6 +2282,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       blocks.push(block("doDeleteFromList"));
       blocks.push(block("doInsertInList"));
       blocks.push(block("doReplaceInList"));
+      blocks.push("=");
+      blocks.push(block("useStageForStyleTransferImage"));
+      blocks.push(block("importImageOnlyStyleTransfer"));
+      blocks.push(block("toggleASTProgress"));
+      blocks.push(block("setDreamImageForAI"));
+      blocks.push(block("createImageUsingAI"));
+      blocks.push(block("getCurrentFilePicker"));
+      blocks.push(block("getCurrentPaintEditor"));
+      blocks.push(block("getWorldChildren"));
 
       // for debugging: ///////////////
 

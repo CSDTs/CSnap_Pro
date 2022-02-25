@@ -5091,8 +5091,18 @@ IDE_Morph.prototype.settingsMenu = function () {
       IDE_Morph.prototype.toggleTutorialMode();
     },
     IDE_Morph.prototype.tutorialMode,
-    "uncheck to disable\tutorial layout for project",
-    "check to enable\tutorial layout for project",
+    "uncheck to disable\ttutorial layout for project",
+    "check to enable\ttutorial layout for project",
+    false
+  );
+  addPreference(
+    "Full resolution support",
+    () => {
+      Costume.prototype.noFit = !Costume.prototype.noFit;
+    },
+    Costume.prototype.noFit,
+    "uncheck to disable\tfull resolution for costumes",
+    "check to enable\tfull resolution for costumes",
     false
   );
   addPreference(
@@ -5140,8 +5150,8 @@ let csdtSyntax = {
     tags: "read-only static",
     menu: {
       "§_ast": null,
-      target: ["target"],
-      source: ["source"],
+      base: ["base"],
+      style: ["style"],
     },
   },
   "%scft": {

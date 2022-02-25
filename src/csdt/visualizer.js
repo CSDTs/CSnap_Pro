@@ -688,8 +688,8 @@ SpriteMorph.prototype.sizeErrorHandlingAST = function () {
 
 SpriteMorph.prototype.createImageUsingAI = function () {
   let ide = this.parentThatIsA(IDE_Morph);
-  let checkTarget = document.querySelector("#target-img");
-  let checkSource = document.querySelector("#source-img");
+  let checkTarget = document.querySelector("#base-img");
+  let checkSource = document.querySelector("#style-img");
   let target, source;
   let payload = ["", ""];
 

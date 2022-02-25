@@ -2572,3 +2572,15 @@ SpriteMorph.prototype.getWorldChildren = function () {
 
   return false;
 };
+
+Costume.prototype.shrinkToFit = function (extentPoint) {
+  if (this.getNoFit()) return;
+  if (extentPoint.x < this.width() || extentPoint.y < this.height()) {
+    this.contents = this.thumbnail(extentPoint, null, true);
+  }
+};
+
+Costume.prototype.getNoFit = function () {
+  return this.noFit;
+};
+Costume.prototype.noFit = false;

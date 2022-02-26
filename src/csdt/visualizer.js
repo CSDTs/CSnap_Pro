@@ -869,7 +869,7 @@ IDE_Morph.prototype.droppedDreamImage = function (aCanvas, name, userVar) {
   this.hasChangedMedia = true;
   this.recordUnsavedChanges();
 
-  this.setVar(userVar, costume);
+  // this.setVar(userVar, costume);
 };
 
 Costume.prototype.editDreamImage = function (

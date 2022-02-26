@@ -153,11 +153,11 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 
     // inp.add(labelText("Content Image:"));
     // inp.add(imageA);
-    inp.add(labelText("\nContent Size:"));
+    inp.add(labelText("\nBase Texture Size:"));
     inp.add(sizeSliderA);
     // inp.add(labelText("\nStyle Image:"));
     // inp.add(imageB);
-    inp.add(labelText("\nStyle Size:"));
+    inp.add(labelText("\nStyle Texture Size:"));
     inp.add(sizeSliderB);
     inp.add(labelText("\nStylization strength:"));
     inp.add(slider);
@@ -245,10 +245,11 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
       transformModel: transformModel.getValue(),
       // choice: agree,
       styleRatio: slider.value / 100.0,
-      contentSize: `${sizeSliderA}px`,
-      sourceSize: `${sizeSliderB}px`,
+      contentSize: `${sizeSliderA.value}px`,
+      sourceSize: `${sizeSliderB.value}px`,
     };
 
+    console.table(payload);
     if (agree) {
       // let ide = world.children[0];
 
@@ -274,6 +275,7 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 IDE_Morph.prototype.promptAiImage = function (payload) {
   // open a dialog box letting the user browse available "built-in"
   // costumes, backgrounds or sounds
+  console.log(payload);
 
   let checkTarget = payload[0] != "";
   let checkSource = payload[1] != "";
@@ -283,9 +285,9 @@ IDE_Morph.prototype.promptAiImage = function (payload) {
     this.launchVisualizer(payload);
   } else {
     if (checkTarget) {
-      imageType = "source";
+      imageType = "style";
     } else {
-      imageType = "content";
+      imageType = "base";
     }
     var msg = this.showMessage("Loading AI images...");
     this.getMediaList("Costumes", (items) => {
@@ -423,11 +425,11 @@ IDE_Morph.prototype.selectAiImage = function (
 
   dialog.ok = function () {
     if (selectedIcon) {
-      if (imageType == "content") {
+      if (imageType == "base") {
         payload[0] = selectedIcon.url;
         myself.promptAiImage(payload);
         dialog.destroy();
-      } else if (imageType == "source") {
+      } else if (imageType == "style") {
         payload[1] = selectedIcon.url;
         myself.promptAiImage(payload);
         dialog.destroy();
@@ -688,8 +690,8 @@ SpriteMorph.prototype.sizeErrorHandlingAST = function () {
 
 SpriteMorph.prototype.createImageUsingAI = function () {
   let ide = this.parentThatIsA(IDE_Morph);
-  let checkTarget = document.querySelector("#target-img");
-  let checkSource = document.querySelector("#source-img");
+  let checkTarget = document.querySelector("#base-img");
+  let checkSource = document.querySelector("#style-img");
   let target, source;
   let payload = ["", ""];
 
@@ -902,4 +904,20 @@ Costume.prototype.editDreamImage = function (
     },
     anIDE
   );
+};
+
+SpriteMorph.prototype.useCostumeForStyleTransferImage = function (name, type) {
+  if (type == "") return;
+  this.clearStyleTransferImage(type);
+  let ide = this.parentThatIsA(IDE_Morph);
+  let finalImg = document.createElement("IMG");
+  let visualizer = document.getElementById("visualizer");
+  let cst = detect(this.costumes.asArray(), (cost) => cost.name === name);
+  let data = cst.contents.toDataURL();
+
+  finalImg.id = `${type}-img`;
+  finalImg.src = data;
+  finalImg.style.width = "auto";
+  finalImg.style.height = "auto";
+  visualizer.appendChild(finalImg);
 };

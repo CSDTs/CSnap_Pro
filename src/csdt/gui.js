@@ -5140,8 +5140,8 @@ let csdtSyntax = {
     tags: "read-only static",
     menu: {
       "§_ast": null,
-      target: ["target"],
-      source: ["source"],
+      base: ["base"],
+      style: ["style"],
     },
   },
   "%scft": {

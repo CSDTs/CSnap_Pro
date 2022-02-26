@@ -272,6 +272,13 @@ let csdtBlocks = {
     category: "other",
     spec: "use stage image for %ast - AI",
   },
+
+  useCostumeForStyleTransferImage: {
+    type: "command",
+    category: "other",
+    spec: "use costume %cst for %ast - AI",
+  },
+
   clearStyleTransferImage: {
     type: "command",
     category: "other",
@@ -2284,6 +2291,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
       blocks.push(block("doReplaceInList"));
       blocks.push("=");
       blocks.push(block("useStageForStyleTransferImage"));
+      blocks.push(block("useCostumeForStyleTransferImage"));
+
       blocks.push(block("importImageOnlyStyleTransfer"));
       blocks.push(block("toggleASTProgress"));
       blocks.push(block("setDreamImageForAI"));

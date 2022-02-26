@@ -84,20 +84,26 @@ var Core = function () {
 
       if (options) {
         Object.assign(generic, options);
+        console.table(generic)
+
       }
 
       this.contentImg = document.createElement("IMG");
       this.contentImg.style.height = generic.contentSize;
-      this.contentImg.style.width = "100%";
+    //   this.contentImg.style.width = "aut%";?
       this.contentImg.src = generic.contentImage;
+
 
       this.styleImg = document.createElement("IMG");
       this.styleImg.style.height = generic.sourceSize;
-      this.styleImg.style.width = "100%";
+    //   this.styleImg.style.width = "100%";
       this.styleImg.src = generic.sourceImage;
+
 
       this.styleRatio = generic.styleRatio;
       this.stylized = document.createElement("CANVAS");
+      this.stylized.height = generic.contentSize
+      
 
       if (typeof world !== "undefined") {
         this.ide = world.children[0];
@@ -118,8 +124,8 @@ var Core = function () {
         console.log(styleNet, transformNet);
         _this2.startStyling().finally(function () {
           var a = document.createElement("a");
-          a.setAttribute("download", "output.jpeg");
-          a.setAttribute("href", _this2.stylized.toDataURL("image/jpeg", 1.0).replace("image/jpeg", "image/octet-stream"));
+          a.setAttribute("download", "output.png");
+          a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream"));
 
           // a.download = "output.png";
           document.body.appendChild(a);

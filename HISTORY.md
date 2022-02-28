@@ -2,11 +2,1160 @@
 
 ## in development:
 
+* **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+
+## 7.2.2:
+* **Notable Changes:**
+    * renamed "crossproduct" to "combinations"
+* **Translation Updates:**
+    * German
+
+### 2022-02-22
+    * renamed "crossproduct" to "combinations"
+
+## 7.2.1:
+* **New Features:**
+    * new "List Comprehension" library adding a HOF version of ZIP
+    * added "crossproduct" as relabel option for "append"
+* **Translation Updates:**
+    * German
+
+### 2022-02-22
+* new dev version
+* new "List Comprehension" library adding a HOF version of ZIP
+* threads: added "crossproduct" as relabel option for "append"
+* blocks: restore embedded inputs when relabelling variadic primitives
+* German translation update for "crossproduct %lists"
+* prepared patch
+
+## 7.2.0:
+* **New Features:**
+    * new SciSnap2 extension and library, thanks, Eckart!
+    * new MQTT extension and library, thanks, Simon and Xavier!
+* **Notable Changes:**
+    * hyperized reporter-IF/ELSE
+* **Notable Fixes:**
+    * strings library: fixed lowercase(number), thanks, Brian and Simon!
+    * swapped "lists" and "other" in the make-a-block category menu, thanks Brian, for the report!
+    * don't let deleted sprites clone
+
+### 2022-02-21
+* threads: optimized hyper-if/else to skip repeated evaluation of literal true/false cases
+* objects: prevent deleted sprites from cloning
+* prepared v7.2.0
+
+### 2022-02-18
+* new MQTT extension and library, thanks, Simon and Xavier!
+
+### 2022-02-17
+* strings library: fixed lowercase(number), thanks, Brian and Simon!
+* new SciSnap2 extension and library, thanks, Eckart!
+* added Eckart to the contributors credits
+* byob: swapped "lists" and "other" in the make-a-block category menu
+
+### 2022-02-16
+* threads: hyperized reporter-IF/ELSE
+
+### 2022-02-14
+* new dev version
+* gui: temporary fix for a new temporary Chrome v98 blank-tab bug (later reverted)
+
+## 7.1.4:
+* **Notable Changes:**
+    * hyperized Boolean AND, OR operators
+* **Notable Fixes:**
+    * preserve contents of variadic inputs when editing or translating a custom blocks
+
+### 2022-02-11
+* prepared v7.1.4
+
+### 2022-02-09
+* new dev version
+* blocks, byob: preserve contents of variadic inputs when editing or translating a custom blocks
+* threads: hyperized Boolean AND, OR operators
+
+## 7.1.3:
+* **New Features:**
+    * new bitwise operators library, thanks, Bernat!
+* **Notable Fixes:**
+    * JSON encoding for nested lists
+    * enforce static typing for stage backgrounds and sounds, and for sprite duplicates
+    * prevent Chrome from crashing when using serial ports on a Mac, thanks, Dariusz!
+    * fixed missing blocks in variadic reporters library, thanks, Brian!
+    * fixed an infinite loop in the signada library, thanks, Bernat!
+    * fixed missing blocks in bar chars library
+    * fixed missing blocks in frequency distribution analysis library
+    * fixed missing blocks in iteration composition library
+    * fixed a comment in "remove duplicates" in the list utilities library
+    * fixed missing blocks in parallelization library
+
+### 2022-02-08
+* signade library: fixed cached values being stuck forever in edge case, thanks, Bernat!
+* variadic reporters library: fixed blocks that apparently were "lost in translation" before, thanks, Brian!
+* fixed PIPE in bar-charts library
+* fixed PIPE in frequency distribution analysis library
+* fixed PIPE in iteration composition library
+* fixed the comment in "remove duplicates" in the list utilities library to reflect that the last match is kept
+* fixed "do in parallel" block in parallelization library
+* new bitwise operators library, thanks, Bernat!
+* moved bitwise operators into standard extensions
+* prepared v7.1.3
+
+### 2022-02-07
+* lists: fixed JSON encoding for nested lists
+* objects: fixed static "costume" type for stage backgrounds and sprite duplicates
+* objects: fixed static "sound" type for stage backgrounds and sprite duplicates
+* extensions: fixed #2980, thanks, Dariusz!
+
+### 2022-02-04
+* new dev version
+
+## 7.1.2:
+* **Notable Changes:**
+    * friendlier error messages
+* **Translation Updates:**
+    * German
+
+### 2022-01-31
+* new dev version
+* threads, locale: friendlier error messages
+* German translation update
+* prepared v7.1.2
+
+## 7.1.1:
+* **Notable Fixes:**
+    * disabled reporter drops into "When I am ..." hat block (again)
+    * fixed "pick random" for descending ranges, thanks, Brian!
+
+### 2022-01-30
+* new dev version
+* blocks: disabled reporter drops into "When I am ..." hat block (again)
+* threads: fixed #2972 (fixed "pick random" for descending ranges), thanks, Brian!
+* prepared v7.1.1
+
+## 7.1.0:
+* **New Features:**
+    * delete and insert individual variadic slots, script vars & ring params via the context menu
+    * drag blocks, costumes and sounds out from result bubbles, and from speech balloons and variable watchers when in edit mode
+    * export data (costumes, sounds, text, numbers, atomic lists) from result bubbles, and from speech balloons and variable watchers when in edit mode via the context menu
+* **Notable Fixes:**
+    * fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
+    * text-costumes library: fixed preserving (more) pen state, thanks, Brian!
+* **Translation Updates:**
+    * Hungarian, thank you, Attila Faragó, for this HUGE update!
+    * German
+
+### 2022-01-28
+* tables: support dragging costumes and sounds out from table views
+* blocks: support exporting costumes from result bubbles
+* blocks: support exporting sounds from result bubbles
+* objects: support exporting sounds and costumes from speech balloons in edit mode
+* objects: support exporting sounds and costumes from variable watchers in edit mode
+* blocks: support exporting numbers and text from result bubbles
+* objects: support exporting numbers and text from speech balloons when in edit mode
+* lists: support exporting atomic lists from list watchers everywhere when in edit mode
+* tables: support exporting atomic tables from table views everywhere when in edit mode
+* v7.1.0
+
+### 2022-01-27
+* blocks, gui: support dragging costumes and sounds out from result bubbles
+* objects: support dragging costumes and sounds out from speech balloons
+* objects: support dragging costumes and sounds out from variable watchers
+
+### 2022-01-26
+* blocks: refactored slot context menus
+* blocks: support for deleting and inserting individual script vars & ring params
+* German translation update
+* blocks: support for deleting and inserting individual rings inside variadic inputs
+* updated text-costumes library, thanks, Brian!
+* Hungarian translation update, thank you, Attila Faragó!
+
+### 2022-01-25
+* blocks: support deleting and inserting individual variadic slots
+
+### 2022-01-23
+* morphic: added Node >> childThatIsA
+* tables: support dragging blocks out from table views
+
+### 2022-01-22
+* blocks: support dragging blocks out from result bubbles
+* objects: support dragging blocks out from speech balloons
+* objects: support dragging blocks out from variable watchers
+* morphic, objects: only allow dragging block out from balloons and watchers in edit mode (not in presentation mode)
+
+### 2022-01-21
+* new dev version
+* gui: fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
+
+## 7.0.6:
+* **Notable Changes:**
+    * added more localizable error strings
+* **Notable Fixes:**
+    * fixed binding an unbound context to a sprite (e.g. when using JOIN blocks)
+    * fixed loading the Chinese translation, thanks, @moodykeke
+* **Translation Updates:**
+    * German (for error messages)
+
+### 2022-01-21
+* threads: refactored Context >> image
+* v7.0.6
+
+### 2022-01-20
+* German translation update (for error messages)
+* threads: added more localizable error strings
+* objects: added more localizable error strings
+
+### 2022-01-17
+* new dev version
+* fixed loading the Chinese translation, thanks, @moodykeke
+* threads: fixed binding an unbound context to a sprite (e.g. when using JOIN blocks)
+
+## 7.0.5:
+* **New Features:**
+    * text costumes library: new block to add a rectangular colored background with optional padding to a copy of a costume, for making "clickable buttons"
+* **Notable Changes:**
+    * improved emoji handling for "length of text" reporter, thanks, Michael!
+    * added support for EDC's Early Math Microworld extension
+* **Notable Fixes:**
+    * strings library: fixed an index range bug, thanks, Brian!
+* **Translation Updates:**
+    * Chinese, thanks, Simon!
+
+### 2022-01-14
+* v7.0.5
+
+### 2022-01-13
+* threads: improved emoji handling for "length of text" reporter, thanks, Michael!
+* extensions: added support for EDC's Early Math Microworld extension
+
+### 2022-01-10
+* new dev version
+* text costumes library: new block to add a rectangular colored background with padding to a copy of a costume
+* Chinese translation update, thanks, Simon!
+* strings library: fixed an index range bug, thanks, Brian!
+
+## 7.0.4:
+* **New Features:**
+    * syntax tree format for translatable input options and constants: "[choice]"
+    * syntax tree support for variable getter names
+* **Notable Fixes:**
+    * strings library: substrings handle negative indices as documented, thanks, Brian!
+* **Translation Updates:**
+    * Catalan library translations, thanks, Joan!
+
+### 2022-01-07
+* blocks: added syntax tree representation for variable getters
+* blocks, byob: blank-out variable getters in syntax-tree result list
+* v7.0.4
+
+### 2022-01-06
+* Catalan library translations, thanks, Joan!
+
+### 2022-01-05
+* new dev version
+* blocks: added syntax tree representation for translated input options and constants
+* strings library update, thanks, Brian!
+
+## 7.0.3:
+* **New Features:**
+    * arity control for assembling polyadic inputs using JOIN (pass a list whose first item is an integer representing the number of slots followed by the contents of those slots)
+* **Notable Changes:**
+    * same blocks with empty variadic inputs compare as equal regardless of their arity
+    * made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
+    * improved handling of user-defined errors and errors inside custom blocks
+* **Notable Fixes:**
+    * fixed storing the stage name(s) - also fixes undesired translation
+    * removed distinction between number and string keys in "analyze"
+    * fixed variable binding when broadcasting through the API, thanks, Zak!
+    * fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
+    * fixed / worked around PWA caching for URLs with query parts, thanks, Ken!
+    * added missing "identical to" relabel option to "less than" reporter, thanks, Mary!
+* **Translation Updates:**
+    * Italian, thanks, Stefano!
+
+### 2022-01-04
+* manifest: fixed #2954
+* threads, blocks: added arity control for assembling polyadic inputs
+* v7.0.3
+
+### 2022-01-03
+* Italian translation update, thanks, Stefano!
+* api: fixed variable binding when broadcasting through the API, thanks, Zak!
+* objects: fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
+* threads, api: made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
+* threads, extensions: improved handling of user-defined errors and errors inside custom blocks
+* sw.js: fixed #2957, thanks, Ken!
+* objects: fixed #2950, thanks, Mary!
+* manifest: fixed #2954
+
+### 2022-01-02
+* store: fixed storing the stage name(s)
+
+### 2022-01-01
+* extensions: removed distinction between number and string keys in "analyze"
+
+### 2021-12-22
+* new dev version
+* threads: same blocks with empty variadic inputs compare as equal regardless of their arity
+
+## 7.0.2:
+* **Notable Fixes:**
+    * setting a clone's rotation coordinates shadows its inherited costumes
+    * preserve embedded inputs when JOINing a nested expression with an empty list
+    * improved loading custom block categories
+
+### 2021-12-21
+* prepared patch
+
+### 2021-12-20
+* blocks, threads: preserve embedded inputs when JOINing a nested expression with an empty list
+* objects: improved loading custom block categories
+
+### 2021-12-18
+* new dev version
+* objects: shadow (a clone's) costumes when setting its rotation coordinates
+
+## 7.0.1:
+* **Notable Changes:**
+    * better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
+    * added support for Uni Oxford (Ken Kahn's) ecraft2learn extension
+* **Notable Fixes:**
+    * keep the order of sprites in the corral when saving newly created projects
+    * allow parentheses in project names (again)
+    * dropping a library or sprite file into presentation mode switches back to edit mode
+    * exporting blocks uses the project name as file name, followed by "blocks"
+
+### 2021-12-17
+* prepared patch
+
+### 2021-12-16
+* gui: removed some commented out code
+* gui: fixed #2941
+* byob: fixed #2945
+
+### 2021-12-15
+* threads, lists: better support for multi-byte emojis with "split" and "unicode", thanks, Michael!
+* extensions: added support for Uni Oxford (Ken Kahn's) ecraft2learn extension
+
+### 2021-12-14
+* new dev version
+* store: keep the order of sprites in the corral when saving newly created projects
+* gui: allow parens in project names
+
+## 7.0.0:
+* **New Features:**
+    * scenes
+    * extensions
+    * single blocks palette option, thanks, Michael!
+    * web-serial support, thanks, Dariusz Dorożalski!
+    * hide any block, including variables and custom helper blocks in palette, also use "hide/show var" primitive on custom blocks (same as on primitives)
+    * generate Parsons Problems from projects: Hide all unused blocks from the scripting area in the palette
+    * user defined custom block palettes
+    * introspection, syntax analysis and assembly (new block-attribute reporter, split & join scripts)
+    * PWA, thanks, Joan and John, for pioneering this at Robolot and in Mircoblocks!
+    * new "blocksZoom=n" url parameter, thanks, Bernat!
+    * message and key hat blocks can be expanded to show an optional upvar referencing their event data
+    * BROADCAST blocks are expandable to feature a second input for message receivers, default is "all"
+    * block-instances can be dragged off from templates in the "export blocks", "unused blocks" and "hide blocks" dialogs
+    * added "enter" key to key-pressed dropdown
+    * added green flag symbol to message drop-down
+    * the green flag button's background color indicates whether the current scene is running or idle
+    * empty categories are indicated by half-tone buttons
+    * added "r-g-b-a" option to dropdown menu of SET / CHANGE PEN command and PEN reporter
+    * new preference setting per scene for pen color model and graphic effects, HSV or HSL, default is HSV
+    * new preference setting per scene to "disable click-to-run" on blocks, for use in micro-world extensions
+    * new Signada hardware library, thanks, Citilab Barcelona!
+* **Notable Changes:**
+    * saved projects remember the last edited sprite
+    * libraries no longer rely on the JSF primitive, projects may need to re-import their libraries to run without having to enable JS extensions
+    * bulk hide/show arbitrary blocks in the palette via the palette's context menu (instead of the primitive blocks' context menus)
+    * hidden blocks don't appear in search results / keyboard input options
+    * codification and js-func blocks don't appear in search results unless enabled
+    * migrated SEND blocks to be BROADCAST TO blocks
+    * "when I receive 'any message'" hat scripts are threadsafe (uninterruptable by other messages)
+    * changed the scale of the graphics color effect from 0-200 to 0-100
+    * result-bubbles (when clicking on a reporter) now stay visible until the next click
+    * took out "Hyper blocks support" setting from the gears menu (it's now hidden behind shift-click)
+    * new Birdbrain Technology extensions for Finch and Hummingbird, thanks, Kristina and Bambi!
+    * retired Leap Motion library
+    * display blocks with their error messages for custom blocks, thanks, Michael!
+    * made scrollbars thinner by default and slightly transparent in flat design mode
+    * blocked xhr requests from Snap! to s.b.e
+    * the "message" reporter and watcher in the control category has been deprecated and moved to dev mode for backwards compatibility
+    * updated the Snap! API and documentation with methods to navigate among scenes and control processes
+    * removed old hidden "prefer smooth animations" setting (no longer used, old projects will continue to work just fine)
+    * removed old hidden "virtual keyboard" setting (was no longer used for the last years)
+    * removed old hidden "project urls" setting
+    * removed hidden "cache inputs" setting (only used for debugging the evaluator)
+* **Notable Fixes:**
+    * made scrollbars in the wardrobe and jukebox more responsive
+    * fixed centering of menus, thanks, Brian Broll!
+    * fixed occasional invisible error messages
+    * fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
+    * colors library: fixed SET PEN to work with more than a single sprite per costume,  thanks, Jadga, for the report!
+    * fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
+    * fixed copying unattached comments among sprites, thanks, Jadga, for the report!
+    * disabled dropping reporters onto message hat block input slots
+    * fixed outdated blocks specs for "When I am ..." hat block in many translations
+    * fixed duplicating custom block definitions that don't have a body
+    * allow selecting the fill color in the vector editor via touch-hold gesture on touch devices
+    * fixed an infinite loop in the FILL block when the pen colors have been set to an invalid color (via a bad library)
+    * fixed some minor variable-renaming issues
+    * fixed STOP OTHER SCRIPTS for use inside TELL
+    * made "remove duplicates" reporter in the "list utilities" library (a lot) faster
+    * fixed translation support for the libraries list, thanks, Joan!
+* **Documentation Updates:**
+    * updated manual, thanks, Brian!
+    * updated readme, thanks, Michael!
+* **Translation Updates:**
+    * German
+    * Chinese, thanks, Simon!
+    * Brazilian Portuguese, thank you, Cassiano D'Andrea!
+    * Catalan, thanks, Joan!
+
+### 2021-12-13
+* objects: tweaked asynchronous costume loading/rendering issue
+* rc7
+* v7 release
+
+### 2021-12-12
+* threads: fixed #2932
+
+### 2021-12-11
+* objects: remove all clones when the green flag is sent to a scene
+* rc6
+
+### 2021-12-10
+* Catalan and German translation updates, thanks, Joan!
+* translation support for the libraries list, thanks, Joan!
+* objects: fixed categories cache invalidation for duplicated sprites
+* rc4
+* threads: remove all clones when the green flag is broadcast to all
+* rc5
+
+### 2021-12-09
+* blocks, threads: never push untested last minute changes that might break everything
+* gui: select motion category when switching to a scene that doesn't have the current custom category
+* rc2
+* objects: worked around an asynchronous rendering issue
+* rc3
+
+### 2021-12-08
+* blocks: refactored syntax trees
+* rc1
+
+### 2021-12-07
+* objects: backwards-compatibility fix for key-event hat blocks
+* store, objects: load category-less custom blocks into "other"
+
+### 2021-12-06
+* blocks, threads: refactored block assembly, experimental
+* German translation update
+
+### 2021-12-05
+* blocks, threads, objects: introspection & syntax analysis, experimental
+
+### 2021-12-03
+* blocks, threads: block-assembly support for multi-args, experimental
+* threads: changed the visualization for an empty context to reporter-ring
+
+### 2021-12-02
+* blocks, threads: block-assembly support refactorings, experimental
+
+### 2021-12-01
+* blocks, threads: block-assembly support refactorings, experimental
+* blocks, threads: equality testing for scripts, experimental
+
+### 2021-11-30
+* blocks, threads: block-assembly support, experimental
+* gui: fixed #2920
+
+### 2021-11-29
+* renamed "r-g-b-a" option to "RGBA" and "r-g-b(-a)" to "RGB(A)"
+
+### 2021-11-28
+* fixed a glitch in "remove duplicates" in the "list utilities" library
+
+### 2021-11-27
+* blocks, threads: tweaked SET / CHANGE PEN dropdown option to "r-g-b(-a)"
+* made "remove duplicates" reporter in the "list utilities" library (a lot) faster
+
+### 2021-11-26
+* added signada extension files to the pwa cache
+* blocks, treads, objects: added "r-g-b-a" option to dropdown menu of SET / CHANGE PEN command and PEN reporter
+
+### 2021-11-25
+* gui: rearranged and amended the project menu
+* German translation update for project menu entries
+* objects: fixed a FILL issue when the pen color has been set to an invalid color via a bad library
+
+### 2021-11-24
+* threads: fixed #2918
+* gui, objects, scenes: added scene-setting to hide/show buttons in the unified palette
+* store: made "show buttons" setting for unified palette persistent in the XML
+* German translation update for "Show buttons" setting
+* added indented sub-preferences to the settings menu
+
+### 2021-11-23
+* byob: refresh category buttons when hiding / showing blocks
+* gui: refresh category buttons when switching to dev mode and back
+* gui: refresh category buttons when turning built-in extensions on and off
+
+### 2021-11-19
+* objects, byob, gui: visually indicate empty categories by half-toning their buttons
+
+### 2021-11-18
+* gui: only pause generic hat blocks when loading a new project, not when switching to a new scene
+
+### 2021-11-17
+* gui: set the green-flag button's background color to "active" while a thread is running
+* api: changed "processes" method to "isRunning"
+* updated api documentation
+* gui: refresh stop button when switching scenes
+
+### 2021-11-16
+* store, gui: updated serializer app tag to v7
+* api: removed incomplete api documentation from the source code
+* updated api documentation
+
+### 2021-11-15
+* German translation update
+* gui: made "Hyper blocks support" setting hidden in the gears menu
+* gui, objects, threads, store, translations: Removed old hidden "prefer smooth animations" setting
+* gui: removed experimental hidden "add scenes" option from the settings menus
+* gui, translations: removed old hidden "virtual keyboard" setting
+* gui: removed old hidden "project urls" setting
+* gui: removed hidden "cache inputs" setting (only used for debugging the evaluator)
+
+### 2021-11-14
+* locale: contextualize translations
+* gui: refresh IDE when changing the pen color model
+
+### 2021-11-12
+* store: fixed importing custom categories from libraries, thanks, Eckart, for reporting this!
+* gui, objects, scenes, store: reverted to HSV as default pen color model
+* store: fixed a serialization conflict for global variables referencing the stage
+* gui: made HSL preference setting hidden behind shift-click
+
+### 2021-11-11
+* German translation update, changed %hsva -> %clrdim
+* Brazilian Portuguese translation update, thank you, Cassiano D'Andrea!!
+* threads, gui: experimental "disalbe click-to-run" preference
+* gui, scenes, store: made "pen color model" and "disable click-to-run" settings persistent per scene
+
+### 2021-11-10
+* objects, store: new "penColorModel" setting, can e 'hsv' or 'hsl'
+* gui, objects: new (hidden) pen-color-model preference setting (per session)
+* objects: changed the scale of the graphics color effect from 0-200 to 0-100
+* objects: refactored graphics color effect to reuse Morphic's conversion methods
+* objects: use the selected pen color model (hsl or hsv) for graphic effects
+
+### 2021-11-09
+* objects, store: refactored block-migration mechanism
+* gui: changed display of project name in the IDE to PROJECT (SCENE)
+* gui: adjusted random color for new sprites to HSL model
+* objects: fixed keyboard entry for script variable getters
+* gui: changed edit project notes to always edit project motes instead of scene notes
+* byob, blocks, gui: allow block-instances to be dragged off from templates in the "export blocks" dialog
+* byob, gui: allow block-instances to be dragged off from templates in the "unused blocks" dialog
+
+### 2021-11-08
+* objects: renamed some internal color methods
+* objects, store: renamed internal pen color channel cache
+* objects, blocks, threads: renamed internal pen accessor methods
+* objects, threads, store, extensions: switched pen color dimensions from HSV to HSL
+* threads: fixed upvars in hat block prims when the user clicks on them to run them
+
+### 2021-11-07
+* widgets, blocks, byob: allow block-instances to be dragged off from templates in the "hide blocks" dialog
+* gui: prevent switching to another sprite if a "hide blocks" dialog is open
+
+### 2021-11-06
+* blocks: fixed some minor variable-renaming issues
+
+### 2021-11-03
+* sketch: allow selecting the fill color in the vector editor via touch-hold gesture on touch devices
+* updated version history
+
+### 2021-10-29
+* objects: flood-fill edge case fix, thanks, Dariusz!
+* gui: removed obsolete dev comments
+* blocks, objects: fixed scanning for senders and receivers of messages for new BROADCAST scheme
+
+### 2021-10-28
+* introduced default values for expandable slot specs
+* updated German translation
+* migrated Basque and Swedish translations to new BROADCAST block specs
+* migrated Slovenian, Romanian and Interlingua translations to new BROADCAST block specs
+* migrated Estonian, Hungarian, Croatian and Esperanto translations to new BROADCAST block specs
+* migrated Danish, Czech, Valencian Catalan and Arabic translations to new BROADCAST block specs
+* migrated Bulgarian, Traditional Chinese, Indonesian and Galician translations to new BROADCAST block specs
+* migrated Hebrew, Japanese Hiragana, Slovakian and Ukrainian translations to new BROADCAST block specs
+* migrated Japanese, Bangla, Portuguese and Norwegian translations to new BROADCAST block specs
+* migrated French, Italian, Greek and Spanish translations to new BROADCAST block specs
+* migrated Russian, Dutch, Tamil and Turkish translations to new BROADCAST block specs
+* migrated Catalan, Hindi, Polish and Telagu translations to new BROADCAST block specs
+* migrated Brazilian Portuguese, Malayam, Korean and Kannada translations to new BROADCAST block specs
+* migrated Finnish and Simplified Chinese translations to new BROADCAST block specs
+
+### 2021-10-27
+* included bbt extensions
+* updated service worker to cache bbtSnapExtension.js
+* pwa versioning & cache-busting mechanism
+* changed PWA icon to Alonzo
+* tweaked PWA
+
+### 2021-10-26
+* objects: don't show codification and js-func blocks in search results unless enabled
+* gui, objects: new "showingExtensions" session setting for showing extension prims in the palette
+* German translation update for "extension blocks" setting
+* widgets: r-g-b editor for custom category colors (right-click on color-field)
+
+### 2021-10-25
+* byob: fixed #2902
+
+### 2021-10-22
+* blocks, objects: only show the "message" upvar in the "When I receive" hat if "any message" is selected
+* blocks: only show "key" upvar in the "When ... is pressed" hat if "any key" is selected
+* blocks: tweaked blocks layout for hidden expansion slots
+* blocks, objects, store, threads: made SEND blocks expandable for receivers and renamed them back to BROADCAST
+* threads: deep copy atomic lists sent from one scene to another
+* bignum library: fixed IS IDENTICAL
+
+### 2021-10-21
+* threads, objects: make "when I receive 'any message'" hat scripts threadsafe (uninterruptable by other messages)
+* threads: enabled sending atomic lists to other scenes
+* threads: took out broadcasting a 2-item list to mean a message directed to a particular sprite
+* blocks, objects, threads: added "all" option to the receiver-dropdown of the SEND block
+* objects, blocks, threads: replaced BROADCAST block variants with SEND block variants
+* tweaked German translation for "all"
+
+### 2021-10-20
+* blocks: enable sending green-flag events when switching scenes
+* blocks, objects, gui, threads: removed "When switched to this scene hat block"
+* objects: rearranged "switch to scene" and "pause all" blocks in the palette
+* updated German translation (removed "when switched to this scene")
+* blocks, threads: removed options "1" and "last" from "switch to scene" dropdown
+
+### 2021-10-19
+* threads: enable sending green-flag events to specific sprites
+
+### 2021-10-14
+* gui, byob, objects: scroll custom category buttons if there are more than 6
+* gui, byob: scroll selected custom category button into view
+* gui: fixed "show categories" setting display
+* gui: sort custom category menu ("delete a category") alphabetically
+* blocks: enabled symbols inside input slots, activated %greenflag as selectable message
+
+### 2021-10-12
+* scenes, store: store single palette setting per project (for making extensions)
+* gui, scenes, objects: added scene-setting to hide/show category names in the unified palette
+* store: made "hide/show categories in unified palette" setting persistent
+* byob: hide unused blocks in palette
+* objects: tweaked unified palette formatting for hidden categories
+
+### 2021-10-11
+* objects: sort order of blocks in custom categories alphabetically in the unified palette
+
+### 2021-10-08
+* objects: tweaked variable block visibility
+* objects: filter hidden blocks out from search / keyboard input results
+* objects: prevent deprecated "message" reporter from showing up in search results
+* objects: tweaked hiding / showing inherited local blocks
+
+### 2021-10-07
+* objects, byob: new BlockVisibilityDialogMorph for bulk-selecting blocks to hide / show in the palette
+* ojects: simplified palette context menu
+* blocks: removed "hide" option from context menu of primitive blocks in the palette
+* objects, byob: optimized bulk hiding & showing palette blocks
+
+### 2021-10-06
+* threads: programmatically hide individual variables in palette
+* extensions: new extension primitives for hiding and showing arbitrary blocks in the palette
+* threads: keep hidden variables out of the palette and drop-down menus
+* objects: added utilities to enumerate all palette blocks for hiding & showing
+* objects, threads, extensions: refactored block hiding methods
+* objects: added method to check whether an arbitrary block is hidden in the palette
+
+### 2021-10-05
+* threads, store: added infrastructure for hiding individual variables in palette
+
+### 2021-10-04
+* blocks: added "enter" key to key-pressed dropdown
+* updated German translation for "enter" key
+* threads: extended "hide/show var" primitive to also hide/show custom blocks in the palette
+
+* migrated Bangla block specs
+* migrated Portuguese block specs
+* migrated Norwegian block specs
+* migrated French block specs
+* migrated Italian block specs
+* migrated Greek block specs
+* migrated Spanish block specs
+* migrated Russian block specs
+* migrated Dutch block specs
+* migrated and fixed Tamil block specs
+* migrated Turkish block specs
+* migrated Catalan block specs
+* migrated Hindi block specs
+* migrated Polish block specs
+* migrated and fixed Simplified Chinese block specs
+* fixed Telagu block specs for %interaction
+* fixed Brazilian-Portuguese block specs for %interaction
+* fixed Malayalam block specs for %interaction
+* fixed Korean block specs for %interaction
+* fixed Kannada block specs for %interaction
+* fixed Finnish block specs for %interaction
+
+### 2021-10-03
+* migrated Hebrew block specs
+* migrated and fixed Japanese Hiragana block specs
+* migrated Slovak block specs
+* migrated Ukrainian block specs
+* migrated and fixed Japanese block specs
+
+### 2021-10-02
+* migrated Indonesian block specs
+* migrated Galician block specs
+
+### 2021-10-01
+* objects: tweaked detectable keynames and representations
+* German translation update
+* migrated Euskara block specs
+* migrated Telagu block specs
+* migrated Swedish block specs
+* migrated Slovenian block specs
+* migrated Romanian block specs
+* migrated Brazilian-Portuguese block specs
+* migrated Malayalam block specs
+* migrated Korean block specs
+* migrated Kannada block specs
+* migrated Interlingua block specs
+* migrated Hungarian block specs
+* migrated Croatian block specs
+* migrated Finnish block specs
+* migrated Estonian block specs
+* migrated Esperanto block specs
+* migrated Danish block specs
+* fixed Danish block spec for "When I am %interaction"
+* migrated Czech block specs
+* migrated Valencian-Catalan block specs
+* migrated Arabic block specs
+* migrated and fixed Bulgarian block specs
+* migrated and fixed Traditial-Chinese block specs
+
+### 2021-09-30
+* blocks, objects, threads, gui: optional upvars referencing event data for message, key and scene hat blocks
+* blocks: disabled dropping reporters onto message hat block input slots
+* threads: restricted inter-scene messages to text and numbers
+* objects: assign case-sensitive key symbol to key event hat blocks' upvars
+
+### 2021-09-29
+* objects, blocks: refactored experimental "When I receive message" hat block
+
+### 2021-09-28
+* objects, blocks, threads: new "When I receive message" hat block featuring an upvar for the transmission, experimental in dev mode
+
+### 2021-09-27
+* objects: renamed scene event hat block
+* German translation update
+
+### 2021-09-09
+* German translation update
+
+### 2021-09-08
+* objects: changed category for "switch to scene" to control
+* blocks, objects, threads: new hat block for "when this scene starts"
+* blocks, threads: changed "switch to scene" to be a stop block
+* threads: disabled "when this scene starts" hat blocks to directly switch to another scene
+* threads: slowed down scene switching to let the user better interrupt it, commented out for now
+
+### 2021-09-07
+* blocks, objects, threads: new change-of-scene event
+* gui, threads: enabled change-of-scene events for user-induced scene switches, made them user-stoppable
+
+### 2021-09-06
+* blocks: fixed exporting comment pics from inside the block editor, thanks, Jadga, for the report!
+* gui: fixed copying unattached comments among sprites, thanks, Jadga, for the report!
+
+### 2021-08-27
+* colors library: fixed SET PEN to work with more than a single sprite per costume, thanks, Jadga, for the report!
+
+### 2021-08-06
+* gui: new "blocksZoom=n" url parameter, thanks, Bernat!
+* extensions: added to the documentation
+
+### 2021-08-03
+* extensions: updated documentation
+* byob: record unsaved changes when applying edits to a custom block definition
+
+### 2021-08-02
+* extensions: updated documentation
+
+### 2021-08-01
+* gui: fixed saving projects with their names
+* store: fixed deserializing global settings per scene in multi-scene projects
+
+### 2021-07-29
+* gui: fixed switching scenes in presentation mode
+
+### 2021-07-23
+* byob, objects, gui, store: support custom categories in libraries
+* gui, byob: arrange custom categories alphabetically
+* store: fixed exporting sprites
+
+### 2021-07-22
+* store: serialize user defined block palettes
+* objects: enabled custom categories for the stage
+* store: load user defined palettes
+* gui: restore custom palettes when activating a scene
+* objects: added new category feature to palette context menu
+* gui, objects, scenes: fixed costume maximum extent
+* gui: cleaned up hidden menu
+* objects, gui: added delete category feature to palette context menu
+
+### 2021-07-21
+* user defined custom block palettes, under construction
+
+### 2021-07-20
+* threads, extensions: blocked xhr requests to from Snap! to s.b.e, thanks, Bernat!
+* widgets, scenes, gui: custom category prompter
+
+### 2021-07-19
+* fixed #2863, thanks, Brian!
+
+### 2021-07-16
+* new libraries manual versions, thanks, Brian!
+* palette hiding/showing primitives fixes, tanks, Michael!
+* readme update, thanks, Michael!
+* objects, gui: rearranged internal order of categories
+* byob: rearranged internal order of categories
+* objects: fixed overlapping blocks bug in unified palette
+* store, gui: fixed capturing global settings for serializing scenes
+* gui: update palette when switching to a new scene / loading a new project
+
+### 2021-07-15
+* gui: made sprite-bar height independent of the number of categories
+
+### 2021-07-13
+* objects: fixed search from palette context menu
+
+### 2021-07-12
+* Chinese translation update, thanks, Simon!
+* objects: fixed refactored "Delete a variable" button for stage palette
+
+### 2021-07-11
+* added libraries and media to cache, thanks, Joan!
+
+### 2021-07-10
+* PWA support, thanks, John, for showing me!
+
+### 2021-07-09
+* extensions: whitelisted 'https://snap.berkeley.edu/'
+* morphic: made scrollbars thinner by default
+* morphic: tweaked slider transparency for flat design mode
+* objects: translation support for category labels in the unified palette
+* threads: fixed vanishing JSF block bug in new error messages
+* gui: fixed blocks cache invalidation for unified palette
+
+### 2021-07-08
+* objects: added category labels to unified palette
+* gui: accelerated unified palette scrolling animation
+* adjust scroll bars when refreshing the palette
+* store: commented out saving the unified palette setting in the project xml during development
+* gui: fixed scroll-into-view glitch when adding scenes
+
+### 2021-07-07
+* morphic, gui: tweaked perish() animation
+* objects: fixed "hide / show primitives" for unified palette
+* threads: display blocks with their error messages for custom blocks, thanks, Michael!
+
+### 2021-07-06
+* byob, objects: new feature: hide custom helper blocks in palette
+* German translation update (hiding helper blocks in the palette)
+* gui: unified palette: offer the currently visible category when letting the user make a block
+* scenes, objects, gui: made unified palette the default for dev
+
+### 2021-07-05
+* gui: unified palette: indicate "selected" category in selector buttons
+* extensions: web-serial extension primitives, pioneered by Dariusz Dorożalski
+* added new "serial ports" library
+* added jshint esversion tags
+* gui: unified palette: don't animate scrolling if delta is zero
+* byob: replaced checkboxes in custom block context menus with symbols
+
+### 2021-07-04
+* fixed audio_comp library "plot sound" block to work with translations, thanks, Hans, for the report!
+
+### 2021-07-03
+* objects: arranged the blocks in the unified palette column-wise
+* gui: fixed the paletteHandle for the unified palette
+* gui, scenes, store: fixed unified palette for multi-scene projects
+* gui: fixed unified palette for searching
+* gui: renamed "Unified palette" to "Single palette" in the settings menu
+* updated German translation for unified palette setting
+
+### 2021-07-02
+* gui, object, store, etc.: unified blocks palette option, thanks, Michael!
+* merged scenes branch
+* morphic: fixed centering of menus, thanks, Brian Broll!
+* gui: animate scrollToPaletteCategory()
+* gui: guard against missing categories when scrolling the unified palette
+
+### 2021-05-21
+* gui, scenes, store: proxied thumbnail, name and notes in project, restored in XML
+* gui: distinguished project name from scene names, removed hidden "export as plain text" option
+* gui: sceneified project notes
+* gui: adjusted project thumbnail in "save" dialog
+* gui: some cleanups
+* gui, scenes: sceneified unsaved changes management
+* blocks: fixed search-blocks for scenesMenu
+
+### 2021-05-20
+* gui: marked projectName to be refactored and sceneified
+
+### 2021-05-19
+* gui: disabled scene icon context menu for project scene
+* gui: disabled dragging the project scene icon
+* gui: made sure the project scene stays in place
+* gui: added exporting single scenes
+* scenes, store: removed redundant properties "notes" and "thumbnail" from project
+* store: removed "thumbnail" property from scene xml
+
+### 2021-05-18
+* gui: fixed exporting media only for a single scene
+* gui: fixed cloud file format components
+* gui: "projectized" cloud file format for a single scene
+* gui: fixed cloud file format for multi-scene projects
+* gui: ensured unique scene names
+
+### 2021-05-11
+* gui: add multi-scene projects
+* gui: adjusted scene album rendering
+* gui: tweaked scene album rendering
+
+### 2021-05-10
+* gui: project menu entries for "new scene" and "add scene"
+
+### 2021-04-28
+* gui: only show scene album if the project has more than a single scene
+
+### 2021-04-23
+* store: serialize sprite-order from scenes
+* gui: sceneified refreshIDE()
+* gui: sceneified toggling dynamic input labels and switching languages
+* gui: sceneified "zoom blocks"
+* store: moved sprite-selection attribute from stage to scenes tag
+* scenes, store, gui: remember last edited scene in a project
+
+### 2021-04-22
+* store, gui: first pass at deserializing multi-scene projects
+* gui, scenes: migrated "new project" feature
+* gui: replaced openScene() with openProject()
+
+### 2021-04-21
+* store, gui: refactored project loading structure
+
+### 2021-04-20
+* scenes, store, gui: multi-scene project serialization format, first pass
+
+### 2021-04-16
+* scenes, store, gui: remember last edited sprite in a scene / project
+* scenes: removed Project class
+* scenes, store, gui: export multi-scene projects
+
+### 2021-04-14
+* scenes: new Project class
+* store: sceneified projects
+* gui: switched to scene-based project serialization
+
+### 2021-04-12
+* blocks, objects, threads, gui: new "switch to scene _" command primitive
+* morphic, gui: support bulk-file-drop for importing scenes
+* gui: tweaked scene album colors
+
+### 2021-04-08
+* gui: scroll selected scene icon into view
+
+### 2021-04-01
+* gui: made scrollbars in the wardrobe and jukebox more responsive
+
+### 2021-04-01
+* gui: made scene icons selectable
+* gui: made scene icons observe the scene's stage versions
+
+### 2021-07-02
+* extensions: took out web-serial extension prims (not yet ready)
+
+### 2021-06-25
+* extensions: added first rough experimental version of web-serial extension primitives
+* extensions: commented out web-serial extension prims while thinking about their design
+
+### 2021-06-24
+* extensions: tweaked loading unlisted script-extensions
+* byob, threads, store: removed unused code
+* extensions: added documentation for adding external JS modules
+* updated bignumbers library
+
+### 2021-06-23
+* updated bignums library
+* pushed dev version to 6.10
+* took out device libraries (Hummingbird blocks and Leap Motion)
+
+### 2021-06-22
+* extensions: added script-loading extension primitive
+
+### 2021-06-20
+* updated extensions documentation
+
+### 2021-06-19
+* extensions: added color extension primitives
+* byob: fixed search for dynamic extension menus
+* tweaked make-vars library to reduce internal dependencies
+* updated the abominable colors library ;-)
+
+### 2021-06-18
+* extensions: added text extension primitives
+* updated strings library
+* extensions: tweaked variable declaration extension primitive, commented out palette refresh prim
+* tweaked make-variables library
+* tweaked strings library
+* extensions: added color library dropdown menu
+* blocks, threads, extensions: separated extension primitives from extension dropdown menus
+* blocks, byob: dynamic extension dropdown menu support
+* updated strings library (changed variable name to '_case independent')
+
+### 2021-06-17
+* extensions: added APL extension primitives
+* updated apl library
+* threads, extensions: added variable extension primitives
+* updated make-variables library
+
+### 2021-06-16
+* threads: added exception handling primitives for try/catch
+* extensions: added try-catch extension primitives
+* updated try-catch library
+* extensions: added object-naming extension primitive
+* updated text-costume library
+
+### 2021-06-15
+* extensions: tweaked world-map primitives
+* updated maps library
+* extensions: new naming convention
+* updated list-utilities library
+* extensions: documented function semantics
+* updated frequency-distribution-analysis library
+* updated animation library
+* updated words-sentences library
+' extensions: added tts
+* updated text-to-speech library
+* updated bar-charts library
+* fixed #2850 (occasional invisible error message), thanks, Ken, for the bug report!
+* extensions: added long-form xhr primitive
+* extensions: added geolocation extension primitive
+* maps: changed default style to OpenStreetMap
+* updated http-blocks library
+* updated pixels library
+* updated audio library
+* updated localstorage library
+
+### 2021-06-14
+* new dev version
+* threads, blocks, objects, extensions: new safe extensions mechanism
+* objects: added new "primitive" blocks to dev palette
+* updated list-utilities library
+* updated animation library
+* updated frequency-distribution-analysis library
+* extensions: added some world-map extension primitives
+* threads: associate setting with JSF-block rather than the evaluator
+* extensions: added more world-map extension primitives
+
+## 6.9.0
+* **Notable Changes:**
+    * JS-functions are now disabled by default until switched on in the settings menu per session
+    * error messages in presentation mode are now shown as pop-up messages onstage  
+* **Notable Fixes:**
+    * register unsaved changes when the user edits a comment
+    * fixed bignums library and and made colors library faster, thanks, Brian!
+    * fixed setting the IDE language via a url parameter, thanks, Joan!
+* **Translation Updates:**
+    * Polish, thanks, Witek!
+    * new Hindi translation, thanks, Barthdry!
+    * German
+
+### 2021-06-14
+* prepared release
+
+### 2021-06-11
+* byob, blocks: catch JS functions inside custom dropdown definitions
+* German translation update
+
+### 2021-06-10
+* threads: error messages in presentation mode are now shown as pop-up messages onstage  
+* store: commented out modal prompt to enable JS when loading a project that uses it
+* gui: renamed setting to "JavaScript extensions"
+
+### 2021-06-09
+* new dev version
+* Polish translation update, thanks, Witek!
+* blocks: register unsaved changes when the user edits a comment
+* new Hindi translation, thanks, Barthdry!
+* fixed bignums library and and made colors library faster, thanks, Brian!
+* gui: fixed setting the IDE language via a url parameter, thanks, Joan!
+* threads, gui, objects, byob, store: reinstated JS-function control, disabled JS-functions by default
+* gui, store: automatically logout when the user enablesJavaScript, commented out for now
+
+## 6.8.1
+* **Notable Fixes:**
+    * fixed peeling off niladic custom block instances from prototype templates
+
+### 2021-05-04
+* new dev version
+* gui: fixed "peeling off" niladic custom block instances from prototype templates
+* prepared patch
+
+## 6.8.0
+* **New Features:**
+    * first-class colors, sorta, in the new "Colors" library, thanks, Brian!
+    * you can now also "peel off" custom block instances from their prototype templates in the block editor
+* **Notable Changes:**
+    * speed-up talk bubble positioning by 5x
+* **Notable Fixes:**
+    * work around a floating point precision glitch in "ray length"
+    * fixed an occasional rendering glitch when changing the display style of a variable watcher
+    * fixed color effect for negative inputs, thanks, Brian!
+    * fixed some issues round bignums, thanks, Brian!
+* **Documentation Updates:**
+    * updated manual, thanks Brian!
+
+### 2021-05-03
+* new versions of "Colors" and bignums libraries, updated documentation, thanks, Brian
+* bumped dev version to v6.8
+* prepared minor release
+
+### 2021-04-23
+* objects: fixed color effect for negative inputs, thanks, Brian!
+
+### 2021-04-17
+* objects: fixed an occasional rendering glitch when changing the display style of a variable watcher
+* objects: tweaked CellMorph shadow rendering
+* byob: enable "peeling off" custom block instances from their prototype templates
+
+### 2021-04-17
+* new dev version
+* threads: worked around a floating point precision glitch in "ray length"
+* objects: speed-up  talk bubble positioning by 5x
+
 ## 6.7.4
 * **Notable Fixes:**
     * fixed DEAL in the APL library, thanks, Brian!
     * fixed a resizing edge case bug for the stage prompter (ASK command)
-    * fixed finding "index of" block by search 
+    * fixed finding "index of" block by search
 
 ### 2021-04-09
 * objects fixed #2821 - "index of" block not found by search
@@ -16,6 +1165,23 @@
 * new dev version
 * fixed DEAL in the APL library, thanks, Brian!
 * objects: fixed a resizing edge case bug for the stage prompter (ASK command)
+
+### 2021-03-31
+* gui: tweaked scene icon settings
+* gui: moved stage icon to the top of the corral
+
+### 2021-03-30
+* gui: added documentation
+* gui: added SceneIconMorph and SceneAlbumMorph prototypes
+* gui: turned scenes into an observable list
+* gui: added scene icon thumbnails
+
+### 2021-03-25
+* gui, scenes: sceneified trash
+* gui: first "live" multi-scene experiment
+
+### 2021-03-19
+* gui, store, scenes: capture global settings in scenes
 
 ## 6.7.3
 * **Notable Changes:**
@@ -31,7 +1197,11 @@
 * threads: hyperized "key _ pressed?" predicate
 * prepared patch
 
+### 2021-03-18
+* gui, scenes, objects: more scene-refactorings
+
 ### 2021-03-17
+* objects, gui, paint, sketch, store: de-globalized stage dimensions
 * new dev version
 * threads fixed repeat for non-numbers, thanks Stefan!
 * updated list-utilities library, thanks, Brian!
@@ -45,6 +1215,15 @@
     * Catalan, thanks, Joan!
 
 ### 2021-03-15
+* gui: marked methods for scene refactorings
+
+### 2021-03-12
+* scenes, gui, store: added scenes class
+
+### 2021-03-11
+* gui, store: refactor loading a project into the IDE
+
+### 2021-03-09
 * new dev version
 * Catalan translation update, thanks, Joan!
 * lists, apl: fixed "transpose", thanks, Brian!
@@ -71,7 +1250,7 @@
     * undelete sprites
 * **Notable Changes:**
     * optimized special cases for COMBINE (sum, product, min, max) by up to 34 x
-    *  rebind (relabel) recursive calls when duplicating a custom block definition 
+    *  rebind (relabel) recursive calls when duplicating a custom block definition
     * custom block label parts inside the prototype (in the block editor) are now displayed the same as in block instances
     * variadic ring inputs are now arranged vertically (e.g. the reporter rings in PIPE)
     * changed zebra-coloring for yellow custom block prototypes (in the block editor) so the hat block changes the shade, not the prototype
@@ -96,7 +1275,7 @@
 * gui: added "trash is empty" information, commented out for now
 * gui: changed gui strings for undelete feature
 * updated German translation
-* byob: rebind (relabel) recursive calls when duplicating a custom block definition 
+* byob: rebind (relabel) recursive calls when duplicating a custom block definition
 
 ### 2021-03-04
 * gui: added trash button for undeleting sprites
@@ -110,7 +1289,7 @@
 ### 2021-03-02
 * threads: optimized special cases for COMBINE (sum, product, min, max) by up to 34 x
 * threads: optimized special cases for compiled version of COMBINE
-* gui, objects: undelete sprites 
+* gui, objects: undelete sprites
 * threads: correct identities when combining the items of an empty list with + /  * / min / max
 * gui: pushed dev version to 6.7 because of new documentable features
 
@@ -122,7 +1301,7 @@
 ### 2021-02-27
 * new dev version
 * blocks: arrange variadic ring inputs vertically (e.g. the reporter rings in PIPE)
-* blocks: removed a redundant unused case for block highlights 
+* blocks: removed a redundant unused case for block highlights
 
 ## 6.6.0
 * **New Features:**
@@ -233,7 +1412,7 @@
     * experimental "transpose (list)" primitive relabelling option for "all but first"
     * renamed "Obsolete!" blocks to "Undefined!"
 * **Notable Fixes:**
-    * fixed a glitch in the animation library's "sine in-out" easing function 
+    * fixed a glitch in the animation library's "sine in-out" easing function
     * fixed a postMessage glitch in the API, thanks, Bernat!
     * fixed a glitch in the Turkish translation that broke the "Looks" blocks category
     * fixed a glitch that prevented the text cursor from displaying instantly in certain situations
@@ -275,7 +1454,7 @@
 * threads, objects experimental "column _ of _" reporter relabelling option for "item _ of _"
 * threads, objects experimental "width of _" reporter relabelling option for "length of _"
 * updated German translation (with experimental block specs)
-* fixed an input slot spec glitch in the Turkish translation 
+* fixed an input slot spec glitch in the Turkish translation
 * store: renamed "Obsolete!" blocks to "Undefined!"
 
 ### 2021-01-25
@@ -284,7 +1463,7 @@
 
 ### 2021-01-21
 * new dev version
-* animation library: fixed a glitch in the "sine in-out" easing function 
+* animation library: fixed a glitch in the "sine in-out" easing function
 
 ## 6.5.1
 * **New Features:**
@@ -293,7 +1472,7 @@
     * 10% speed-up for reporters, WARP and TURBO
     * updated list utilities library, thanks, Brian!
 * **Notable Fixes:**
-    * fixed a bug when changing a Boolean input slot with a default value to numerical type 
+    * fixed a bug when changing a Boolean input slot with a default value to numerical type
 * **Documentation Updates:**
     * Snap! Manual sources and compiling documentation, thanks, Brian!
     * updated "contentWindows" part of the Snap! API, thanks, Bernat
@@ -326,7 +1505,7 @@
     * automatic backup of unsaved changes to localstore, option to restore in the file menu until the first change in the new project
 * **Notable Changes:**
     * 25% speed-up for reporters, WARP and TURBO
-    * up to 40x speed-up for "new costume from list" reporter primitive 
+    * up to 40x speed-up for "new costume from list" reporter primitive
     * re-enabled reporter drops in "key _ pressed?" input slot
 * **Notable Fixes:**
     * fixed a bug in hyperblocks
@@ -344,7 +1523,7 @@
 * prepared release
 
 ### 2020-12-22
-* threads: up to 40x speed-up for "new costume from list" reporter primitive 
+* threads: up to 40x speed-up for "new costume from list" reporter primitive
 * api: added unsavedChanges() method and documentation
 * blocks, gui: visual indication of unsaved changes in the IDE's project label
 * Russian translation update, thanks, Pavel!
@@ -359,7 +1538,7 @@
 
 ### 2020-12-19
 * threads: added code-documentation for the WARP/timestamp optimization
-* gui: new auto-backup to localstore feature 
+* gui: new auto-backup to localstore feature
 
 ### 2020-12-18
 * threads: optimized scheduler, reduced system calls to Date.now(), 25 % speed-up for reporters, WARP and TURBO
@@ -401,7 +1580,7 @@
     * searching for blocks and keyboard entry now includes the contents of dropdown menus
     * disabled dropping reporters into certain dropdowns (monadic functions, types, costume attributes, graphic effects, layers, audio attributes, pen attributes, dates, relation, keys, video attributes)
     * changed VIDEO _ ON _ reporter primitive to be hyper-monadic (second slot)
-    * hyperized OBJECT reporter primitive in sensing 
+    * hyperized OBJECT reporter primitive in sensing
 * **Notable Fixes:**
     * keep internal linked-list organization intact for hyperblocks
     * improved SVG loading in Firefox, thanks, Joan!
@@ -421,7 +1600,7 @@
 ### 2020-12-09
 * Tamil translation update, thanks, Barthdry!
 * threads, objects: added hyperdyadic ATAN2 primitive reachable via "relabel"
-* threads: hyperized OBJECT reporter primitive in sensing 
+* threads: hyperized OBJECT reporter primitive in sensing
 
 ### 2020-12-07
 * GUI: improved SVG loading, thanks, Joan!
@@ -447,7 +1626,7 @@
 
 ### 2020-12-01
 * threads, objects: added hyperdyadic MIN and MAX primitives reachable via "relabel"
-* threads, objects: added hyperdyadic less/greaterThanOrEquals prims 
+* threads, objects: added hyperdyadic less/greaterThanOrEquals prims
 * blocks: made monadic functions and data types menus static
 * blocks: made costume attribute, graphic effects and layers menus static
 * blocks: made audio attributes menu static
@@ -491,7 +1670,7 @@
 
 ### 2020-11-22
 * objects: fixed display of inherited sprite-local variables
-* threads: make sure video capture is turned on before accessing it programmatically 
+* threads: make sure video capture is turned on before accessing it programmatically
 
 ### 2020-11-21
 * new dev version
@@ -642,12 +1821,12 @@
 ### 2020-10-28
 * gui: tweaked wait-until-assets-are-loaded mechanism
 * gui: fixed "rename costume" dialog title to distinguish between costumes and backgrounds
-* German translation update for "rename background" 
+* German translation update for "rename background"
 * French translation update
 
 ### 2020-10-27
 * gui, objects, store: pause generic WHEN hat blocks when loading a project or importing a sprite until the user clicks the green flag or un-pauses the red stop sign, unless opening it with #present:&noRun
-* morphic: prevent unclosable menus, thanks, Brian B.! 
+* morphic: prevent unclosable menus, thanks, Brian B.!
 
 ### 2020-10-26
 * objects: added test for the existence of generic WHEN hat blocks
@@ -655,7 +1834,7 @@
 ### 2020-10-23
 * pushed dev version to v6.3.0 because of new features
 * objects: don't show some development-only blocks as search results
-* blocks: fixed a multi-line-text spec typo 
+* blocks: fixed a multi-line-text spec typo
 * blocks: removed unused %month slot
 * blocks: removed unused %lst slot
 
@@ -666,10 +1845,10 @@
 * blocks: un-hid "extract" menu-option
 * morphic: create drop-shadows just in time
 * blocks: holding the shift-key when dragging extracts a single command from a stack of blocks
-* German translation update for new string "extract" 
+* German translation update for new string "extract"
 
 ### 2020-10-21
-* gui: wait until all costumes have loaded before auto-triggering the green-flag event 
+* gui: wait until all costumes have loaded before auto-triggering the green-flag event
 * gui, objects, store: wait until all sounds have loaded before auto-triggering the green-flag event
 * gui, cloud: added noCloud flag that disables cloud access, thanks, Bernat!
 * blocks: new experimental (hidden) "extract" single command block context menu option
@@ -680,7 +1859,7 @@
 * blocks: fixed translation bug for zero-value menu selection entries
 * Russian translation update, thanks, Pavel!
 * api: added getProjectXML() method
-* gui: removed an obsolete comment 
+* gui: removed an obsolete comment
 
 ### 2020-10-15
 * new dev version
@@ -720,14 +1899,14 @@
     * enabled "result pic" for command scripts containing a "report" block
 * **Notable Changes:**
     * made (hidden) "Blurred shadows" setting persistent, use to get rid of "red bar" artifacts on old laptops using Chrome
-    * specifying alpha values is now optional for generating pixels in bitmaps (costumes), none means the pixel is solid 
+    * specifying alpha values is now optional for generating pixels in bitmaps (costumes), none means the pixel is solid
     * attribute selection in the SET block are now prefixed with "my"
     * assume stage dimensions for "SWITCH TO COSTUME" with list if current costume dimensions don't fit
-    * new "48 kHz" option in the "sampling rate" dropdown 
+    * new "48 kHz" option in the "sampling rate" dropdown
     * increased area / sensitivity for collapsing variadic input slots, esp. on mobile devices
 * **Notable Fixes:**
     * "append" block now shows up when searching  for it
-    * disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off, use this setting on old laptops displaying "red bars" in Chrome 
+    * disable blurred shadows inside input slots if the hidden "blurred shadows" setting is turned off, use this setting on old laptops displaying "red bars" in Chrome
 * **Translation Updates:**
     * Greek, thanks, HM100!
     * German
@@ -740,7 +1919,7 @@
 * byob: added "settings" button to input slot dialog
 * symbols: added "gearPartial" icon
 * blocks: fixed an empty-slot detection issue (reported in the forums), but left it commented out for now, until researching the consequences ;-)
-* blocks: increased area / sensitivity for collapsing variadic input slots 
+* blocks: increased area / sensitivity for collapsing variadic input slots
 * blocks: tweaked expanding variadic inputs
 * blocks: reverted sensitivity tweaks for variadic inputs
 * blocks, threads: reintroduced a different approach for making it easier to collapse variadic inputs
@@ -756,7 +1935,7 @@
 
 ### 2020-10-05
 * Greek translation updata, thanks, HM100!
-* blocks, threads: prefixed attribute selection in the SET block with "my" 
+* blocks, threads: prefixed attribute selection in the SET block with "my"
 * German translation update
 * objects: assume stage dimensions for "SWITCH TO COSTUME" with list if current costume dimensions don't fit
 
@@ -766,16 +1945,16 @@
 
 ### 2020-09-28
 * tweaked "frequency distribution analysis" library to plot lines in any color or style
- 
+
 ### 2020-09-25
 * new dev version
 * updated "frequency distribution analysis" library: New "lines" option for plotting
 * blocks: new "add comment" option in the block context menu, thanks, Rob Fidler!
-* blocks: added "48 kHz" option to the "sampling rate" dropdown 
+* blocks: added "48 kHz" option to the "sampling rate" dropdown
 
 ## 6.2.1
 * **New Features:**
-    * added "get value from key" reporter to database library, thanks, Brian! 
+    * added "get value from key" reporter to database library, thanks, Brian!
 * **Notable Changes:**
     * updated reference manual for v6.2, thanks, Brian!
 * **Notable Fixes:**
@@ -849,7 +2028,7 @@
 ### 2020-09-01
 * Norwegian translation update, thanks, Olav
 * gui, blocks: fixed a bunch of typos and UI strings, thanks, Brian Broll!
-* colors library update, thanks, Brian H.! 
+* colors library update, thanks, Brian H.!
 * German translation update
 * objects: also scan custom blocks for message sends
 
@@ -894,7 +2073,7 @@
 
 ### 2020-08-04
 * new dev version
-* blocks: include background color when exporting (semi-) transparent script pics 
+* blocks: include background color when exporting (semi-) transparent script pics
 
 ## 6.1.2:
 * fixed variable scope for ASK/TELL
@@ -972,12 +2151,12 @@
 ### 2020-07-23
 * morphic: fixed mouseDown events for touch devices
 * morphic, gui: added separators to list morphs, '~' for the libraries dialog
-* blocks: tweaked block-fading coloring 
+* blocks: tweaked block-fading coloring
 
 ### 2020-07-22
 * morphic, blocks, gui: tweaked block-fading mouse-over
 * blocks, threads: tweaked context visualizations to be alpha-independent
-* gui: save block-transparency in  settings 
+* gui: save block-transparency in  settings
 * morphic: fixed input slider target update rendering
 
 ### 2020-07-21
@@ -1097,7 +2276,7 @@
     * render Boolean slots correctly after mouse-over
 
 ### 2020-01-06
-* blocks: reset BooleanSlotMorph canvas context's global alpha after rendering the slider button 
+* blocks: reset BooleanSlotMorph canvas context's global alpha after rendering the slider button
 * prepared patch
 
 ## 5.4.2:
@@ -1224,11 +2403,11 @@
 
 ## v5.3.6:
 * **Notable Fix:**
-    * fixed variadic reporters library 
+    * fixed variadic reporters library
 
 ## v5.3.5:
 * **Notable Fix:**
-    * make sure list watchers are correctly initiailized 
+    * make sure list watchers are correctly initiailized
 
 ## v5.3.4:
 * **Notable Fixes:**
@@ -1240,7 +2419,7 @@
 
 ### 2019-11-15
 * objects: prevent costumes from becoming "broken" when pasting video snaps on them while the camera is not yet fully initialized
-* objects: catch sub-pixel sized thumbnails 
+* objects: catch sub-pixel sized thumbnails
 * prepared release
 
 ### 2019-11-14
@@ -1264,7 +2443,7 @@
 * new dev version
 * drop-down menu translation improvements by Joan
 * submenu-title translation control
-* help screen fixes by Brian and Michael 
+* help screen fixes by Brian and Michael
 * prepared release
 
 ## v5.3.2:
@@ -1304,7 +2483,7 @@
 
 ## v5.3.0:
 * **New Features:**
-    * expanding the rings in "map", "keep" and "find" shows 3 inputs named "value", "index" and "list" 
+    * expanding the rings in "map", "keep" and "find" shows 3 inputs named "value", "index" and "list"
     * limited expanding rings in special HOFs to 3 parameters
     * calling an empty reporter-ring with no formal parameters passing a single argument treats it as the identity function of that argument
 * **Notable Changes:**
@@ -1455,7 +2634,7 @@
 * **New Features:**
     * new cloud-menu entry: "Open in Community Site", thanks, Michael!
     * accept a list of pixels in the SWITCH TO COSTUME block
-    * URLs in dialog boxes are now clickable and can open new browser tabs, thanks, Brian Broll! 
+    * URLs in dialog boxes are now clickable and can open new browser tabs, thanks, Brian Broll!
 * **Notable Changes:**
     * made "i" upvar inside FOR loop's C-Shape slot mutable by user script
     * prevent switching to another sprite if a block editor is open (so local blocks of different sprites don't mix)
@@ -1469,7 +2648,7 @@
     * enable costumes created in the vector editor to be stretchable in Firefox, thanks, @coproc
 * **Translation Updates:**
     * Catalan
-    * Ukrainian, thanks, 
+    * Ukrainian, thanks,
     * Galician, thanks, Bernat
     * Turkish, thanks, Turgut!
     * German
@@ -1484,7 +2663,7 @@
 ### 2019-10-14
 * morphic: new "reactToInput" text-editing event
 * objects: fixed #2485 (find blocks and text-entry mode feature)
-* gui: fixed ProjectDialog's search field behavior for IME 
+* gui: fixed ProjectDialog's search field behavior for IME
 * threads: fixed MY PARTS so mutating the result list has no effect
 * threads: made "i" upvar inside FOR loop's C-Shape slot mutable by user script
 * URLs in dialog boxes are now clickable and can open new browser tabs, thanks, Brian Broll!
@@ -1526,7 +2705,7 @@
 * blocks, threads: made "temporary?" attribute for clones settable (in the SET->my... block)
 * objects: made the "paste on" block avaible in the "pen" palette
 * fix for tainted audio context when the user interacts with an auto-playing project
-* store: persist temporary costumes that aren't in the wardrobe (e.g. generated graphics, maps, paste-ups) 
+* store: persist temporary costumes that aren't in the wardrobe (e.g. generated graphics, maps, paste-ups)
 * German translation update
 * Galician translation update, thanks, Miguel!
 
@@ -1583,7 +2762,7 @@
 ## v5.0.4
 * **Notable Fixes:**
     * fixed a glitch when running a generic WHEN hat block with a literal Boolean input
-    * fixed a bug in the SHOW PICTURE block of the "Pixels" library 
+    * fixed a bug in the SHOW PICTURE block of the "Pixels" library
 
 ### 2019-07-10
 * threads: fixed a glitch when running a generic WHEN hat block with a literal Boolean input
@@ -1639,14 +2818,14 @@
 * new dev version
 * lists: fixed #2446
 * threads: fixed an issue when iterating over a linked list with a script mutating it, thanks, Brian!
-* cloud: fixed collection grid page size, thanks, Bernat! 
+* cloud: fixed collection grid page size, thanks, Bernat!
 * morphic: fixed a race condition in Morph.glideTo()
 * blocks: added gliding animation when inserting  blocks using the keyboard
 
 ## v5
 ### 2019-06-27
 * **New Features:**
-    * the "tools" library has been integrated as primitives 
+    * the "tools" library has been integrated as primitives
     * export 1- /2- dimensional lists with atomic data as CSV
     * export n-dimensional lists with atomic data as JSON
     * import CSV, Text, or JSON via drag & drop
@@ -1658,7 +2837,7 @@
     * new experimental live audio-scripting support
     * new video capturing and video-motion detection support, thanks, Josep!
     * new "object" reporter in the Sensing category for getting a sprite by its name
-    * blocks for changing and querying the "flat line ends" setting 
+    * blocks for changing and querying the "flat line ends" setting
     * selectors for changing and querying "draggable" and "rotation style" settings
     * new sound + music "volume" feature + blocks
     * new sound + music stereo "panning" feature + blocks
@@ -1682,7 +2861,7 @@
     * added "width" and "height" to the MY blocks dropdown
     * added "width" and "height" as attribute selectors of the OF primitive
     * added "costume" selector to the MY attributes dropdown
-    * added plus (+) and minus (-) keys to sensing and key hat 
+    * added plus (+) and minus (-) keys to sensing and key hat
     * special context-aware drop-downs for custom blocks
     * new "stick to" submenu in the sprite context menu where applicable
     * multi-line and monospaced "code" input slots for custom blocks
@@ -1697,9 +2876,9 @@
     * added transparency (alpha) to pen colors
     * new drop-down options for sprite-layer control ("GO TO front/back")
     * "loop arrow" symbol for primitive loops, also available for custom blocks
-    * optimized in-project storage of atomic-data lists (more efficient, less space) 
+    * optimized in-project storage of atomic-data lists (more efficient, less space)
     * remove all clones when the Green Flag is clicked
-    * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch) 
+    * adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch)
     * enable dropping commands into all rings
     * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
     * renamed "whitespace" option in SPLIT to "word"
@@ -1759,7 +2938,7 @@
 
 ### 2019-06-04
 * Objects, Lists: fixed #682
-* Lists, Tables: fixed table watcher cell updates for costumes (save / load) 
+* Lists, Tables: fixed table watcher cell updates for costumes (save / load)
 
 ### 2019-06-03
 * Threads: fixed #2249, predicates inside generic WHEN hats should be able to pass upvars
@@ -1768,7 +2947,7 @@
 
 ### 2019-06-02
 * Objects, Store: made "pen down?" and "shown?" attributes watchable onstage
-* Objects, Blocks: made "shown?" attribute inheritable 
+* Objects, Blocks: made "shown?" attribute inheritable
 * Objects, Blocks: made "pen down?" attribute inheritable
 * Objects: made watchers immediately react to inheritance changes
 
@@ -1814,7 +2993,7 @@
 * enhanced detecting '+' and '-' keys for Firefox
 
 ### 2019-05-20
-* Objects, Blocks added plus- and minus- keys to key pressed predicate and hat block 
+* Objects, Blocks added plus- and minus- keys to key pressed predicate and hat block
 * Objects: refactored projection layer update
 * Catalan translation update, thanks, Joan!
 
@@ -1832,7 +3011,7 @@
 * Threads: fixed costume names and thumbnails for computed costumes
 
 ### 2019-05-09
-* Blocks, Objects, Threads: tweaked new video-snap (still capture) feature 
+* Blocks, Objects, Threads: tweaked new video-snap (still capture) feature
 * Objects: fixed video still "snap on sprite" for Firefox
 * GUI: added credits in the "about" dialog for @jferran6 and @jguille2
 * German and Catalan translation updates
@@ -1843,7 +3022,7 @@
 * Blocks, Threads, Objects: Finalized Video ops
 * Objects, Threads, GUI: auto-start video capture when querying, stop video on stop-all
 * GUI, Objects: arranged video blocks in palette
-* Blocks, Objects, Threads: new video-snap (still capture) feature 
+* Blocks, Objects, Threads: new video-snap (still capture) feature
 
 ### 2019-05-07
 * Blocks, Objects, Threads, Video: optimized video motion detection
@@ -1864,7 +3043,7 @@
 * Blocks: reordered MY block dropdown by data type
 * Blocks, Threads: added "width" and "height" to the MY block's dropdown
 * Blocks, Threads: added "width" and "height" to the OF block's dropdown for sprites
-* Blocks, Objects: added hidden "blitz-HOF primitives" for MAP, KEEP and COMBINE 
+* Blocks, Objects: added hidden "blitz-HOF primitives" for MAP, KEEP and COMBINE
 * updated German, Catalan, Spanish and French translations for "blitz-HOF" primitives
 * duplicated help-screens for "map" & friends for their atomic "blitz" variants
 * Objects: expose "import raw data" option in variable watcher context menu
@@ -1959,7 +3138,7 @@
 * Objects, Threads: new "stretch" primitive for costumes, also for flipping
 * Threads: new feature: new costume from list of pixels
 * Objects, Threads: added "current" to costume input slot dropdown
-* Blocks: deprecated graphic effects: "duplicate", "comic" and "confetti" 
+* Blocks: deprecated graphic effects: "duplicate", "comic" and "confetti"
 * Objects: added reporter for graphic effects
 * Objects, Blocks: added pen attribute reporter
 * Objects: added "write" command to Pen category (same as "label" from tools
@@ -2092,7 +3271,7 @@
 * removed "loudness / microphone" block from AudioComp lib (turned into primitive)
 * new "microphone" reporter in Sensing for getting volume, signals and frequencies
 * Objects: keep microphone always on when running Snap! locally
-* GUI: let users turn off microphone manually in the settings menu (in the offline version) 
+* GUI: let users turn off microphone manually in the settings menu (in the offline version)
 
 ### 2019-03-05
 * GUI: added "globe" icon to language menu item
@@ -2124,9 +3303,9 @@
 * new help screens for some blocks, thanks, Brian!
 
 ### 2019-02-22
-* Paint, Sketch: fixed pipette bug for fill color introduced 
+* Paint, Sketch: fixed pipette bug for fill color introduced
 * Tweaked German translation
-* Tweaked sharing scripts with global custom blocks among projects, thanks, Bernat! 
+* Tweaked sharing scripts with global custom blocks among projects, thanks, Bernat!
 
 ### 2019-02-21
 * Blocks: fixed deleting a single command inside a stack
@@ -2161,7 +3340,7 @@
 ### 2019-02-06
 * Blocks, BYOB: refactored custom block input options and drop-down menus
 * Blocks: adjust bottom of STOP block to reflect the menu selection (show / hide bottom notch)
-* Blocks: enable dropping commands into all rings, under constructions 
+* Blocks: enable dropping commands into all rings, under constructions
 
 ### 2019-02-05
 * BYOB: radio button symbols for special slot / drop-down menu options
@@ -2197,7 +3376,7 @@
 * Objects, Threads: new blocks for setting and changing the stage's background color
 * Store: save stage's background color in project
 * updated German translation
-* Blocks: Tweaked rendering of C-shaped slots in predicates 
+* Blocks: Tweaked rendering of C-shaped slots in predicates
 * updated cases library blocks with new loop-arrow symbols
 * updated animation library blocks with new loop-arrow symbols, tweaked FOR block
 
@@ -2211,8 +3390,8 @@
 
 ### 2019-01-21
 * let users make C-shape slots with loop arrow symbols. Sigh.
-* updated internal "for each" primitive block with new arrow symbol. Sigh. 
-* updated Indonesian translation, thanks, Emmanuella Rumanti 
+* updated internal "for each" primitive block with new arrow symbol. Sigh.
+* updated Indonesian translation, thanks, Emmanuella Rumanti
 * updated FOR and FOREACH in tools library with new new loop-arrow symbols
 
 ### 2019-01-19
@@ -2256,7 +3435,7 @@
 * Objects: fixed "set pen color (color picker)" to observe, i.e. overwrite transparency
 * Lists, Threads, Objects: added (Bernat's) JSON parser to SPLIT block
 * Lists, Objects: added "export as JSON" capability
-* Lists, Objects: automatically parse json files on import 
+* Lists, Objects: automatically parse json files on import
 * Lists: prevent Booleans in CSVs
 
 ### 2019-01-08
@@ -2271,8 +3450,8 @@
 
 ### 2019-01-04
 * Objects, Blocks, Threads: new feature/block: sense colors and sprites anywhere
-* updated German translation 
-* Objects: fixed pixel color sensing for stage pen trails 
+* updated German translation
+* Objects: fixed pixel color sensing for stage pen trails
 
 ### 2019-01-02
 * Objects, Blocks, Threads, GUI, Store: added third color dimension and transparency to pen
@@ -2352,7 +3531,7 @@
     * don't stamp if the canvas is too small, avoid a JS error message
     * changed "csv" option in SPLIT to comply with RFC 4180 and parse the whole table
 * Notable Fix:
-    * help for local custom blocks 
+    * help for local custom blocks
 * Translation Update:
     * Japanese, thanks Yoshiteru Nakamura!
 
@@ -2389,8 +3568,8 @@
     * reorganized source code files and translations into a subfolder structure
     * SET PEN COLOR TO (number) now wraps the hue around for numbers < 0 and > 100
 * Notable Fixes:
-    * restore propagation of inherited attributes when loading 
-    * support for older versions of Chrome, thanks, Michael! 
+    * restore propagation of inherited attributes when loading
+    * support for older versions of Chrome, thanks, Michael!
     * fixed "letter of" primitive for numeric input, thanks, Michael and Dan!
 
 ### 2018-10-07

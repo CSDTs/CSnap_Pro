@@ -84,35 +84,26 @@ var Core = function () {
 
       if (options) {
         Object.assign(generic, options);
-        console.table(generic)
-
       }
 
       this.contentImg = document.createElement("IMG");
       this.contentImg.style.height = generic.contentSize;
-    //   this.contentImg.style.width = "aut%";?
+      this.contentImg.style.width = "100%";
       this.contentImg.src = generic.contentImage;
-
 
       this.styleImg = document.createElement("IMG");
       this.styleImg.style.height = generic.sourceSize;
-    //   this.styleImg.style.width = "100%";
+      this.styleImg.style.width = "100%";
       this.styleImg.src = generic.sourceImage;
-
 
       this.styleRatio = generic.styleRatio;
       this.stylized = document.createElement("CANVAS");
-      this.stylized.height = generic.contentSize
-      
 
       if (typeof world !== "undefined") {
-        this.ide = world.children[0];
+        var ide = world.children[0];
+        ide.broadcast("startProgress");
       }
-
-      if (typeof world !== "undefined") {
-        this.ide.broadcast('startProgress')
-      }
-      Promise.all([this.loadStyleModel(), this.loadTransformModel()]).then(function (_ref3) {
+      Promise.all([this.loadStyleModel(generic.styleModel), this.loadTransformModel(generic.transformModel)]).then(function (_ref3) {
         var _ref4 = _slicedToArray(_ref3, 2),
             styleNet = _ref4[0],
             transformNet = _ref4[1];
@@ -124,8 +115,8 @@ var Core = function () {
         console.log(styleNet, transformNet);
         _this2.startStyling().finally(function () {
           var a = document.createElement("a");
-          a.setAttribute("download", "output.png");
-          a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0).replace("image/png", "image/octet-stream"));
+          a.setAttribute("download", "output.jpeg");
+          a.setAttribute("href", _this2.stylized.toDataURL("image/jpeg", 1.0).replace("image/jpeg", "image/octet-stream"));
 
           // a.download = "output.png";
           document.body.appendChild(a);
@@ -133,8 +124,8 @@ var Core = function () {
           document.body.removeChild(a);
 
           if (typeof world !== "undefined") {
-            let ide = world.children[0];
-            ide.broadcast('endProgress')
+            var _ide = world.children[0];
+            _ide.broadcast("endProgress");
           }
         });
       });
@@ -184,7 +175,7 @@ var Core = function () {
               }
 
               _context3.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/src/middleware/visualizer/saved_model_style_js/model.json"));
+              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_style_js/model.json"));
 
             case 3:
               this.mobileStyleNet = _context3.sent;
@@ -216,7 +207,7 @@ var Core = function () {
               }
 
               _context4.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/src/middleware/visualizer/saved_model_style_inception_js/model.json"));
+              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_style_inception_js/model.json"));
 
             case 3:
               this.inceptionStyleNet = _context4.sent;
@@ -248,7 +239,7 @@ var Core = function () {
               }
 
               _context5.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/src/middleware/visualizer/saved_model_transformer_js/model.json"));
+              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_transformer_js/model.json"));
 
             case 3:
               this.originalTransformNet = _context5.sent;
@@ -280,7 +271,7 @@ var Core = function () {
               }
 
               _context6.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/src/middleware/visualizer/saved_model_transformer_separable_js/model.json"));
+              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_transformer_separable_js/model.json"));
 
             case 3:
               this.separableTransformNet = _context6.sent;
@@ -613,6 +604,28 @@ var Core = function () {
 
   return Core;
 }();
+
+// function validateTextureSize(width, height) {
+//   var maxTextureSize = environment_1.ENV.get('WEBGL_MAX_TEXTURE_SIZE');
+//   if ((width <= 0) || (height <= 0)) {
+//       var requested = "[" + width + "x" + height + "]";
+//       if(typeof world !== 'undefined'){
+//           let ide = world.children[0]
+//           ide.broadcast('sizeError')
+//       }
+//       throw new Error('Requested texture size ' + requested + ' is invalid.');
+//   }
+//   if ((width > maxTextureSize) || (height > maxTextureSize)) {
+//       var requested = "[" + width + "x" + height + "]";
+//       var max = "[" + maxTextureSize + "x" + maxTextureSize + "]";
+//       if(typeof world !== 'undefined'){
+//           let ide = world.children[0]
+//           ide.broadcast('sizeError')
+//       }
+//       throw new Error('Requested texture size ' + requested +
+//           ' greater than WebGL maximum on this browser / GPU ' + max + '.');
+//   }
+// }
 
 window.application = new Core();
 console.log(window.application);
@@ -21782,19 +21795,11 @@ function validateTextureSize(width, height) {
     var maxTextureSize = environment_1.ENV.get('WEBGL_MAX_TEXTURE_SIZE');
     if ((width <= 0) || (height <= 0)) {
         var requested = "[" + width + "x" + height + "]";
-        if(typeof world !== 'undefined'){
-            let ide = world.children[0]
-            ide.broadcast('sizeError')
-        }
         throw new Error('Requested texture size ' + requested + ' is invalid.');
     }
     if ((width > maxTextureSize) || (height > maxTextureSize)) {
         var requested = "[" + width + "x" + height + "]";
         var max = "[" + maxTextureSize + "x" + maxTextureSize + "]";
-        if(typeof world !== 'undefined'){
-            let ide = world.children[0]
-            ide.broadcast('sizeError')
-        }
         throw new Error('Requested texture size ' + requested +
             ' greater than WebGL maximum on this browser / GPU ' + max + '.');
     }

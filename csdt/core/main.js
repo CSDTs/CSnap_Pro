@@ -62,6 +62,9 @@ SpriteMorph.prototype.initBlocks = function () {
 
 Object.assign(SpriteMorph.prototype, blockOverrides);
 
+SpriteMorph.prototype.initBlockMigrations();
+SpriteMorph.prototype.initBlocks();
+
 ListMorph.prototype.deactivateIndex = function (idx) {
 	var item = this.listContents.children[idx];
 	if (!item) {

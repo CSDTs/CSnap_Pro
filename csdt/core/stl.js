@@ -42,7 +42,11 @@ export function saveAndExportAsSTL(name) {
 							return msg;
 						};
 					},
-					this.cloudError()
+					(error) => {
+						this.cloudError();
+						console.error(error);
+						console.error(JSON.stringify(error));
+					}
 				);
 			}
 		);

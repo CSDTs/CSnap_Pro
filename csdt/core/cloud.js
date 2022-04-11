@@ -1,7 +1,7 @@
 export let knownDomains = {
 	"Snap!Cloud": "https://csdt.org",
-	"Snap!Cloud (staging)": "http://45.33.64.197:8000/",
-	localhost: "http://localhost:8000/",
+	"Snap!Cloud (staging)": "http://45.33.64.197:8000",
+	"localhost (default)": "http://localhost:8000",
 	"localhost (alt)": "http://127.0.0.1:8000",
 	"localhost (secure)": "https://localhost:4431",
 };
@@ -291,7 +291,7 @@ export function getCSRFToken() {
 export function saveProject(projectName, body, onSuccess, onError) {
 	// Expects a body object with the following paramters:
 	// xml, media, thumbnail, remixID (optional), notes (optional)
-	console.log(body);
+
 	var myself = this;
 	this.checkCredentials(function (username) {
 		if (username) {
@@ -300,11 +300,8 @@ export function saveProject(projectName, body, onSuccess, onError) {
 			let xml_blob = myself.dataURItoBlob(xml_string, "text/xml");
 			let xml = new FormData();
 
-			console.log(xml_string);
-			console.log(xml_blob);
-
 			xml.append("file", xml_blob);
-			console.log(xml);
+
 			let img_string = body.thumbnail;
 			let img_blob = myself.dataURItoBlob(img_string, "image/png");
 			let img = new FormData();
@@ -338,6 +335,7 @@ export function saveProject(projectName, body, onSuccess, onError) {
 }
 
 export function saveFile(file, onSuccess, onError) {
+	this.getCSRFToken();
 	$.ajax({
 		type: "PUT",
 		url: this.apiBasePath + "/files/",

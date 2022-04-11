@@ -173,7 +173,7 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		// transformModelColumn.add(transformModel);
 		// dof.add(styleModelColumn);
 		// dof.add(transformModelColumn);
-		inp.add(dof);
+		// inp.add(dof);
 	}
 
 	if (msg) {
@@ -209,9 +209,9 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		bdy.add(chk);
 	}
 
-	dof.fixLayout();
-	styleModelColumn.fixLayout();
-	transformModelColumn.fixLayout();
+	// dof.fixLayout();
+	// styleModelColumn.fixLayout();
+	// transformModelColumn.fixLayout();
 	inp.fixLayout();
 	lnk.fixLayout();
 	bdy.fixLayout();

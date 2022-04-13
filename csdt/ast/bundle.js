@@ -24,26 +24,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 tf.ENV.set("WEBGL_PACK", false); // This needs to be done otherwise things run very slow v1.0.4
 
-
-var styleOptions = ["mobilenet", "inception"];
-var transformerOptions = ["separable", "original"];
-
-window.testA = {
-  contentImage: "images/chicago.jpg",
-  sourceImage: "images/statue_of_liberty.jpg",
-  styleModel: "inception",
-  transformModel: "original",
-  styleRatio: 1
-};
-
-window.testB = {
-  contentImage: "images/towers.jpg",
-  sourceImage: "images/red_circles.jpg",
-  styleModel: "inception",
-  transformModel: "original",
-  styleRatio: 0.23
-};
-
 var Core = function () {
   function Core() {
     var _this = this;
@@ -58,9 +38,9 @@ var Core = function () {
       console.log("Loaded styleNet");
       _this.styleNet = styleNet;
       _this.transformNet = transformNet;
-      // this.enableStylizeButtons();
     });
 
+    //Checks if bundle is part of CSnap
     this.ide = null;
     if (typeof world !== "undefined") {
       this.ide = world.children[0];
@@ -78,31 +58,39 @@ var Core = function () {
         styleModel: "mobilenet",
         transformModel: "separable",
         styleRatio: 0.5,
-        contentSize: "400px",
-        sourceSize: "400px"
+        contentSize: 100,
+        sourceSize: 100
       };
 
       if (options) {
         Object.assign(generic, options);
       }
 
-      this.contentImg = document.createElement("IMG");
-      this.contentImg.style.height = generic.contentSize;
-      this.contentImg.style.width = "100%";
-      this.contentImg.src = generic.contentImage;
+      //TODO Convert to dynamic (width sizing issues prevented this from being done earlier)
+      this.contentImg = document.getElementById('base-image');
+      this.contentImg.removeAttribute('height');
+      this.contentImg.removeAttribute('width');
 
-      this.styleImg = document.createElement("IMG");
-      this.styleImg.style.height = generic.sourceSize;
-      this.styleImg.style.width = "100%";
+      this.contentImg.src = generic.contentImage;
+      this.contentImg.height = this.contentImg.height * generic.contentSize;
+      this.contentImg.width = this.contentImg.width * generic.contentSize;
+
+      this.styleImg = document.getElementById('style-image');
+      this.styleImg.removeAttribute('height');
+      this.styleImg.removeAttribute('width');
       this.styleImg.src = generic.sourceImage;
+      this.styleImg.height = this.styleImg.height * generic.sourceSize;
+      this.styleImg.width = this.styleImg.width * generic.sourceSize;
 
       this.styleRatio = generic.styleRatio;
-      this.stylized = document.createElement("CANVAS");
+      this.stylized = document.getElementById("style-canvas");
 
+      // Calls the block that loads the progress bar to user
       if (typeof world !== "undefined") {
         var ide = world.children[0];
         ide.broadcast("startProgress");
       }
+
       Promise.all([this.loadStyleModel(generic.styleModel), this.loadTransformModel(generic.transformModel)]).then(function (_ref3) {
         var _ref4 = _slicedToArray(_ref3, 2),
             styleNet = _ref4[0],
@@ -112,23 +100,39 @@ var Core = function () {
         _this2.styleNet = styleNet;
         _this2.transformNet = transformNet;
 
-        console.log(styleNet, transformNet);
         _this2.startStyling().finally(function () {
           var a = document.createElement("a");
-          a.setAttribute("download", "output.jpeg");
-          a.setAttribute("href", _this2.stylized.toDataURL("image/jpeg", 1.0).replace("image/jpeg", "image/octet-stream"));
 
-          // a.download = "output.png";
+          _this2.fixStylizedImage();
+          a.setAttribute("download", "output.png");
+          a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0));
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
 
+          // Calls the block that hides the progress bar to user
           if (typeof world !== "undefined") {
             var _ide = world.children[0];
             _ide.broadcast("endProgress");
           }
         });
       });
+    }
+
+    // ? Where does tensorflow call to duplicate the canvas by 2?
+    // This fixes the doubling with the canvas, producing a proper image
+
+  }, {
+    key: "fixStylizedImage",
+    value: function fixStylizedImage() {
+      var canvas = document.getElementById('style-canvas');
+      var ctx = canvas.getContext('2d');
+      var width = canvas.width / 2;
+      var height = canvas.height / 2;
+      var imageData = ctx.getImageData(0, 0, width, height);
+      canvas.width = width;
+      canvas.height = height;
+      ctx.putImageData(imageData, 0, 0);
     }
   }, {
     key: "loadStyleModel",
@@ -304,68 +308,71 @@ var Core = function () {
               return regeneratorRuntime.awrap(tf.nextFrame());
 
             case 2:
-              _context7.next = 4;
+              console.log("Generating 100D style representation");
+              _context7.next = 5;
               return regeneratorRuntime.awrap(tf.nextFrame());
 
-            case 4:
-              _context7.next = 6;
+            case 5:
+              _context7.next = 7;
               return regeneratorRuntime.awrap(tf.tidy(function () {
                 return _this3.styleNet.predict(tf.browser.fromPixels(_this3.styleImg).toFloat().div(tf.scalar(255)).expandDims());
               }));
 
-            case 6:
+            case 7:
               bottleneck = _context7.sent;
 
               if (!(this.styleRatio !== 1.0)) {
-                _context7.next = 19;
+                _context7.next = 21;
                 break;
               }
 
-              _context7.next = 10;
+              console.log("Generating 100D identity style representation");
+              _context7.next = 12;
               return regeneratorRuntime.awrap(tf.nextFrame());
 
-            case 10:
-              _context7.next = 12;
+            case 12:
+              _context7.next = 14;
               return regeneratorRuntime.awrap(tf.tidy(function () {
                 return _this3.styleNet.predict(tf.browser.fromPixels(_this3.contentImg).toFloat().div(tf.scalar(255)).expandDims());
               }));
 
-            case 12:
+            case 14:
               identityBottleneck = _context7.sent;
               styleBottleneck = bottleneck;
-              _context7.next = 16;
+              _context7.next = 18;
               return regeneratorRuntime.awrap(tf.tidy(function () {
                 var styleBottleneckScaled = styleBottleneck.mul(tf.scalar(_this3.styleRatio));
                 var identityBottleneckScaled = identityBottleneck.mul(tf.scalar(1.0 - _this3.styleRatio));
                 return styleBottleneckScaled.addStrict(identityBottleneckScaled);
               }));
 
-            case 16:
+            case 18:
               bottleneck = _context7.sent;
 
               styleBottleneck.dispose();
               identityBottleneck.dispose();
 
-            case 19:
-              _context7.next = 21;
+            case 21:
+              console.log("Stylizing image...");
+              _context7.next = 24;
               return regeneratorRuntime.awrap(tf.nextFrame());
 
-            case 21:
-              _context7.next = 23;
+            case 24:
+              _context7.next = 26;
               return regeneratorRuntime.awrap(tf.tidy(function () {
                 return _this3.transformNet.predict([tf.browser.fromPixels(_this3.contentImg).toFloat().div(tf.scalar(255)).expandDims(), bottleneck]).squeeze();
               }));
 
-            case 23:
+            case 26:
               stylized = _context7.sent;
-              _context7.next = 26;
+              _context7.next = 29;
               return regeneratorRuntime.awrap(tf.browser.toPixels(stylized, this.stylized));
 
-            case 26:
+            case 29:
               bottleneck.dispose(); // Might wanna keep this around
               stylized.dispose();
 
-            case 28:
+            case 31:
             case "end":
               return _context7.stop();
           }
@@ -628,7 +635,6 @@ var Core = function () {
 // }
 
 window.application = new Core();
-console.log(window.application);
 
 },{"./links":2,"@tensorflow/tfjs":292,"babel-polyfill":294}],2:[function(require,module,exports){
 "use strict";

@@ -406,12 +406,5 @@ export function getThumbnail(url, onSuccess, onError) {
 }
 
 export function getProject(project, delta, onSuccess, onError) {
-	this.withCredentialsRequest(
-		"GET",
-		project.project_url,
-		onSuccess,
-		onError,
-		"Could not fetch project " + project.name,
-		true
-	);
+	this.request("GET", project.project_url, onSuccess, onError, "Could not fetch project " + project.name, true);
 }

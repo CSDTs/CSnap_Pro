@@ -47,10 +47,10 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 			true
 		),
 		imageA = new TextMorph(data[0].split("/static/csnap_pro/")[1], 12),
-		sizeSliderA = new SliderMorph(256, 400, 256, 6, "horizontal"),
+		sizeSliderA = new SliderMorph(50, 200, 100, 6, "horizontal"),
 		imageB = new TextMorph(data[1].split("/static/csnap_pro/")[1], 12),
-		sizeSliderB = new SliderMorph(256, 400, 256, 6, "horizontal"),
-		slider = new SliderMorph(0, 100, 50, 6, "horizontal"),
+		sizeSliderB = new SliderMorph(50, 200, 100, 6, "horizontal"),
+		slider = new SliderMorph(1, 100, 50, 6, "horizontal"),
 		styleModel,
 		transformModel,
 		sourceImg = new InputFieldMorph(),
@@ -61,6 +61,15 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		dof = new AlignmentMorph("row", 4),
 		styleModelColumn = new AlignmentMorph("column", 2),
 		transformModelColumn = new AlignmentMorph("column", 2),
+		basePercentage = new AlignmentMorph("row", 4),
+		stylePercentage = new AlignmentMorph("row", 4),
+		ratioPercentage = new AlignmentMorph("row", 4),
+		bColLeft = new AlignmentMorph("column", 2),
+		bColRight = new AlignmentMorph("column", 2),
+		sColLeft = new AlignmentMorph("column", 2),
+		sColRight = new AlignmentMorph("column", 2),
+		ratioColLeft = new AlignmentMorph("column", 2),
+		ratioColRight = new AlignmentMorph("column", 2),
 		instructions = new TextMorph("Apply a 'style' to your selected\ncontent image.\n", 12);
 	(inp = new AlignmentMorph("column", 2)),
 		(lnk = new AlignmentMorph("row", 4)),
@@ -129,10 +138,37 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 	inp.setColor(this.color);
 	bdy.setColor(this.color);
 
-	styleModelColumn.alignment = "left";
-	styleModelColumn.setColor(this.color);
 	transformModelColumn.alignment = "left";
 	transformModelColumn.setColor(this.color);
+	transformModelColumn.setWidth(165);
+	transformModelColumn.setHeight(25);
+
+	bColLeft.alignment = "left";
+	bColLeft.setColor(this.color);
+	bColLeft.setWidth(165);
+	bColLeft.setHeight(25);
+	bColRight.alignment = "left";
+	bColRight.setColor(this.color);
+	bColRight.setWidth(10);
+	bColRight.setHeight(25);
+
+	sColLeft.alignment = "left";
+	sColLeft.setColor(this.color);
+	sColLeft.setWidth(165);
+	sColLeft.setHeight(25);
+	sColRight.alignment = "left";
+	sColRight.setColor(this.color);
+	sColRight.setWidth(10);
+	sColRight.setHeight(25);
+
+	ratioColLeft.alignment = "left";
+	ratioColLeft.setColor(this.color);
+	ratioColLeft.setWidth(165);
+	ratioColLeft.setHeight(25);
+	ratioColRight.alignment = "left";
+	ratioColRight.setColor(this.color);
+	ratioColRight.setWidth(10);
+	ratioColRight.setHeight(25);
 
 	contentImg.setWidth(200);
 	imageA.setWidth(200);
@@ -158,13 +194,33 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		// inp.add(imageA);
 		inp.add(labelText("\nBase image size:"));
 		inp.add(sizeSliderA);
+		bColLeft.add(labelText("50%"));
+		bColRight.add(labelText("200%"));
+		// transformModelColumn.add(labelText("50%"));
+		// styleModelColumn.add(labelText("200%"));
+		basePercentage.add(bColLeft);
+		basePercentage.add(bColRight);
+		inp.add(basePercentage);
 		// inp.add(labelText("\nStyle Image:"));
 		// inp.add(imageB);
-		inp.add(labelText("\nStyle image size:"));
+		inp.add(labelText("Style image size:"));
 		inp.add(sizeSliderB);
-		inp.add(labelText("\nStylization strength:"));
+		sColLeft.add(labelText("50%"));
+		sColRight.add(labelText("200%"));
+		// transformModelColumn.add(labelText("50%"));
+		// styleModelColumn.add(labelText("200%"));
+		stylePercentage.add(sColLeft);
+		stylePercentage.add(sColRight);
+		inp.add(stylePercentage);
+		// inp.add(dof);
+		inp.add(labelText("Stylization strength:"));
 		inp.add(slider);
-		inp.add(labelText("\nCreation type:"));
+		ratioColLeft.add(labelText("1%"));
+		ratioColRight.add(labelText("100%"));
+		ratioPercentage.add(ratioColLeft);
+		ratioPercentage.add(ratioColRight);
+		inp.add(ratioPercentage);
+		inp.add(labelText("Creation type:"));
 		inp.add(conversionType);
 		// styleModelColumn.add(conversionType);
 		// styleModelColumn.add(labelText("Style Model:"));
@@ -209,9 +265,18 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		bdy.add(chk);
 	}
 
-	// dof.fixLayout();
-	// styleModelColumn.fixLayout();
-	// transformModelColumn.fixLayout();
+	basePercentage.fixLayout();
+	bColLeft.fixLayout();
+	bColRight.fixLayout();
+
+	stylePercentage.fixLayout();
+	sColLeft.fixLayout();
+	sColLeft.fixLayout();
+
+	ratioPercentage.fixLayout();
+	ratioColLeft.fixLayout();
+	ratioColLeft.fixLayout();
+
 	inp.fixLayout();
 	lnk.fixLayout();
 	bdy.fixLayout();
@@ -240,37 +305,28 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 
 		let conversion = conversionType.getValue();
 
-		console.log(conversion);
 		let payload = {
-			// contentImage: stage.toDataURL(),
-			// contentImage: stage.toDataURL(),
 			contentImage: `${data[0]}`,
-			// choiceImageSize: contentImgSize.getValue(),
-			// sourceImage: sourceImg.getValue(),
 			sourceImage: `${data[1]}`,
-
-			// sourceImageSize: sourceImgSize.getValue(),
 			styleModel: conversionType.getValue() === "fast" ? "mobilenet" : "inception",
 			transformModel: conversionType.getValue() === "fast" ? "separable" : "original",
-			// choice: agree,
 			styleRatio: slider.value / 100.0,
-			contentSize: `${sizeSliderA.value}px`,
-			sourceSize: `${sizeSliderB.value}px`,
+			contentSize: sizeSliderA.value / 100.0,
+			sourceSize: sizeSliderB.value / 100.0,
 		};
 
-		console.table(payload);
+		// console.table(payload);
 		if (agree) {
-			// let ide = world.children[0];
-
-			// console.log(ide.stage.fullImage());
-			// console.log(window.application);
 			window.application.generateStylizedImage();
 		} else {
-			// console.log(window.application);
-
 			window.application.generateStylizedImage(payload);
 		}
-		// console.log(payload);
+
+		// if (agree) {
+		// 	window.application.generateStylizedImage();
+		// } else {
+		// 	window.application.generateStylizedImage(payload);
+		// }
 		return payload;
 	};
 
@@ -284,7 +340,7 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 IDE_Morph.prototype.promptAiImage = function (payload) {
 	// open a dialog box letting the user browse available "built-in"
 	// costumes, backgrounds or sounds
-	console.log(payload);
+	// console.log(payload);
 
 	let checkTarget = payload[0] != "";
 	let checkSource = payload[1] != "";
@@ -515,7 +571,7 @@ SpriteMorph.prototype.useStageForStyleTransferImage = function (type) {
 };
 
 SpriteMorph.prototype.clearStyleTransferImage = function (type) {
-	console.log(type);
+	// console.log(type);
 	let vis = document.querySelector("#visualizer");
 	let target = document.querySelector(`#${type}-img`);
 
@@ -614,7 +670,7 @@ HandMorph.prototype.processImageFromImport = function (event, userVar) {
 		finalImg.style.height = "auto";
 		finalImg.id = `${userVar}-img`;
 		pic.onload = () => {
-			console.log(pic.width, pic.height);
+			// console.log(pic.width, pic.height);
 			canvas = newCanvas(new Point(pic.width, pic.height), true);
 			canvas.getContext("2d").drawImage(pic, 0, 0);
 			// img = target.droppedDreamImage(canvas, aFile.name, userVar);
@@ -653,7 +709,7 @@ HandMorph.prototype.processImageFromImport = function (event, userVar) {
 };
 
 SpriteMorph.prototype.toggleASTProgress = function (bool) {
-	console.log(bool);
+	// console.log(bool);
 	let progress = document.querySelector("#vis-progress");
 	if (bool) {
 		progress.style.display = "inline-flex";
@@ -774,7 +830,7 @@ HandMorph.prototype.processDreamImageDrop = function (event, userVar) {
 		}
 		let img = "";
 		pic.onload = () => {
-			console.log(pic.width, pic.height);
+			// console.log(pic.width, pic.height);
 			canvas = newCanvas(new Point(pic.width, pic.height), true);
 			canvas.getContext("2d").drawImage(pic, 0, 0);
 			img = target.droppedDreamImage(canvas, aFile.name, userVar);
@@ -853,7 +909,7 @@ IDE_Morph.prototype.droppedDreamImage = function (aCanvas, name, userVar) {
 Costume.prototype.editDreamImage = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
 	var editor = new PaintEditorMorph();
 	let stageDimensions = new Point(1920, 1080);
-	console.log(isnew);
+	// console.log(isnew);
 	editor.oncancel = oncancel || nop;
 	editor.openIn(
 		aWorld,

@@ -1,5 +1,32 @@
 IDE_Morph.prototype.launchVisualizer = function (payload) {
 	let myself = this;
+
+	function createPicture(src) {
+		let canvas = document.createElement("canvas");
+		let ctx = canvas.getContext("2d");
+		canvas.width = 200;
+		canvas.height = 200;
+		let img = new Image();
+		img.src = src;
+
+		// get the scale
+		var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+		// get the top left position of the image
+		var x = canvas.width / 2 - (img.width / 2) * scale;
+		var y = canvas.height / 2 - (img.height / 2) * scale;
+		ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+		// ctx.clearRect(0, 0, canvas.width, canvas.height);
+		// // base_image.onload = function () {
+		// ctx.drawImage(base_image, 0, 0, canvas.width, canvas.height);
+		return canvas;
+		// };
+	}
+
+	// let test = [, createPicture(payload[1])];
+
+	payload.push(createPicture(payload[0]));
+	payload.push(createPicture(payload[1]));
 	new DialogBoxMorph(null, myself.sendVisualizerData).promptVisualizerInput(
 		"Stylize an Image Using AI",
 		"signup",
@@ -50,7 +77,7 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		sizeSliderA = new SliderMorph(50, 200, 100, 6, "horizontal"),
 		imageB = new TextMorph(data[1].split("/static/csnap_pro/")[1], 12),
 		sizeSliderB = new SliderMorph(50, 200, 100, 6, "horizontal"),
-		slider = new SliderMorph(1, 100, 50, 6, "horizontal"),
+		slider = new SliderMorph(1, 100, 100, 6, "horizontal"),
 		styleModel,
 		transformModel,
 		sourceImg = new InputFieldMorph(),
@@ -58,7 +85,11 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		sourceImgSize = new InputFieldMorph(),
 		agree = false,
 		chk,
-		dof = new AlignmentMorph("row", 4),
+		baseLabelRow = new AlignmentMorph("row", 4),
+		styleLabelRow = new AlignmentMorph("row", 4),
+		ratioLabelRow = new AlignmentMorph("row", 4),
+		imageRow = new AlignmentMorph("row", 4),
+		creationLabelRow = new AlignmentMorph("row", 4),
 		styleModelColumn = new AlignmentMorph("column", 2),
 		transformModelColumn = new AlignmentMorph("column", 2),
 		basePercentage = new AlignmentMorph("row", 4),
@@ -76,6 +107,9 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		(bdy = new AlignmentMorph("column", this.padding)),
 		(myself = this);
 
+	var baseColumn = new AlignmentMorph("column", 2),
+		styleColumn = new AlignmentMorph("column", 2);
+
 	function labelText(string) {
 		return new TextMorph(
 			localize(string),
@@ -91,6 +125,64 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		);
 	}
 
+	this.explainBase = function () {
+		new DialogBoxMorph().inform(
+			"Base image size",
+			"Insert def here" +
+				".\n\nA bigger base image\nresults in a more detailed\noutput, but increases the\nprocessing time\nsignificantly.",
+			world,
+			null
+		);
+	};
+	this.explainStyle = function () {
+		new DialogBoxMorph().inform(
+			"Style image size",
+			"Insert def here" +
+				".\n\nChanging the size of a style\nimage usually affects the\ntexture 'seen' by the\nnetwork.",
+			world,
+			null
+		);
+	};
+	this.explainRatio = function () {
+		new DialogBoxMorph().inform(
+			"Stylization ratio",
+			"Insert def here" +
+				".\n\nThis parameter affects the\nstylization strength.The\nfurther to the right, the\nstronger the stylization. This\nis done via interpolation\nbetween the style vectors of\nthe base and style\nimages.",
+			world,
+			null
+		);
+	};
+	this.explainConversion = function () {
+		new DialogBoxMorph().inform(
+			"Creation type",
+			"Insert def here" +
+				".\n\nFast uses smaller training models\nto produce an image\nquickly, while high quality uses\na larger training model\nat the cost of it being\nmore time consuming.",
+			world,
+			null
+		);
+	};
+
+	function modalButton(label, action) {
+		var btn = new PushButtonMorph(myself, action || "ok", "  " + localize(label || "OK") + "  ");
+		btn.fontSize = 10;
+		btn.corner = myself.buttonCorner;
+		btn.edge = myself.buttonEdge;
+		btn.outline = null;
+		btn.outlineColor = null;
+		btn.outlineGradient = null;
+		btn.padding = 0;
+		btn.contrast = null;
+		// btn.corner = myself.buttonCorner;
+		// btn.edge = myself.buttonEdge;
+		// btn.outline = myself.buttonOutline;
+		// btn.outlineColor = myself.buttonOutlineColor;
+		// btn.outlineGradient = myself.buttonOutlineGradient;
+		// btn.padding = myself.buttonPadding;
+		// btn.contrast = myself.buttonContrast;
+		btn.fixLayout();
+		return btn;
+	}
+
 	function linkButton(label, url) {
 		var btn = new PushButtonMorph(myself, () => window.open(url), "  " + localize(label) + "  ");
 		btn.fontSize = 10;
@@ -103,6 +195,30 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		btn.contrast = myself.buttonContrast;
 		btn.fixLayout();
 		return btn;
+	}
+
+	function addPicture(aMorphOrCanvas) {
+		let morph = new Morph();
+		morph.isCachingImage = true;
+		morph.cachedImage = aMorphOrCanvas;
+		// morph.shouldRerender = true;
+		morph.bounds.setWidth(200);
+		morph.bounds.setHeight(200);
+
+		return morph;
+	}
+
+	function createPicture(src) {
+		let canvas = document.createElement("canvas");
+		let ctx = canvas.getContext("2d");
+
+		let base_image = new Image();
+		base_image.src = src;
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		base_image.onload = function () {
+			ctx.drawImage(base_image, 0, 0, 500, 500);
+			return canvas;
+		};
 	}
 
 	styleModel = new InputFieldMorph(
@@ -134,6 +250,7 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 		},
 		true // read-only
 	);
+
 	inp.alignment = "left";
 	inp.setColor(this.color);
 	bdy.setColor(this.color);
@@ -163,7 +280,7 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 
 	ratioColLeft.alignment = "left";
 	ratioColLeft.setColor(this.color);
-	ratioColLeft.setWidth(165);
+	ratioColLeft.setWidth(365);
 	ratioColLeft.setHeight(25);
 	ratioColRight.alignment = "left";
 	ratioColRight.setColor(this.color);
@@ -177,8 +294,8 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 	sizeSliderA.setHeight(20);
 	sizeSliderB.setWidth(200);
 	sizeSliderB.setHeight(20);
-	conversionType.setWidth(200);
-	slider.setWidth(200);
+	conversionType.setWidth(400);
+	slider.setWidth(400);
 	slider.setHeight(20);
 	styleModel.setWidth(100);
 	transformModel.contents().minWidth = 80;
@@ -187,83 +304,109 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 	contentImgSize.setWidth(200);
 	sourceImgSize.setWidth(200);
 
-	if (purpose === "signup") {
-		inp.add(instructions);
+	creationLabelRow.setWidth(400);
 
-		// inp.add(labelText("Content Image:"));
-		// inp.add(imageA);
-		inp.add(labelText("\nBase image size:"));
-		inp.add(sizeSliderA);
+	imageRow.setWidth(200);
+	ratioLabelRow.setWidth(400);
+	baseColumn.setWidth(225);
+	styleColumn.setWidth(225);
+	ratioPercentage.setWidth(400);
+	if (purpose === "signup") {
+		// inp.add(instructions);
+
+		// let bl = labelText("Base image size:");
+		// // let bPreview = addPicture(world.children[0].sprites.asArray()[0].costume.contents);
+		// let bPreview = addPicture(world.children[0].sprites.asArray()[0].cachedImage);
+		// bl.setWidth(165);
+		// // bPreview.setWidth(200);s
+		// baseLabelRow.add(bl);
+		// baseLabelRow.add(modalButton("?", "explainBase"));
+		// inp.add(baseLabelRow);
+		// inp.add(sizeSliderA);
+
+		// imageRow.add(bPreview);
+		// inp.add(imageRow);
+		// bPreview.keepWithin(inp);
+		// bColLeft.add(labelText("50%"));
+		// bColRight.add(labelText("200%"));
+		// basePercentage.add(bColLeft);
+		// basePercentage.add(bColRight);
+		// inp.add(basePercentage);
+
+		let bl = labelText("Base image size:");
+		bl.setWidth(165);
+		let sprites = world.children[0].sprites.asArray()[0].costumes;
+		// let bPreview = addPicture(world.children[0].sprites.asArray()[0].cachedImage);
+		let bImage = detect(
+			sprites.asArray(),
+			(cost) => cost.name === document.querySelector("#base-img").dataset.costume || ""
+		);
+		let bPreview = addPicture(bImage.contents);
+		baseLabelRow.add(bl);
+		baseLabelRow.add(modalButton("?", "explainBase"));
+		baseColumn.add(baseLabelRow);
+
+		baseColumn.add(sizeSliderA);
+
 		bColLeft.add(labelText("50%"));
 		bColRight.add(labelText("200%"));
-		// transformModelColumn.add(labelText("50%"));
-		// styleModelColumn.add(labelText("200%"));
 		basePercentage.add(bColLeft);
 		basePercentage.add(bColRight);
-		inp.add(basePercentage);
-		// inp.add(labelText("\nStyle Image:"));
-		// inp.add(imageB);
-		inp.add(labelText("Style image size:"));
-		inp.add(sizeSliderB);
+		baseColumn.add(basePercentage);
+		if (document.querySelector("#base-img").dataset.costume) baseColumn.add(bPreview);
+
+		let sl = labelText("Style image size:");
+		sl.setWidth(165);
+
+		let sImage = detect(
+			sprites.asArray(),
+			(cost) => cost.name === document.querySelector("#style-img").dataset.costume || ""
+		);
+		let sPreview = addPicture(sImage.contents);
+
+		styleLabelRow.add(sl);
+		styleLabelRow.add(modalButton("?", "explainStyle"));
+		styleColumn.add(styleLabelRow);
+
+		styleColumn.add(sizeSliderB);
 		sColLeft.add(labelText("50%"));
 		sColRight.add(labelText("200%"));
-		// transformModelColumn.add(labelText("50%"));
-		// styleModelColumn.add(labelText("200%"));
 		stylePercentage.add(sColLeft);
 		stylePercentage.add(sColRight);
-		inp.add(stylePercentage);
-		// inp.add(dof);
-		inp.add(labelText("Stylization strength:"));
+		styleColumn.add(stylePercentage);
+		if (document.querySelector("#style-img").dataset.costume) styleColumn.add(sPreview);
+
+		let rl = labelText("Stylization strength:");
+		rl.setWidth(365);
+		ratioLabelRow.add(rl);
+		ratioLabelRow.add(modalButton("?", "explainRatio"));
+		inp.add(ratioLabelRow);
 		inp.add(slider);
 		ratioColLeft.add(labelText("1%"));
 		ratioColRight.add(labelText("100%"));
 		ratioPercentage.add(ratioColLeft);
 		ratioPercentage.add(ratioColRight);
 		inp.add(ratioPercentage);
-		inp.add(labelText("Creation type:"));
+
+		let cl = labelText("Creation type:");
+		cl.setWidth(365);
+		creationLabelRow.add(cl);
+		creationLabelRow.add(modalButton("?", "explainConversion"));
+		inp.add(creationLabelRow);
 		inp.add(conversionType);
-		// styleModelColumn.add(conversionType);
-		// styleModelColumn.add(labelText("Style Model:"));
-		// styleModelColumn.add(styleModel);
-		// transformModelColumn.add(labelText("Transform Model:"));
-		// transformModelColumn.add(transformModel);
-		// dof.add(styleModelColumn);
-		// dof.add(transformModelColumn);
-		// inp.add(dof);
 	}
 
 	if (msg) {
 		bdy.add(labelText(msg));
 	}
 
+	lnk.add(baseColumn);
+	lnk.add(styleColumn);
+
+	// lnk.add(addPicture(world.children[0].sprites.asArray()[0].cachedImage));
+	bdy.add(instructions);
+	bdy.add(lnk);
 	bdy.add(inp);
-
-	if (tosURL || prvURL) {
-		bdy.add(lnk);
-	}
-	if (tosURL) {
-		lnk.add(linkButton(tosLabel, tosURL));
-	}
-	if (prvURL) {
-		lnk.add(linkButton(prvLabel, prvURL));
-	}
-
-	if (checkBoxLabel) {
-		chk = new ToggleMorph(
-			"checkbox",
-			this,
-			() => (agree = !agree), // action,
-			checkBoxLabel,
-			() => agree //query
-		);
-		chk.edge = this.buttonEdge / 2;
-		chk.outline = this.buttonOutline / 2;
-		chk.outlineColor = this.buttonOutlineColor;
-		chk.outlineGradient = this.buttonOutlineGradient;
-		chk.contrast = this.buttonContrast;
-		chk.fixLayout();
-		bdy.add(chk);
-	}
 
 	basePercentage.fixLayout();
 	bColLeft.fixLayout();
@@ -276,17 +419,27 @@ DialogBoxMorph.prototype.promptVisualizerInput = function (
 	ratioPercentage.fixLayout();
 	ratioColLeft.fixLayout();
 	ratioColLeft.fixLayout();
-
+	baseLabelRow.fixLayout();
+	styleLabelRow.fixLayout();
+	ratioLabelRow.fixLayout();
+	creationLabelRow.fixLayout();
+	imageRow.fixLayout();
 	inp.fixLayout();
+	baseColumn.fixLayout();
+	styleColumn.fixLayout();
 	lnk.fixLayout();
+
 	bdy.fixLayout();
+
+	// bdy.fixLayout();
 
 	this.labelString = title;
 	this.createLabel();
 
-	if (pic) {
-		this.setPicture(pic);
-	}
+	console.log(world.children[0].sprites.asArray()[0].costume.contents);
+	// if (pic) {
+
+	// }
 
 	this.addBody(bdy);
 
@@ -565,6 +718,7 @@ SpriteMorph.prototype.useStageForStyleTransferImage = function (type) {
 
 	finalImg.id = `${type}-img`;
 	finalImg.src = data;
+
 	finalImg.style.width = "auto";
 	finalImg.style.height = "auto";
 	visualizer.appendChild(finalImg);
@@ -945,6 +1099,7 @@ SpriteMorph.prototype.useCostumeForStyleTransferImage = function (name, type) {
 
 	finalImg.id = `${type}-img`;
 	finalImg.src = data;
+	finalImg.dataset.costume = name;
 	finalImg.style.width = "auto";
 	finalImg.style.height = "auto";
 	visualizer.appendChild(finalImg);
@@ -974,4 +1129,40 @@ SpriteMorph.prototype.getWorldChildren = function () {
 	}
 
 	return false;
+};
+
+SpriteMorph.prototype.createImageUsingAST = function () {
+	let baseImage, styleImage;
+	baseImage = document.querySelector("#base-img").src;
+	styleImage = document.querySelector("#style-img").src;
+	let payload = {
+		contentImage: baseImage,
+		sourceImage: styleImage,
+		styleModel: "mobilenet",
+		transformModel: "separable",
+		styleRatio: 1.0,
+		contentSize: 1.0,
+		sourceSize: 1.0,
+	};
+
+	window.application.generateStylizedImage(payload);
+};
+
+SpriteMorph.prototype.checkForASTImage = function (type) {
+	let img = document.querySelector(`#${type}-img`);
+
+	if (img) return true;
+
+	return false;
+};
+
+SpriteMorph.prototype.switchToASTCostume = function () {
+	if (!document.querySelector("#style-canvas")) return;
+
+	let image = document.querySelector("#style-canvas");
+
+	let cos = new Costume(image, "processed");
+
+	let ide = this.parentThatIsA(IDE_Morph);
+	ide.currentSprite.wearCostume(cos);
 };

@@ -59,7 +59,8 @@ var Core = function () {
         transformModel: "separable",
         styleRatio: 0.5,
         contentSize: 100,
-        sourceSize: 100
+        sourceSize: 100,
+        download: true
       };
 
       if (options) {
@@ -104,11 +105,14 @@ var Core = function () {
           var a = document.createElement("a");
 
           _this2.fixStylizedImage();
-          a.setAttribute("download", "output.png");
-          a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0));
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+          document.querySelector('#converted-image').src = _this2.stylized.toDataURL("image/png", 1.0);
+          if (generic.download) {
+            a.setAttribute("download", "output.png");
+            a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0));
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
 
           // Calls the block that hides the progress bar to user
           if (typeof world !== "undefined") {

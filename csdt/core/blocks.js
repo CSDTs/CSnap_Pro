@@ -300,6 +300,21 @@ export let csdtBlocks = {
 		category: "other",
 		spec: "(legacy) set costume color to %n ",
 	},
+	checkForASTImage: {
+		type: "reporter",
+		category: "other",
+		spec: "check if %ast image exists ",
+	},
+	createImageUsingAST: {
+		type: "command",
+		category: "other",
+		spec: "create image using AST (no prompt) ",
+	},
+	switchToASTCostume: {
+		type: "command",
+		category: "other",
+		spec: "wear AST image as costume ",
+	},
 };
 
 // export let blockMigrations = {
@@ -2206,6 +2221,9 @@ export function blockTemplates(
 		blocks.push(block("getCurrentFilePicker"));
 		blocks.push(block("getCurrentPaintEditor"));
 		blocks.push(block("getWorldChildren"));
+		blocks.push(block("checkForASTImage"));
+		blocks.push(block("createImageUsingAST"));
+		blocks.push(block("switchToASTCostume"));
 
 		if (SpriteMorph.prototype.showingExtensions) {
 			blocks.push("=");

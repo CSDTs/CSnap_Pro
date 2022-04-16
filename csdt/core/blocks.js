@@ -8,6 +8,33 @@
 
 modules.csdtBlocks = "2022-February-28";
 
+export let categories = [
+	"motion",
+	"looks",
+	"sound",
+	"pen",
+	"control",
+	"sensing",
+	"operators",
+	"variables",
+	"lists",
+	"ai",
+	"other",
+];
+
+export let blockColor = {
+	motion: new Color(74, 108, 212),
+	looks: new Color(143, 86, 227),
+	sound: new Color(207, 74, 217),
+	pen: new Color(0, 161, 120),
+	control: new Color(230, 168, 34),
+	sensing: new Color(4, 148, 220),
+	operators: new Color(98, 194, 19),
+	variables: new Color(243, 118, 29),
+	lists: new Color(217, 77, 17),
+	ai: new Color(150, 150, 150),
+	other: new Color(150, 150, 150),
+};
 ////////////////////////////////////////////////////////////////
 // Special Block Syntax (SyntaxElementMorph)
 // If you need to create a dropdown with specific values
@@ -245,16 +272,7 @@ export let csdtBlocks = {
 		category: "other",
 		spec: "use stage for %ast image",
 	},
-	useCostumeForStyleTransferImage: {
-		type: "command",
-		category: "other",
-		spec: "use costume %cst for %ast image",
-	},
-	clearStyleTransferImage: {
-		type: "command",
-		category: "other",
-		spec: "clear %ast image - AI",
-	},
+
 	importImageOnlyStyleTransfer: {
 		type: "command",
 		category: "other",
@@ -305,15 +323,33 @@ export let csdtBlocks = {
 		category: "other",
 		spec: "check if %ast image exists ",
 	},
-	createImageUsingAST: {
-		type: "command",
-		category: "other",
-		spec: "create image using AST (no prompt) ",
-	},
+
 	switchToASTCostume: {
 		type: "command",
 		category: "other",
 		spec: "wear AST image as costume ",
+	},
+	////////////////////////////////////////////////////////////////
+	createImageUsingStyleTransfer: {
+		type: "command",
+		category: "ai",
+		spec: "create image using AST - advanced? %b ",
+		defaults: [false],
+	},
+	useCostumeForStyleTransferImage: {
+		type: "command",
+		category: "ai",
+		spec: "use costume %cst for %ast image",
+	},
+	clearStyleTransferImage: {
+		type: "command",
+		category: "ai",
+		spec: "clear %ast image",
+	},
+	saveStyleTransferImageAsCostume: {
+		type: "command",
+		category: "ai",
+		spec: "save AST image as costume",
 	},
 };
 
@@ -2210,9 +2246,11 @@ export function blockTemplates(
 		blocks.push(block("doInsertInList"));
 		blocks.push(block("doReplaceInList"));
 		blocks.push("=");
-
+		blocks.push(block("createImageUsingStyleTransfer"));
 		blocks.push(block("useStageForStyleTransferImage"));
 		blocks.push(block("useCostumeForStyleTransferImage"));
+		blocks.push(block("saveStyleTransferImageAsCostume"));
+		blocks.push(block("clearStyleTransferImage"));
 
 		blocks.push(block("importImageOnlyStyleTransfer"));
 		blocks.push(block("toggleASTProgress"));
@@ -2222,7 +2260,7 @@ export function blockTemplates(
 		blocks.push(block("getCurrentPaintEditor"));
 		blocks.push(block("getWorldChildren"));
 		blocks.push(block("checkForASTImage"));
-		blocks.push(block("createImageUsingAST"));
+
 		blocks.push(block("switchToASTCostume"));
 
 		if (SpriteMorph.prototype.showingExtensions) {

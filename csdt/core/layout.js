@@ -1040,7 +1040,7 @@ export function createCategories() {
 	// De-categorizes the blocks for tutorials
 	if (!StageMorph.prototype.decategorize) {
 		SpriteMorph.prototype.categories.forEach((cat) => {
-			if (!contains(["lists", "other"], cat)) {
+			if (!contains(["ai", "lists", "other"], cat)) {
 				addCategoryButton(cat);
 			}
 		});

@@ -58,6 +58,16 @@ export let csdtSyntax = {
 			style: ["style"],
 		},
 	},
+	"%astp": {
+		type: "input",
+		tags: "read-only static",
+		menu: {
+			"§_astp": null,
+			"base image size": ["base image size"],
+			"style image size": ["style image size"],
+			"stylization ratio": ["stylization ratio"],
+		},
+	},
 	"%scft": {
 		type: "input",
 		tags: "read-only static",
@@ -278,11 +288,7 @@ export let csdtBlocks = {
 		category: "other",
 		spec: "import image for %ast - AI",
 	},
-	checkIfImageWasGenerated: {
-		type: "reporter",
-		category: "other",
-		spec: "was %ast image created - AI",
-	},
+
 	toggleASTProgress: {
 		type: "command",
 		category: "other",
@@ -333,8 +339,8 @@ export let csdtBlocks = {
 	createImageUsingStyleTransfer: {
 		type: "command",
 		category: "ai",
-		spec: "create image using AST - advanced? %b ",
-		defaults: [false],
+		spec: "create image using AST - advanced? %b download? %b",
+		defaults: [false, false],
 	},
 	useCostumeForStyleTransferImage: {
 		type: "command",
@@ -349,7 +355,22 @@ export let csdtBlocks = {
 	saveStyleTransferImageAsCostume: {
 		type: "command",
 		category: "ai",
-		spec: "save AST image as costume",
+		spec: "save and switch to AST image",
+	},
+	setStyleTransferParameter: {
+		type: "command",
+		category: "ai",
+		spec: "set AST %astp to %n %",
+	},
+	getStyleTransferParameter: {
+		type: "reporter",
+		category: "ai",
+		spec: "get AST %astp",
+	},
+	checkIfImageWasGenerated: {
+		type: "reporter",
+		category: "other",
+		spec: "was %ast image created",
 	},
 };
 
@@ -2247,21 +2268,23 @@ export function blockTemplates(
 		blocks.push(block("doReplaceInList"));
 		blocks.push("=");
 		blocks.push(block("createImageUsingStyleTransfer"));
-		blocks.push(block("useStageForStyleTransferImage"));
 		blocks.push(block("useCostumeForStyleTransferImage"));
+		blocks.push(block("useStageForStyleTransferImage"));
 		blocks.push(block("saveStyleTransferImageAsCostume"));
 		blocks.push(block("clearStyleTransferImage"));
+		blocks.push(block("setStyleTransferParameter"));
+		blocks.push(block("getStyleTransferParameter"));
+		blocks.push(block("checkIfImageWasGenerated"));
 
-		blocks.push(block("importImageOnlyStyleTransfer"));
-		blocks.push(block("toggleASTProgress"));
-		blocks.push(block("setDreamImageForAI"));
-		blocks.push(block("createImageUsingAI"));
-		blocks.push(block("getCurrentFilePicker"));
-		blocks.push(block("getCurrentPaintEditor"));
-		blocks.push(block("getWorldChildren"));
-		blocks.push(block("checkForASTImage"));
+		// blocks.push(block("importImageOnlyStyleTransfer"));
+		// blocks.push(block("toggleASTProgress"));
+		// blocks.push(block("setDreamImageForAI"));
+		// blocks.push(block("createImageUsingAI"));
+		// blocks.push(block("getCurrentFilePicker"));
+		// blocks.push(block("getCurrentPaintEditor"));
+		// blocks.push(block("getWorldChildren"));
 
-		blocks.push(block("switchToASTCostume"));
+		// blocks.push(block("switchToASTCostume"));
 
 		if (SpriteMorph.prototype.showingExtensions) {
 			blocks.push("=");

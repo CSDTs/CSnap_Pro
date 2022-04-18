@@ -258,27 +258,6 @@ IDE_Morph.prototype.selectAiImage = function (folderName, items, imageType, payl
 
 ////////////////////////////////////////////////////////////////
 
-SpriteMorph.prototype.useStageForStyleTransferImage = function (type) {
-	if (type == "") return;
-	this.clearStyleTransferImage(type);
-	let ide = this.parentThatIsA(IDE_Morph);
-
-	let finalImg = document.createElement("IMG");
-	let visualizer = document.getElementById("visualizer");
-	let data = ide.stage.fullImage().toDataURL();
-
-	finalImg.id = `${type}-img`;
-	finalImg.src = data;
-
-	finalImg.style.width = "auto";
-	finalImg.style.height = "auto";
-	visualizer.appendChild(finalImg);
-};
-
-SpriteMorph.prototype.checkIfImageWasGenerated = function (type) {
-	return document.querySelector(`#${type}-img`) != null;
-};
-
 SpriteMorph.prototype.importImageOnlyStyleTransfer = function (userVar) {
 	if (userVar == "") return;
 	this.clearStyleTransferImage(userVar);
@@ -407,26 +386,6 @@ HandMorph.prototype.processImageFromImport = function (event, userVar) {
 	}
 };
 
-SpriteMorph.prototype.toggleASTProgress = function (bool) {
-	// console.log(bool);
-	let progress = document.querySelector("#vis-progress");
-	if (bool) {
-		progress.style.display = "inline-flex";
-		progress.hidden = !bool;
-	} else {
-		progress.style.display = "none";
-		progress.hidden = bool;
-	}
-};
-
-SpriteMorph.prototype.sizeErrorHandlingAST = function () {
-	new DialogBoxMorph().inform(
-		"AI Image Sizing",
-		"One of your images is too big. Max size is 1080p. Please try again with smaller images.",
-		this.world()
-	);
-};
-
 SpriteMorph.prototype.setDreamImageForAI = function (userVar) {
 	if (userVar == "") return;
 	this.clearStyleTransferImage(userVar);
@@ -536,7 +495,6 @@ HandMorph.prototype.processDreamImageDrop = function (event, userVar) {
 		return "not an image";
 	}
 };
-
 IDE_Morph.prototype.droppedDreamImage = function (aCanvas, name, userVar) {
 	var costume = new Costume(
 		aCanvas,
@@ -652,29 +610,57 @@ SpriteMorph.prototype.switchToASTCostume = function () {
 	ide.currentSprite.wearCostume(cos);
 };
 
-SpriteMorph.prototype.saveStyleTransferImageAsCostume = function () {
-	if (!document.querySelector("#style-canvas")) return;
-
-	let image = document.querySelector("#style-canvas");
-
-	let cos = new Costume(image, "ast_" + Date.now().toString());
-
-	let ide = this.parentThatIsA(IDE_Morph);
-	ide.currentSprite.addCostume(cos);
-	ide.currentSprite.wearCostume(cos);
-};
-
 ////////////////////////////////////////////////////////////////
 //Refactored Functions
 ////////////////////////////////////////////////////////////////
+
+SpriteMorph.prototype.setStyleTransferParameter = function (param, value) {
+	let ide = this.parentThatIsA(IDE_Morph);
+	if (param == "" || value == "") return;
+	try {
+		ide.setVar(param, value);
+	} catch (e) {
+		//variable doesn't exist, so create it:
+		let pair = [param, true];
+
+		if (this.isVariableNameInUse(pair[0])) {
+			this.inform("that name is already in use");
+		} else {
+			this.addVariable(pair[0], pair[1]);
+			// this.toggleVariableWatcher(pair[0], pair[1]);
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+		}
+
+		ide.setVar(param, value);
+	}
+};
+
+SpriteMorph.prototype.getStyleTransferParameter = function (param) {
+	let ide = this.parentThatIsA(IDE_Morph);
+	if (param == "") return;
+	try {
+		return ide.getVar(param);
+	} catch (e) {
+		//variable doesn't exist, so create it:
+		let pair = [param, true];
+
+		if (this.isVariableNameInUse(pair[0])) {
+			this.inform("that name is already in use");
+		} else {
+			this.addVariable(pair[0], pair[1]);
+			// this.toggleVariableWatcher(pair[0], pair[1]);
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+		}
+
+		return ide.getVar(param);
+	}
+};
 
 SpriteMorph.prototype.useCostumeForStyleTransferImage = function (name, type) {
 	if (type == "") return;
 	this.clearStyleTransferImage(type);
 
 	let cst = detect(this.costumes.asArray(), (cost) => cost.name === name);
-
-	console.log(cst.contents.width);
 
 	let payload = {
 		data: cst.contents.toDataURL(),
@@ -687,7 +673,35 @@ SpriteMorph.prototype.useCostumeForStyleTransferImage = function (name, type) {
 	createStyleTransferImage(payload);
 };
 
-SpriteMorph.prototype.createImageUsingStyleTransfer = function (isAdvanced) {
+SpriteMorph.prototype.useStageForStyleTransferImage = function (type) {
+	if (type == "") return;
+	this.clearStyleTransferImage(type);
+
+	let ide = this.parentThatIsA(IDE_Morph);
+
+	// let finalImg = document.createElement("IMG");
+	// let visualizer = document.getElementById("visualizer");
+	// let stage = ide.stage.fullImage().toDataURL();
+
+	// finalImg.id = `${type}-img`;
+	// finalImg.src = data;
+
+	// finalImg.style.width = "auto";
+	// finalImg.style.height = "auto";
+	// visualizer.appendChild(finalImg);
+
+	let payload = {
+		data: ide.stage.fullImage().toDataURL(),
+		type: type,
+		width: ide.stage.dimensions.x,
+		height: ide.stage.dimensions.y,
+		costume: "",
+	};
+
+	createStyleTransferImage(payload);
+};
+
+SpriteMorph.prototype.createImageUsingStyleTransfer = function (isAdvanced, isDownloadable) {
 	let ide = this.parentThatIsA(IDE_Morph);
 	let baseImage, styleImage;
 
@@ -696,19 +710,30 @@ SpriteMorph.prototype.createImageUsingStyleTransfer = function (isAdvanced) {
 		styleImage = getStyleTransferImage("style");
 
 		if (isAdvanced) {
-			ide.callStyleTransferPrompt([baseImage.src, styleImage.src]);
+			ide.callStyleTransferPrompt([baseImage.src, styleImage.src], isDownloadable);
 			return;
 		}
+
+		let checkForParams = (param) => {
+			let value = 1.0;
+			try {
+				value = parseFloat(ide.getVar(param)) / 100.0;
+			} catch (e) {
+				value = 1.0;
+			}
+			return value;
+		};
+
 		let payload = {
 			contentImage: baseImage.src,
 			sourceImage: styleImage.src,
 			styleModel: "mobilenet",
 			transformModel: "separable",
-			styleRatio: 1.0,
-			contentSize: 1.0,
-			sourceSize: 1.0,
+			styleRatio: checkForParams("stylization ratio"),
+			contentSize: checkForParams("base image size"),
+			sourceSize: checkForParams("style image size"),
+			download: isDownloadable || false,
 		};
-		console.log(getStyleTransferImage("base"));
 
 		window.application.generateStylizedImage(payload);
 		return;
@@ -723,8 +748,7 @@ SpriteMorph.prototype.clearStyleTransferImage = function (type) {
 
 	if (target) vis.removeChild(target);
 };
-
-IDE_Morph.prototype.callStyleTransferPrompt = function (payload) {
+IDE_Morph.prototype.callStyleTransferPrompt = function (payload, isDownloadable) {
 	let myself = this;
 
 	payload.push(createCanvasForStyleTransfer(payload[0]));
@@ -740,7 +764,7 @@ IDE_Morph.prototype.callStyleTransferPrompt = function (payload) {
 		null,
 		world,
 		null,
-		null,
+		isDownloadable,
 		payload
 	);
 };
@@ -755,7 +779,7 @@ DialogBoxMorph.prototype.promptInputForStyleTransfer = function (
 	checkBoxLabel,
 	world,
 	pic,
-	msg,
+	isDownloadable,
 	data
 ) {
 	var baseSizeSlider = new SliderMorph(50, 200, 100, 6, "horizontal"),
@@ -1011,6 +1035,7 @@ DialogBoxMorph.prototype.promptInputForStyleTransfer = function (
 			styleRatio: ratioSlider.value / 100.0,
 			contentSize: baseSizeSlider.value / 100.0,
 			sourceSize: styleSizeSlider.value / 100.0,
+			download: isDownloadable || false,
 		};
 
 		window.application.generateStylizedImage(payload);
@@ -1019,7 +1044,41 @@ DialogBoxMorph.prototype.promptInputForStyleTransfer = function (
 
 	this.popUp(world);
 };
+SpriteMorph.prototype.saveStyleTransferImageAsCostume = function () {
+	if (!document.querySelector("#style-canvas")) return;
 
+	let image = document.querySelector("#style-canvas");
+
+	let cos = new Costume(image, "ast_" + Date.now().toString());
+
+	let ide = this.parentThatIsA(IDE_Morph);
+	ide.currentSprite.addCostume(cos);
+	ide.currentSprite.wearCostume(cos);
+};
+
+SpriteMorph.prototype.sizeErrorHandlingAST = function () {
+	new DialogBoxMorph().inform(
+		"AI Image Sizing",
+		"One of your images is too big. Max size is 1080p. Please try again with smaller images.",
+		this.world()
+	);
+};
+
+SpriteMorph.prototype.toggleASTProgress = function (bool) {
+	// console.log(bool);
+	let progress = document.querySelector("#vis-progress");
+	if (bool) {
+		progress.style.display = "inline-flex";
+		progress.hidden = !bool;
+	} else {
+		progress.style.display = "none";
+		progress.hidden = bool;
+	}
+};
+
+SpriteMorph.prototype.checkIfImageWasGenerated = function (type) {
+	return document.querySelector(`#${type}-img`) != null;
+};
 ////////////////////////////////////////////////////////////////
 // Helper functions
 ////////////////////////////////////////////////////////////////

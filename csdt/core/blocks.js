@@ -330,11 +330,6 @@ export let csdtBlocks = {
 		spec: "check if %ast image exists ",
 	},
 
-	switchToASTCostume: {
-		type: "command",
-		category: "other",
-		spec: "wear AST image as costume ",
-	},
 	////////////////////////////////////////////////////////////////
 	createImageUsingStyleTransfer: {
 		type: "command",
@@ -351,6 +346,11 @@ export let csdtBlocks = {
 		type: "command",
 		category: "ai",
 		spec: "clear %ast image",
+	},
+	switchToASTCostume: {
+		type: "command",
+		category: "other",
+		spec: "switch to AST image",
 	},
 	saveStyleTransferImageAsCostume: {
 		type: "command",
@@ -370,7 +370,17 @@ export let csdtBlocks = {
 	checkIfImageWasGenerated: {
 		type: "reporter",
 		category: "other",
-		spec: "was %ast image created",
+		spec: "was %ast image set",
+	},
+	checkIfImageWasConverted: {
+		type: "reporter",
+		category: "other",
+		spec: "was AST image created",
+	},
+	clearConvertedStyleTransferImage: {
+		type: "command",
+		category: "other",
+		spec: "clear AST created image",
 	},
 };
 

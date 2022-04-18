@@ -1079,6 +1079,18 @@ SpriteMorph.prototype.toggleASTProgress = function (bool) {
 SpriteMorph.prototype.checkIfImageWasGenerated = function (type) {
 	return document.querySelector(`#${type}-img`) != null;
 };
+
+SpriteMorph.prototype.checkIfImageWasConverted = function () {
+	return document.querySelector(`#converted-image`).src != "";
+};
+
+SpriteMorph.prototype.clearConvertedStyleTransferImage = function () {
+	let target = document.querySelector("#converted-image");
+	// let target = document.querySelector(`#${type}-img`);
+
+	if (target.src) target.removeAttribute("src");
+};
+
 ////////////////////////////////////////////////////////////////
 // Helper functions
 ////////////////////////////////////////////////////////////////

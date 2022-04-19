@@ -747,6 +747,7 @@ SpriteMorph.prototype.useStageForStyleTransferImage = function (type) {
 SpriteMorph.prototype.createImageUsingStyleTransfer = function (isAdvanced, isDownloadable) {
 	let ide = this.parentThatIsA(IDE_Morph);
 	let baseImage, styleImage;
+	this.clearConvertedStyleTransferImage();
 
 	if (checkForStyleTransferImage("base") && checkForStyleTransferImage("style")) {
 		baseImage = getStyleTransferImage("base");

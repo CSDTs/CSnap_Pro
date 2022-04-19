@@ -339,12 +339,12 @@ export let csdtBlocks = {
 	switchToASTCostume: {
 		type: "command",
 		category: "other",
-		spec: "switch to NST image when finished",
+		spec: "switch to NST image",
 	},
 	saveStyleTransferImageAsCostume: {
 		type: "command",
 		category: "ai",
-		spec: "save and switch to NST image when finished",
+		spec: "save and switch to NST image",
 	},
 	setStyleTransferParameter: {
 		type: "command",

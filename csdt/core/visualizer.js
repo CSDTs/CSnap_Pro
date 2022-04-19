@@ -635,11 +635,54 @@ SpriteMorph.prototype.setStyleTransferParameter = function (param, value) {
 	}
 };
 
+SpriteMorph.prototype.setStyleTransferMode = function (value) {
+	let ide = this.parentThatIsA(IDE_Morph);
+	let param = "conversion mode";
+	if (value == "") return;
+	try {
+		ide.setVar(param, value);
+	} catch (e) {
+		//variable doesn't exist, so create it:
+		let pair = [param, true];
+
+		if (this.isVariableNameInUse(pair[0])) {
+			this.inform("that name is already in use");
+		} else {
+			this.addVariable(pair[0], pair[1]);
+			// this.toggleVariableWatcher(pair[0], pair[1]);
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+		}
+
+		ide.setVar(param, value);
+	}
+};
+
 SpriteMorph.prototype.getStyleTransferParameter = function (param) {
 	let ide = this.parentThatIsA(IDE_Morph);
 	if (param == "") return;
 	try {
 		return ide.getVar(param);
+	} catch (e) {
+		//variable doesn't exist, so create it:
+		let pair = [param, true];
+
+		if (this.isVariableNameInUse(pair[0])) {
+			this.inform("that name is already in use");
+		} else {
+			this.addVariable(pair[0], pair[1]);
+			// this.toggleVariableWatcher(pair[0], pair[1]);
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+		}
+
+		return ide.getVar(param);
+	}
+};
+
+SpriteMorph.prototype.getStyleTransferMode = function () {
+	let ide = this.parentThatIsA(IDE_Morph);
+	if (param == "") return;
+	try {
+		return ide.getVar("conversion mode");
 	} catch (e) {
 		//variable doesn't exist, so create it:
 		let pair = [param, true];
@@ -724,11 +767,23 @@ SpriteMorph.prototype.createImageUsingStyleTransfer = function (isAdvanced, isDo
 			return value;
 		};
 
+		let checkMode = () => {
+			let value = "fast";
+			try {
+				value = ide.getVar("conversion mode");
+			} catch (e) {
+				value = "fast";
+			}
+			return value;
+		};
+
+		let mode = checkMode();
+
 		let payload = {
 			contentImage: baseImage.src,
 			sourceImage: styleImage.src,
-			styleModel: "mobilenet",
-			transformModel: "separable",
+			styleModel: mode === "fast" ? "mobilenet" : "inception",
+			transformModel: mode === "fast" ? "separable" : "original",
 			styleRatio: checkForParams("stylization ratio"),
 			contentSize: checkForParams("base image size"),
 			sourceSize: checkForParams("style image size"),

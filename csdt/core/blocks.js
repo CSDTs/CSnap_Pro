@@ -1710,6 +1710,13 @@ export function clear() {
 	this.clearEffects();
 	this.setVisibility(true);
 	this.hasBorder = false;
+
+	try {
+		this.deleteVariable("base image size");
+		this.deleteVariable("style image size");
+		this.deleteVariable("stylization ratio");
+		this.deleteVariable("conversion mode");
+	} catch (e) {}
 }
 
 export function doSwitchToCostume(id, noShadow) {

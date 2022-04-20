@@ -703,8 +703,13 @@ SpriteMorph.prototype.useCostumeForStyleTransferImage = function (name, type) {
 	if (type == "") return;
 	this.clearStyleTransferImage(type);
 
-	let cst = detect(this.costumes.asArray(), (cost) => cost.name === name);
+	let cst;
+	let isCostumeNumber = Process.prototype.reportIsA(name, "number");
 
+	if (isCostumeNumber) cst = this.costumes.asArray()[name - 1];
+	else cst = detect(this.costumes.asArray(), (cost) => cost.name === name);
+
+	if (cst == undefined) throw new Error("Costume does not exist");
 	let payload = {
 		data: cst.contents.toDataURL(),
 		type: type,

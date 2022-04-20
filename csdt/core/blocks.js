@@ -8,6 +8,33 @@
 
 modules.csdtBlocks = "2022-February-28";
 
+export let categories = [
+	"motion",
+	"looks",
+	"sound",
+	"pen",
+	"control",
+	"sensing",
+	"operators",
+	"variables",
+	"lists",
+	"other",
+	"ai",
+];
+
+export let blockColor = {
+	motion: new Color(74, 108, 212),
+	looks: new Color(143, 86, 227),
+	sound: new Color(207, 74, 217),
+	pen: new Color(0, 161, 120),
+	control: new Color(230, 168, 34),
+	sensing: new Color(4, 148, 220),
+	operators: new Color(98, 194, 19),
+	variables: new Color(243, 118, 29),
+	lists: new Color(217, 77, 17),
+	other: new Color(150, 150, 150),
+	ai: new Color(100, 100, 100),
+};
 ////////////////////////////////////////////////////////////////
 // Special Block Syntax (SyntaxElementMorph)
 // If you need to create a dropdown with specific values
@@ -29,6 +56,25 @@ export let csdtSyntax = {
 			"§_ast": null,
 			base: ["base"],
 			style: ["style"],
+		},
+	},
+	"%astp": {
+		type: "input",
+		tags: "read-only static",
+		menu: {
+			"§_astp": null,
+			"base image size": ["base image size"],
+			"style image size": ["style image size"],
+			"stylization ratio": ["stylization ratio"],
+		},
+	},
+	"%astm": {
+		type: "input",
+		tags: "read-only static",
+		menu: {
+			"§_astm": null,
+			fast: ["fast"],
+			"high quality": ["high quality"],
 		},
 	},
 	"%scft": {
@@ -66,9 +112,9 @@ export let csdtMigrations = {
 		offset: 0,
 	},
 	changeCostumeColor: {
-		selector: "setEffect",
-		inputs: [["color"]],
-		offset: 1,
+		selector: "legacySetCostumeColor",
+		// inputs: [["color"]],
+		offset: 0,
 	},
 	setCostumeShade: {
 		selector: "setEffect",
@@ -235,70 +281,120 @@ export let csdtBlocks = {
 		spec: "%eff effect",
 		defaults: [["color"]],
 	},
-	setDreamImageForAI: {
+	// setDreamImageForAI: {
+	// 	type: "command",
+	// 	category: "other",
+	// 	spec: "set %ast image - AI",
+	// },
+
+	// importImageOnlyStyleTransfer: {
+	// 	type: "command",
+	// 	category: "other",
+	// 	spec: "import image for %ast - AI",
+	// },
+
+	// getCurrentFilePicker: {
+	// 	type: "reporter",
+	// 	category: "other",
+	// 	spec: "has file picker",
+	// },
+	// getCurrentPaintEditor: {
+	// 	type: "reporter",
+	// 	category: "other",
+	// 	spec: "is paint editor visible",
+	// },
+	// getWorldChildren: {
+	// 	type: "reporter",
+	// 	category: "other",
+	// 	spec: "is world children",
+	// },
+	legacySetCostumeColor: {
 		type: "command",
-		category: "other",
-		spec: "set %ast image - AI",
+		category: "looks",
+		spec: "(legacy) set costume color to %n ",
 	},
-	useStageForStyleTransferImage: {
+
+	////////////////////////////////////////////////////////////////
+	createImageUsingStyleTransfer: {
 		type: "command",
-		category: "other",
-		spec: "use stage for %ast image",
+		category: "ai",
+		spec: "create image using NST - advanced? %b download? %b",
+		defaults: [false, false],
 	},
 	useCostumeForStyleTransferImage: {
 		type: "command",
-		category: "other",
+		category: "ai",
 		spec: "use costume %cst for %ast image",
+	},
+	useStageForStyleTransferImage: {
+		type: "command",
+		category: "ai",
+		spec: "use stage for %ast image",
 	},
 	clearStyleTransferImage: {
 		type: "command",
-		category: "other",
-		spec: "clear %ast image - AI",
+		category: "ai",
+		spec: "clear %ast image",
 	},
-	importImageOnlyStyleTransfer: {
+	switchToASTCostume: {
 		type: "command",
-		category: "other",
-		spec: "import image for %ast - AI",
+		category: "ai",
+		spec: "switch to NST image",
+	},
+	saveStyleTransferImageAsCostume: {
+		type: "command",
+		category: "ai",
+		spec: "save and switch to NST image",
+	},
+	setStyleTransferParameter: {
+		type: "command",
+		category: "ai",
+		spec: "set NST %astp to %n %",
+	},
+	getStyleTransferParameter: {
+		type: "reporter",
+		category: "ai",
+		spec: "get NST %astp",
+	},
+	setStyleTransferMode: {
+		type: "command",
+		category: "ai",
+		spec: "set NST mode to %astm",
+	},
+	getStyleTransferMode: {
+		type: "reporter",
+		category: "ai",
+		spec: "get NST mode",
 	},
 	checkIfImageWasGenerated: {
 		type: "reporter",
-		category: "other",
-		spec: "was %ast image created - AI",
+		category: "ai",
+		spec: "was %ast image set",
 	},
-	toggleASTProgress: {
+	checkIfImageWasConverted: {
+		type: "reporter",
+		category: "ai",
+		spec: "was NST image created",
+	},
+	clearConvertedStyleTransferImage: {
 		type: "command",
-		category: "other",
-		spec: "show progress bar - AI %b",
+		category: "ai",
+		spec: "clear NST created image",
+	},
+	checkForASTImage: {
+		type: "reporter",
+		category: "ai",
+		spec: "check if %ast image exists ",
 	},
 	sizeErrorHandlingAST: {
 		type: "command",
-		category: "other",
+		category: "ai",
 		spec: "image sizing error",
 	},
-	createImageUsingAI: {
+	toggleASTProgress: {
 		type: "command",
-		category: "other",
-		spec: "create image using AST",
-	},
-	getCurrentFilePicker: {
-		type: "reporter",
-		category: "other",
-		spec: "has file picker",
-	},
-	getCurrentPaintEditor: {
-		type: "reporter",
-		category: "other",
-		spec: "is paint editor visible",
-	},
-	getWorldChildren: {
-		type: "reporter",
-		category: "other",
-		spec: "is world children",
-	},
-	legacySetCostumeColor: {
-		type: "command",
-		category: "other",
-		spec: "(legacy) set costume color to %n ",
+		category: "ai",
+		spec: "show progress bar - AI %b",
 	},
 };
 
@@ -1614,6 +1710,11 @@ export function clear() {
 	this.clearEffects();
 	this.setVisibility(true);
 	this.hasBorder = false;
+
+	if (this.isVariableNameInUse("base image size")) this.deleteVariable("base image size");
+	if (this.isVariableNameInUse("style image size")) this.deleteVariable("style image size");
+	if (this.isVariableNameInUse("stylization ratio")) this.deleteVariable("stylization ratio");
+	if (this.isVariableNameInUse("conversion mode")) this.deleteVariable("conversion mode");
 }
 
 export function doSwitchToCostume(id, noShadow) {
@@ -2196,16 +2297,13 @@ export function blockTemplates(
 		blocks.push(block("doReplaceInList"));
 		blocks.push("=");
 
-		blocks.push(block("useStageForStyleTransferImage"));
-		blocks.push(block("useCostumeForStyleTransferImage"));
-
-		blocks.push(block("importImageOnlyStyleTransfer"));
-		blocks.push(block("toggleASTProgress"));
-		blocks.push(block("setDreamImageForAI"));
-		blocks.push(block("createImageUsingAI"));
-		blocks.push(block("getCurrentFilePicker"));
-		blocks.push(block("getCurrentPaintEditor"));
-		blocks.push(block("getWorldChildren"));
+		// blocks.push(block("importImageOnlyStyleTransfer"));
+		// blocks.push(block("toggleASTProgress"));
+		// blocks.push(block("setDreamImageForAI"));
+		// blocks.push(block("createImageUsingAI"));
+		// blocks.push(block("getCurrentFilePicker"));
+		// blocks.push(block("getCurrentPaintEditor"));
+		// blocks.push(block("getWorldChildren"));
 
 		if (SpriteMorph.prototype.showingExtensions) {
 			blocks.push("=");
@@ -2229,6 +2327,20 @@ export function blockTemplates(
 			blocks.push("-");
 			blocks.push(block("doShowTable"));
 		}
+	} else if (category === "ai") {
+		blocks.push(block("createImageUsingStyleTransfer"));
+		blocks.push(block("useCostumeForStyleTransferImage"));
+		blocks.push(block("useStageForStyleTransferImage"));
+		blocks.push(block("saveStyleTransferImageAsCostume"));
+		blocks.push(block("switchToASTCostume"));
+		blocks.push(block("clearStyleTransferImage"));
+		blocks.push(block("clearConvertedStyleTransferImage"));
+		blocks.push(block("setStyleTransferParameter"));
+		blocks.push(block("setStyleTransferMode"));
+		blocks.push(block("getStyleTransferParameter"));
+		blocks.push(block("getStyleTransferMode"));
+		blocks.push(block("checkIfImageWasGenerated"));
+		blocks.push(block("checkIfImageWasConverted"));
 	}
 
 	return blocks;

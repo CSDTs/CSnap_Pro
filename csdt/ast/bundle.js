@@ -59,7 +59,8 @@ var Core = function () {
         transformModel: "separable",
         styleRatio: 0.5,
         contentSize: 100,
-        sourceSize: 100
+        sourceSize: 100,
+        download: true
       };
 
       if (options) {
@@ -67,18 +68,18 @@ var Core = function () {
       }
 
       //TODO Convert to dynamic (width sizing issues prevented this from being done earlier)
-      this.contentImg = document.getElementById('base-image');
-      this.contentImg.removeAttribute('height');
-      this.contentImg.removeAttribute('width');
+      this.contentImg = document.getElementById('base-img');
+      // this.contentImg.removeAttribute('height');
+      // this.contentImg.removeAttribute('width');
 
-      this.contentImg.src = generic.contentImage;
+      // this.contentImg.src = generic.contentImage;
       this.contentImg.height = this.contentImg.height * generic.contentSize;
       this.contentImg.width = this.contentImg.width * generic.contentSize;
 
-      this.styleImg = document.getElementById('style-image');
-      this.styleImg.removeAttribute('height');
-      this.styleImg.removeAttribute('width');
-      this.styleImg.src = generic.sourceImage;
+      this.styleImg = document.getElementById('style-img');
+      // this.styleImg.removeAttribute('height');
+      // this.styleImg.removeAttribute('width');
+      // this.styleImg.src = generic.sourceImage;
       this.styleImg.height = this.styleImg.height * generic.sourceSize;
       this.styleImg.width = this.styleImg.width * generic.sourceSize;
 
@@ -104,11 +105,14 @@ var Core = function () {
           var a = document.createElement("a");
 
           _this2.fixStylizedImage();
-          a.setAttribute("download", "output.png");
-          a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0));
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+          document.querySelector('#converted-image').src = _this2.stylized.toDataURL("image/png", 1.0);
+          if (generic.download) {
+            a.setAttribute("download", "output.png");
+            a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0));
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
 
           // Calls the block that hides the progress bar to user
           if (typeof world !== "undefined") {

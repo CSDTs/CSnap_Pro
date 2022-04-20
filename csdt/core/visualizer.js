@@ -1,340 +1,5 @@
-IDE_Morph.prototype.launchVisualizer = function (payload) {
-	let myself = this;
-	new DialogBoxMorph(null, myself.sendVisualizerData).promptVisualizerInput(
-		"Stylize an Image Using AI",
-		"signup",
-		null,
-		null,
-		null,
-		null,
-		null,
-		world,
-		null,
-		null,
-		payload
-	);
-};
-
 IDE_Morph.prototype.sendVisualizerData = function (data) {
 	console.log(data);
-};
-
-DialogBoxMorph.prototype.promptVisualizerInput = function (
-	title,
-	purpose,
-	tosURL,
-	tosLabel,
-	prvURL,
-	prvLabel,
-	checkBoxLabel,
-	world,
-	pic,
-	msg,
-	data
-) {
-	var contentImg = new InputFieldMorph(
-			"images/zigzag.jpg",
-			false,
-			{
-				Beach: ["images/beach.jpg"],
-				Chicago: ["images/chicago.jpg"],
-				GoldenGate: ["images/golden_gate.jpg"],
-				SeaPort: ["images/seaport.jpg"],
-				StatueOfLiberty: ["images/statue_of_liberty.jpg"],
-				Towers: ["images/towers.jpg"],
-				ZigZag: ["images/zigzag.jpg"],
-			},
-			true
-		),
-		imageA = new TextMorph(data[0].split("/static/csnap_pro/")[1], 12),
-		sizeSliderA = new SliderMorph(50, 200, 100, 6, "horizontal"),
-		imageB = new TextMorph(data[1].split("/static/csnap_pro/")[1], 12),
-		sizeSliderB = new SliderMorph(50, 200, 100, 6, "horizontal"),
-		slider = new SliderMorph(1, 100, 50, 6, "horizontal"),
-		styleModel,
-		transformModel,
-		sourceImg = new InputFieldMorph(),
-		contentImgSize = new InputFieldMorph(),
-		sourceImgSize = new InputFieldMorph(),
-		agree = false,
-		chk,
-		dof = new AlignmentMorph("row", 4),
-		styleModelColumn = new AlignmentMorph("column", 2),
-		transformModelColumn = new AlignmentMorph("column", 2),
-		basePercentage = new AlignmentMorph("row", 4),
-		stylePercentage = new AlignmentMorph("row", 4),
-		ratioPercentage = new AlignmentMorph("row", 4),
-		bColLeft = new AlignmentMorph("column", 2),
-		bColRight = new AlignmentMorph("column", 2),
-		sColLeft = new AlignmentMorph("column", 2),
-		sColRight = new AlignmentMorph("column", 2),
-		ratioColLeft = new AlignmentMorph("column", 2),
-		ratioColRight = new AlignmentMorph("column", 2),
-		instructions = new TextMorph("Apply a 'style' to your selected\ncontent image.\n", 12);
-	(inp = new AlignmentMorph("column", 2)),
-		(lnk = new AlignmentMorph("row", 4)),
-		(bdy = new AlignmentMorph("column", this.padding)),
-		(myself = this);
-
-	function labelText(string) {
-		return new TextMorph(
-			localize(string),
-			10,
-			null, // style
-			false, // bold
-			null, // italic
-			null, // alignment
-			null, // width
-			null, // font name
-			MorphicPreferences.isFlat ? null : new Point(1, 1),
-			WHITE // shadowColor
-		);
-	}
-
-	function linkButton(label, url) {
-		var btn = new PushButtonMorph(myself, () => window.open(url), "  " + localize(label) + "  ");
-		btn.fontSize = 10;
-		btn.corner = myself.buttonCorner;
-		btn.edge = myself.buttonEdge;
-		btn.outline = myself.buttonOutline;
-		btn.outlineColor = myself.buttonOutlineColor;
-		btn.outlineGradient = myself.buttonOutlineGradient;
-		btn.padding = myself.buttonPadding;
-		btn.contrast = myself.buttonContrast;
-		btn.fixLayout();
-		return btn;
-	}
-
-	styleModel = new InputFieldMorph(
-		"mobilenet", // text
-		false, // numeric?
-		{
-			Fast: ["mobilenet"],
-			High: ["inception"],
-		},
-		true // read-only
-	);
-
-	transformModel = new InputFieldMorph(
-		"separable", // text
-		false, // numeric?
-		{
-			Fast: ["separable"],
-			High: ["original"],
-		},
-		true // read-only
-	);
-
-	conversionType = new InputFieldMorph(
-		"fast", // text
-		false, // numeric?
-		{
-			Fast: ["fast"],
-			"High Quality": ["high quality"],
-		},
-		true // read-only
-	);
-	inp.alignment = "left";
-	inp.setColor(this.color);
-	bdy.setColor(this.color);
-
-	transformModelColumn.alignment = "left";
-	transformModelColumn.setColor(this.color);
-	transformModelColumn.setWidth(165);
-	transformModelColumn.setHeight(25);
-
-	bColLeft.alignment = "left";
-	bColLeft.setColor(this.color);
-	bColLeft.setWidth(165);
-	bColLeft.setHeight(25);
-	bColRight.alignment = "left";
-	bColRight.setColor(this.color);
-	bColRight.setWidth(10);
-	bColRight.setHeight(25);
-
-	sColLeft.alignment = "left";
-	sColLeft.setColor(this.color);
-	sColLeft.setWidth(165);
-	sColLeft.setHeight(25);
-	sColRight.alignment = "left";
-	sColRight.setColor(this.color);
-	sColRight.setWidth(10);
-	sColRight.setHeight(25);
-
-	ratioColLeft.alignment = "left";
-	ratioColLeft.setColor(this.color);
-	ratioColLeft.setWidth(165);
-	ratioColLeft.setHeight(25);
-	ratioColRight.alignment = "left";
-	ratioColRight.setColor(this.color);
-	ratioColRight.setWidth(10);
-	ratioColRight.setHeight(25);
-
-	contentImg.setWidth(200);
-	imageA.setWidth(200);
-	imageB.setWidth(200);
-	sizeSliderA.setWidth(200);
-	sizeSliderA.setHeight(20);
-	sizeSliderB.setWidth(200);
-	sizeSliderB.setHeight(20);
-	conversionType.setWidth(200);
-	slider.setWidth(200);
-	slider.setHeight(20);
-	styleModel.setWidth(100);
-	transformModel.contents().minWidth = 80;
-	transformModel.setWidth(80);
-	sourceImg.setWidth(200);
-	contentImgSize.setWidth(200);
-	sourceImgSize.setWidth(200);
-
-	if (purpose === "signup") {
-		inp.add(instructions);
-
-		// inp.add(labelText("Content Image:"));
-		// inp.add(imageA);
-		inp.add(labelText("\nBase image size:"));
-		inp.add(sizeSliderA);
-		bColLeft.add(labelText("50%"));
-		bColRight.add(labelText("200%"));
-		// transformModelColumn.add(labelText("50%"));
-		// styleModelColumn.add(labelText("200%"));
-		basePercentage.add(bColLeft);
-		basePercentage.add(bColRight);
-		inp.add(basePercentage);
-		// inp.add(labelText("\nStyle Image:"));
-		// inp.add(imageB);
-		inp.add(labelText("Style image size:"));
-		inp.add(sizeSliderB);
-		sColLeft.add(labelText("50%"));
-		sColRight.add(labelText("200%"));
-		// transformModelColumn.add(labelText("50%"));
-		// styleModelColumn.add(labelText("200%"));
-		stylePercentage.add(sColLeft);
-		stylePercentage.add(sColRight);
-		inp.add(stylePercentage);
-		// inp.add(dof);
-		inp.add(labelText("Stylization strength:"));
-		inp.add(slider);
-		ratioColLeft.add(labelText("1%"));
-		ratioColRight.add(labelText("100%"));
-		ratioPercentage.add(ratioColLeft);
-		ratioPercentage.add(ratioColRight);
-		inp.add(ratioPercentage);
-		inp.add(labelText("Creation type:"));
-		inp.add(conversionType);
-		// styleModelColumn.add(conversionType);
-		// styleModelColumn.add(labelText("Style Model:"));
-		// styleModelColumn.add(styleModel);
-		// transformModelColumn.add(labelText("Transform Model:"));
-		// transformModelColumn.add(transformModel);
-		// dof.add(styleModelColumn);
-		// dof.add(transformModelColumn);
-		// inp.add(dof);
-	}
-
-	if (msg) {
-		bdy.add(labelText(msg));
-	}
-
-	bdy.add(inp);
-
-	if (tosURL || prvURL) {
-		bdy.add(lnk);
-	}
-	if (tosURL) {
-		lnk.add(linkButton(tosLabel, tosURL));
-	}
-	if (prvURL) {
-		lnk.add(linkButton(prvLabel, prvURL));
-	}
-
-	if (checkBoxLabel) {
-		chk = new ToggleMorph(
-			"checkbox",
-			this,
-			() => (agree = !agree), // action,
-			checkBoxLabel,
-			() => agree //query
-		);
-		chk.edge = this.buttonEdge / 2;
-		chk.outline = this.buttonOutline / 2;
-		chk.outlineColor = this.buttonOutlineColor;
-		chk.outlineGradient = this.buttonOutlineGradient;
-		chk.contrast = this.buttonContrast;
-		chk.fixLayout();
-		bdy.add(chk);
-	}
-
-	basePercentage.fixLayout();
-	bColLeft.fixLayout();
-	bColRight.fixLayout();
-
-	stylePercentage.fixLayout();
-	sColLeft.fixLayout();
-	sColLeft.fixLayout();
-
-	ratioPercentage.fixLayout();
-	ratioColLeft.fixLayout();
-	ratioColLeft.fixLayout();
-
-	inp.fixLayout();
-	lnk.fixLayout();
-	bdy.fixLayout();
-
-	this.labelString = title;
-	this.createLabel();
-
-	if (pic) {
-		this.setPicture(pic);
-	}
-
-	this.addBody(bdy);
-
-	this.addButton("ok", "Create Image");
-	this.addButton("cancel", "Cancel");
-	this.fixLayout();
-
-	this.accept = function () {
-		DialogBoxMorph.prototype.accept.call(myself);
-		// world.children[0].showMessage("Creating image. One moment...", 5);
-	};
-
-	this.getInput = function () {
-		let ide = world.children[0];
-		let stage = ide.stage.fullImage();
-
-		let conversion = conversionType.getValue();
-
-		let payload = {
-			contentImage: `${data[0]}`,
-			sourceImage: `${data[1]}`,
-			styleModel: conversionType.getValue() === "fast" ? "mobilenet" : "inception",
-			transformModel: conversionType.getValue() === "fast" ? "separable" : "original",
-			styleRatio: slider.value / 100.0,
-			contentSize: sizeSliderA.value / 100.0,
-			sourceSize: sizeSliderB.value / 100.0,
-		};
-
-		// console.table(payload);
-		if (agree) {
-			window.application.generateStylizedImage();
-		} else {
-			window.application.generateStylizedImage(payload);
-		}
-
-		// if (agree) {
-		// 	window.application.generateStylizedImage();
-		// } else {
-		// 	window.application.generateStylizedImage(payload);
-		// }
-		return payload;
-	};
-
-	if (!this.key) {
-		this.key = "credentials" + title + purpose;
-	}
-
-	this.popUp(world);
 };
 
 IDE_Morph.prototype.promptAiImage = function (payload) {
@@ -471,14 +136,55 @@ IDE_Morph.prototype.selectAiImage = function (folderName, items, imageType, payl
 	dialog.addButton("ok", "Next");
 	dialog.addButton("cancel", "Cancel");
 
+	function cloneCanvas(oldCanvas) {
+		//create a new canvas
+		var newCanvas = document.createElement("canvas");
+		var context = newCanvas.getContext("2d");
+
+		//set dimensions
+		newCanvas.width = oldCanvas.width;
+		newCanvas.height = oldCanvas.height;
+
+		//apply the old canvas to the new one
+		context.drawImage(oldCanvas, 0, 0);
+
+		//return the new canvas
+		return newCanvas;
+	}
+
 	dialog.ok = function () {
 		if (selectedIcon) {
 			if (imageType == "base") {
+				console.log(selectedIcon);
 				payload[0] = selectedIcon.url;
+				SpriteMorph.prototype.createImageForAST({
+					type: "base",
+					data: selectedIcon.url,
+					width: selectedIcon.object.contents.width,
+					height: selectedIcon.object.contents.height,
+					costume: selectedIcon.object.name,
+				});
+
+				let newCanvas = cloneCanvas(selectedIcon.object.contents);
+				newCanvas.dataset.library = selectedIcon.object.name;
+				newCanvas.id = `base-library-canvas`;
+				document.querySelector("#visualizer").appendChild(newCanvas);
+
 				myself.promptAiImage(payload);
 				dialog.destroy();
 			} else if (imageType == "style") {
 				payload[1] = selectedIcon.url;
+				SpriteMorph.prototype.createImageForAST({
+					type: "style",
+					data: selectedIcon.url,
+					width: selectedIcon.object.contents.width,
+					height: selectedIcon.object.contents.height,
+					costume: selectedIcon.object.name,
+				});
+				let newCanvas = cloneCanvas(selectedIcon.object.contents);
+				newCanvas.dataset.library = selectedIcon.object.name;
+				newCanvas.id = `style-library-canvas`;
+				document.querySelector("#visualizer").appendChild(newCanvas);
 				myself.promptAiImage(payload);
 				dialog.destroy();
 			}
@@ -550,37 +256,7 @@ IDE_Morph.prototype.selectAiImage = function (folderName, items, imageType, payl
 	handle = new HandleMorph(dialog, 300, 280, dialog.corner, dialog.corner);
 };
 
-IDE_Morph.prototype.setAiImageByURL = function (url) {};
-
 ////////////////////////////////////////////////////////////////
-
-SpriteMorph.prototype.useStageForStyleTransferImage = function (type) {
-	if (type == "") return;
-	this.clearStyleTransferImage(type);
-	let ide = this.parentThatIsA(IDE_Morph);
-
-	let finalImg = document.createElement("IMG");
-	let visualizer = document.getElementById("visualizer");
-	let data = ide.stage.fullImage().toDataURL();
-
-	finalImg.id = `${type}-img`;
-	finalImg.src = data;
-	finalImg.style.width = "auto";
-	finalImg.style.height = "auto";
-	visualizer.appendChild(finalImg);
-};
-
-SpriteMorph.prototype.clearStyleTransferImage = function (type) {
-	// console.log(type);
-	let vis = document.querySelector("#visualizer");
-	let target = document.querySelector(`#${type}-img`);
-
-	if (target) vis.removeChild(target);
-};
-
-SpriteMorph.prototype.checkIfImageWasGenerated = function (type) {
-	return document.querySelector(`#${type}-img`) != null;
-};
 
 SpriteMorph.prototype.importImageOnlyStyleTransfer = function (userVar) {
 	if (userVar == "") return;
@@ -666,9 +342,11 @@ HandMorph.prototype.processImageFromImport = function (event, userVar) {
 		let finalImg = document.createElement("IMG");
 		let visualizer = document.getElementById("visualizer");
 		// finalImg.src = pic.src;
-		finalImg.style.width = "auto";
-		finalImg.style.height = "auto";
+		// finalImg.width = "auto";
+		// finalImg.height = "auto";
 		finalImg.id = `${userVar}-img`;
+		finalImg.dataset.costume = aFile.name;
+
 		pic.onload = () => {
 			// console.log(pic.width, pic.height);
 			canvas = newCanvas(new Point(pic.width, pic.height), true);
@@ -705,45 +383,6 @@ HandMorph.prototype.processImageFromImport = function (event, userVar) {
 		// ide.stopAllScripts();
 
 		return "not an image";
-	}
-};
-
-SpriteMorph.prototype.toggleASTProgress = function (bool) {
-	// console.log(bool);
-	let progress = document.querySelector("#vis-progress");
-	if (bool) {
-		progress.style.display = "inline-flex";
-		progress.hidden = !bool;
-	} else {
-		progress.style.display = "none";
-		progress.hidden = bool;
-	}
-};
-
-SpriteMorph.prototype.sizeErrorHandlingAST = function () {
-	new DialogBoxMorph().inform(
-		"AI Image Sizing",
-		"One of your images is too big. Max size is 1080p. Please try again with smaller images.",
-		this.world()
-	);
-};
-
-SpriteMorph.prototype.createImageUsingAI = function () {
-	let ide = this.parentThatIsA(IDE_Morph);
-	let checkTarget = document.querySelector("#base-img");
-	let checkSource = document.querySelector("#style-img");
-	let target, source;
-	let payload = ["", ""];
-
-	if (checkTarget && checkSource) {
-		ide.launchVisualizer([checkTarget.src, checkSource.src]);
-	} else {
-		if (checkTarget) {
-			payload[0] = checkTarget.src;
-		} else if (checkSource) {
-			payload[1] = checkSource.src;
-		}
-		ide.promptAiImage(payload);
 	}
 };
 
@@ -856,7 +495,6 @@ HandMorph.prototype.processDreamImageDrop = function (event, userVar) {
 		return "not an image";
 	}
 };
-
 IDE_Morph.prototype.droppedDreamImage = function (aCanvas, name, userVar) {
 	var costume = new Costume(
 		aCanvas,
@@ -891,6 +529,7 @@ IDE_Morph.prototype.droppedDreamImage = function (aCanvas, name, userVar) {
 			let data = costume.contents.toDataURL("image/jpeg", 1.0);
 
 			finalImg.id = `${userVar}-img`;
+			finalImg.dataset.costume = name;
 			finalImg.src = data;
 			finalImg.style.width = "auto";
 			finalImg.style.height = "auto";
@@ -934,22 +573,6 @@ Costume.prototype.editDreamImage = function (aWorld, anIDE, isnew, oncancel, ons
 	);
 };
 
-SpriteMorph.prototype.useCostumeForStyleTransferImage = function (name, type) {
-	if (type == "") return;
-	this.clearStyleTransferImage(type);
-	let ide = this.parentThatIsA(IDE_Morph);
-	let finalImg = document.createElement("IMG");
-	let visualizer = document.getElementById("visualizer");
-	let cst = detect(this.costumes.asArray(), (cost) => cost.name === name);
-	let data = cst.contents.toDataURL();
-
-	finalImg.id = `${type}-img`;
-	finalImg.src = data;
-	finalImg.style.width = "auto";
-	finalImg.style.height = "auto";
-	visualizer.appendChild(finalImg);
-};
-
 SpriteMorph.prototype.getCurrentFilePicker = function () {
 	return this.filePicker == null;
 };
@@ -974,4 +597,649 @@ SpriteMorph.prototype.getWorldChildren = function () {
 	}
 
 	return false;
+};
+
+SpriteMorph.prototype.switchToASTCostume = function () {
+	if (!document.querySelector("#style-canvas")) return;
+
+	let image = document.querySelector("#style-canvas");
+
+	let cos = new Costume(image, "processed");
+
+	let ide = this.parentThatIsA(IDE_Morph);
+	ide.currentSprite.wearCostume(cos);
+};
+
+////////////////////////////////////////////////////////////////
+//Refactored Functions
+////////////////////////////////////////////////////////////////
+
+SpriteMorph.prototype.setStyleTransferParameter = function (param, value) {
+	let ide = this.parentThatIsA(IDE_Morph);
+	if (param == "" || value == "") return;
+	try {
+		ide.setVar(param, value);
+	} catch (e) {
+		//variable doesn't exist, so create it:
+		let pair = [param, true];
+
+		if (this.isVariableNameInUse(pair[0])) {
+			this.inform("that name is already in use");
+		} else {
+			this.addVariable(pair[0], pair[1]);
+			// this.toggleVariableWatcher(pair[0], pair[1]);
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+		}
+
+		ide.setVar(param, value);
+	}
+};
+
+SpriteMorph.prototype.setStyleTransferMode = function (value) {
+	let ide = this.parentThatIsA(IDE_Morph);
+	let param = "conversion mode";
+	if (value == "") return;
+	try {
+		ide.setVar(param, value);
+	} catch (e) {
+		//variable doesn't exist, so create it:
+		let pair = [param, true];
+
+		if (this.isVariableNameInUse(pair[0])) {
+			this.inform("that name is already in use");
+		} else {
+			this.addVariable(pair[0], pair[1]);
+			// this.toggleVariableWatcher(pair[0], pair[1]);
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+		}
+
+		ide.setVar(param, value);
+	}
+};
+
+SpriteMorph.prototype.getStyleTransferParameter = function (param) {
+	let ide = this.parentThatIsA(IDE_Morph);
+	if (param == "") return;
+	try {
+		return ide.getVar(param);
+	} catch (e) {
+		//variable doesn't exist, so create it:
+		let pair = [param, true];
+
+		if (this.isVariableNameInUse(pair[0])) {
+			this.inform("that name is already in use");
+		} else {
+			this.addVariable(pair[0], pair[1]);
+			// this.toggleVariableWatcher(pair[0], pair[1]);
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+		}
+
+		return ide.getVar(param);
+	}
+};
+
+SpriteMorph.prototype.getStyleTransferMode = function () {
+	let ide = this.parentThatIsA(IDE_Morph);
+	if (param == "") return;
+	try {
+		return ide.getVar("conversion mode");
+	} catch (e) {
+		//variable doesn't exist, so create it:
+		let pair = [param, true];
+
+		if (this.isVariableNameInUse(pair[0])) {
+			this.inform("that name is already in use");
+		} else {
+			this.addVariable(pair[0], pair[1]);
+			// this.toggleVariableWatcher(pair[0], pair[1]);
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+		}
+
+		return ide.getVar(param);
+	}
+};
+
+SpriteMorph.prototype.useCostumeForStyleTransferImage = function (name, type) {
+	if (type == "") return;
+	this.clearStyleTransferImage(type);
+
+	let cst;
+	let isCostumeNumber = Process.prototype.reportIsA(name, "number");
+
+	if (isCostumeNumber) cst = this.costumes.asArray()[name - 1];
+	else cst = detect(this.costumes.asArray(), (cost) => cost.name === name);
+
+	if (cst == undefined) throw new Error("Costume does not exist");
+	let payload = {
+		data: cst.contents.toDataURL(),
+		type: type,
+		width: cst.contents.width,
+		height: cst.contents.height,
+		costume: name,
+	};
+
+	createStyleTransferImage(payload);
+};
+
+SpriteMorph.prototype.useStageForStyleTransferImage = function (type) {
+	if (type == "") return;
+	this.clearStyleTransferImage(type);
+
+	let ide = this.parentThatIsA(IDE_Morph);
+
+	// let finalImg = document.createElement("IMG");
+	// let visualizer = document.getElementById("visualizer");
+	// let stage = ide.stage.fullImage().toDataURL();
+
+	// finalImg.id = `${type}-img`;
+	// finalImg.src = data;
+
+	// finalImg.style.width = "auto";
+	// finalImg.style.height = "auto";
+	// visualizer.appendChild(finalImg);
+
+	let payload = {
+		data: ide.stage.fullImage().toDataURL(),
+		type: type,
+		width: ide.stage.dimensions.x,
+		height: ide.stage.dimensions.y,
+		costume: "",
+	};
+
+	createStyleTransferImage(payload);
+};
+
+SpriteMorph.prototype.createImageUsingStyleTransfer = function (isAdvanced, isDownloadable) {
+	let ide = this.parentThatIsA(IDE_Morph);
+	let baseImage, styleImage;
+	this.clearConvertedStyleTransferImage();
+
+	if (checkForStyleTransferImage("base") && checkForStyleTransferImage("style")) {
+		baseImage = getStyleTransferImage("base");
+		styleImage = getStyleTransferImage("style");
+
+		if (isAdvanced) {
+			ide.callStyleTransferPrompt([baseImage.src, styleImage.src], isDownloadable);
+			return;
+		}
+
+		let checkForParams = (param) => {
+			let value = 1.0;
+			try {
+				value = parseFloat(ide.getVar(param)) / 100.0;
+			} catch (e) {
+				value = 1.0;
+			}
+			return value;
+		};
+
+		let checkMode = () => {
+			let value = "fast";
+			try {
+				value = ide.getVar("conversion mode");
+			} catch (e) {
+				value = "fast";
+			}
+			return value;
+		};
+
+		let mode = checkMode();
+
+		let payload = {
+			contentImage: baseImage.src,
+			sourceImage: styleImage.src,
+			styleModel: mode === "fast" ? "mobilenet" : "inception",
+			transformModel: mode === "fast" ? "separable" : "original",
+			styleRatio: checkForParams("stylization ratio"),
+			contentSize: checkForParams("base image size"),
+			sourceSize: checkForParams("style image size"),
+			download: isDownloadable || false,
+		};
+
+		window.application.generateStylizedImage(payload);
+		return;
+	}
+	if (!checkForStyleTransferImage("base")) throw new Error("You need to set a base image before creating.");
+	if (!checkForStyleTransferImage("style")) throw new Error("You need to set a style image before creating.");
+};
+
+SpriteMorph.prototype.clearStyleTransferImage = function (type) {
+	let vis = document.querySelector("#visualizer");
+	let target = document.querySelector(`#${type}-img`);
+
+	if (target) vis.removeChild(target);
+};
+IDE_Morph.prototype.callStyleTransferPrompt = function (payload, isDownloadable) {
+	let myself = this;
+
+	payload.push(createCanvasForStyleTransfer(payload[0]));
+	payload.push(createCanvasForStyleTransfer(payload[1]));
+
+	new DialogBoxMorph(null, myself.sendVisualizerData).promptInputForStyleTransfer(
+		"Stylize an Image Using AI",
+		"style-transfer",
+		null,
+		null,
+		null,
+		null,
+		null,
+		world,
+		null,
+		isDownloadable,
+		payload
+	);
+};
+
+DialogBoxMorph.prototype.promptInputForStyleTransfer = function (
+	title,
+	purpose,
+	tosURL,
+	tosLabel,
+	prvURL,
+	prvLabel,
+	checkBoxLabel,
+	world,
+	pic,
+	isDownloadable,
+	data
+) {
+	var baseSizeSlider = new SliderMorph(50, 200, 100, 6, "horizontal"),
+		styleSizeSlider = new SliderMorph(50, 200, 100, 6, "horizontal"),
+		ratioSlider = new SliderMorph(1, 100, 100, 6, "horizontal"),
+		baseCentLeft = new AlignmentMorph("column", 2),
+		baseCentRight = new AlignmentMorph("column", 2),
+		basePercentage = new AlignmentMorph("row", 4),
+		styleCentLeft = new AlignmentMorph("column", 2),
+		styleCentRight = new AlignmentMorph("column", 2),
+		stylePercentage = new AlignmentMorph("row", 4),
+		ratioColLeft = new AlignmentMorph("column", 2),
+		ratioColRight = new AlignmentMorph("column", 2),
+		ratioLabelRow = new AlignmentMorph("row", 4),
+		baseLabelRow = new AlignmentMorph("row", 4),
+		styleLabelRow = new AlignmentMorph("row", 4),
+		creationLabelRow = new AlignmentMorph("row", 4),
+		ratioPercentage = new AlignmentMorph("row", 4),
+		instructions = new TextMorph("Apply a 'style' to your selected\ncontent image.\n", 12),
+		inp = new AlignmentMorph("column", 2),
+		lnk = new AlignmentMorph("row", 4),
+		bdy = new AlignmentMorph("column", this.padding),
+		myself = this;
+
+	var baseColumn = new AlignmentMorph("column", 2),
+		styleColumn = new AlignmentMorph("column", 2),
+		conversionType = new InputFieldMorph(
+			"fast", // text
+			false, // numeric?
+			{
+				Fast: ["fast"],
+				"High Quality": ["high quality"],
+			},
+			true // read-only
+		);
+
+	function labelText(string) {
+		return new TextMorph(
+			localize(string),
+			10,
+			null, // style
+			false, // bold
+			null, // italic
+			null, // alignment
+			null, // width
+			null, // font name
+			MorphicPreferences.isFlat ? null : new Point(1, 1),
+			WHITE // shadowColor
+		);
+	}
+
+	function modalButton(label, action) {
+		var btn = new PushButtonMorph(myself, action || "ok", "  " + localize(label || "OK") + "  ");
+		btn.fontSize = 10;
+		btn.corner = myself.buttonCorner;
+		btn.edge = myself.buttonEdge;
+		btn.outline = null;
+		btn.outlineColor = null;
+		btn.outlineGradient = null;
+		btn.padding = 0;
+		btn.contrast = null;
+		btn.fixLayout();
+		return btn;
+	}
+
+	function addPicture(aMorphOrCanvas) {
+		let morph = new Morph();
+		morph.isCachingImage = true;
+		morph.cachedImage = aMorphOrCanvas;
+
+		morph.bounds.setWidth(200);
+		morph.bounds.setHeight(200);
+
+		return morph;
+	}
+
+	function createColumn(col, width) {
+		col.alignment = "left";
+		col.setColor(this.color);
+		col.setWidth(width);
+		col.setHeight(25);
+	}
+
+	function createLabelRow(labelA, labelB, left, right, row, parent) {
+		left.add(labelA);
+		right.add(labelB);
+		row.add(left);
+		row.add(right);
+		parent.add(row);
+	}
+
+	function createHintRow(a, b, row, parent) {
+		row.add(a);
+		row.add(modalButton("?", b));
+		parent.add(row);
+	}
+
+	let setSlider = (obj, width) => {
+		obj.setWidth(width);
+		obj.setHeight(20);
+	};
+
+	let getPicture = (type) => {
+		let sprites = world.children[0].sprites.asArray()[0].costumes;
+		let image = detect(
+			sprites.asArray(),
+			(cost) => cost.name === document.querySelector(`#${type}-img`).dataset.costume || ""
+		);
+		let preview = addPicture(image.contents);
+
+		return preview;
+	};
+
+	this.explainBase = function () {
+		new DialogBoxMorph().inform(
+			"Base image size",
+			"Insert def here" +
+				".\n\nA bigger base image\nresults in a more detailed\noutput, but increases the\nprocessing time\nsignificantly.",
+			world,
+			null
+		);
+	};
+	this.explainStyle = function () {
+		new DialogBoxMorph().inform(
+			"Style image size",
+			"Insert def here" +
+				".\n\nChanging the size of a style\nimage usually affects the\ntexture 'seen' by the\nnetwork.",
+			world,
+			null
+		);
+	};
+	this.explainRatio = function () {
+		new DialogBoxMorph().inform(
+			"Stylization ratio",
+			"Insert def here" +
+				".\n\nThis parameter affects the\nstylization strength.The\nfurther to the right, the\nstronger the stylization. This\nis done via interpolation\nbetween the style vectors of\nthe base and style\nimages.",
+			world,
+			null
+		);
+	};
+	this.explainConversion = function () {
+		new DialogBoxMorph().inform(
+			"Creation type",
+			"Insert def here" +
+				".\n\nFast uses smaller training models\nto produce an image\nquickly, while high quality uses\na larger training model\nat the cost of it being\nmore time consuming.",
+			world,
+			null
+		);
+	};
+
+	inp.alignment = "left";
+	inp.setColor(this.color);
+	bdy.setColor(this.color);
+
+	createColumn(baseCentLeft, 165);
+	createColumn(baseCentRight, 10);
+
+	createColumn(styleCentLeft, 165);
+	createColumn(styleCentRight, 10);
+
+	createColumn(ratioColLeft, 365);
+	createColumn(ratioColRight, 10);
+
+	setSlider(baseSizeSlider, 200);
+	setSlider(styleSizeSlider, 200);
+	setSlider(ratioSlider, 400);
+
+	conversionType.setWidth(400);
+	baseColumn.setWidth(225);
+	styleColumn.setWidth(225);
+
+	let bl = labelText("Base image size:");
+	bl.setWidth(165);
+
+	let sl = labelText("Style image size:");
+	sl.setWidth(165);
+
+	let rl = labelText("Stylization strength:");
+	rl.setWidth(365);
+
+	let cl = labelText("Creation type:");
+	cl.setWidth(365);
+
+	if (purpose === "style-transfer") {
+		createHintRow(bl, "explainBase", baseLabelRow, baseColumn);
+		baseColumn.add(baseSizeSlider);
+		createLabelRow(labelText("50%"), labelText("200%"), baseCentLeft, baseCentRight, basePercentage, baseColumn);
+		if (document.querySelector("#base-img").dataset.costume) baseColumn.add(getPicture("base"));
+
+		createHintRow(sl, "explainStyle", styleLabelRow, styleColumn);
+		styleColumn.add(styleSizeSlider);
+		createLabelRow(labelText("50%"), labelText("200%"), styleCentLeft, styleCentRight, stylePercentage, styleColumn);
+		if (document.querySelector("#style-img").dataset.costume) styleColumn.add(getPicture("style"));
+
+		createHintRow(rl, "explainRatio", ratioLabelRow, inp);
+		inp.add(ratioSlider);
+		createLabelRow(labelText("1%"), labelText("100%"), ratioColLeft, ratioColRight, ratioPercentage, inp);
+
+		createHintRow(cl, "explainConversion", creationLabelRow, inp);
+		inp.add(conversionType);
+	}
+
+	lnk.add(baseColumn);
+	lnk.add(styleColumn);
+
+	bdy.add(instructions);
+	bdy.add(lnk);
+	bdy.add(inp);
+
+	basePercentage.fixLayout();
+	baseCentLeft.fixLayout();
+	baseCentRight.fixLayout();
+
+	stylePercentage.fixLayout();
+	styleCentLeft.fixLayout();
+	styleCentLeft.fixLayout();
+
+	ratioPercentage.fixLayout();
+	ratioColLeft.fixLayout();
+	ratioColLeft.fixLayout();
+
+	baseLabelRow.fixLayout();
+	styleLabelRow.fixLayout();
+	ratioLabelRow.fixLayout();
+
+	creationLabelRow.fixLayout();
+
+	inp.fixLayout();
+	baseColumn.fixLayout();
+	styleColumn.fixLayout();
+	lnk.fixLayout();
+
+	bdy.fixLayout();
+
+	this.labelString = title;
+	this.createLabel();
+	this.addBody(bdy);
+
+	this.addButton("ok", "Create Image");
+	this.addButton("cancel", "Cancel");
+	this.fixLayout();
+
+	this.accept = function () {
+		DialogBoxMorph.prototype.accept.call(myself);
+	};
+
+	this.getInput = function () {
+		let payload = {
+			contentImage: `${data[0]}`,
+			sourceImage: `${data[1]}`,
+			styleModel: conversionType.getValue() === "fast" ? "mobilenet" : "inception",
+			transformModel: conversionType.getValue() === "fast" ? "separable" : "original",
+			styleRatio: ratioSlider.value / 100.0,
+			contentSize: baseSizeSlider.value / 100.0,
+			sourceSize: styleSizeSlider.value / 100.0,
+			download: isDownloadable || false,
+		};
+
+		window.application.generateStylizedImage(payload);
+		return payload;
+	};
+
+	this.popUp(world);
+};
+SpriteMorph.prototype.saveStyleTransferImageAsCostume = function () {
+	if (!document.querySelector("#style-canvas")) return;
+
+	let image = document.querySelector("#style-canvas");
+
+	let cos = new Costume(image, "ast_" + Date.now().toString());
+
+	let ide = this.parentThatIsA(IDE_Morph);
+	ide.currentSprite.addCostume(cos);
+	ide.currentSprite.wearCostume(cos);
+};
+
+SpriteMorph.prototype.sizeErrorHandlingAST = function () {
+	new DialogBoxMorph().inform(
+		"AI Image Sizing",
+		"One of your images is too big. Max size is 1080p. Please try again with smaller images.",
+		this.world()
+	);
+};
+
+SpriteMorph.prototype.toggleASTProgress = function (bool) {
+	// console.log(bool);
+	let progress = document.querySelector("#vis-progress");
+	if (bool) {
+		progress.style.display = "inline-flex";
+		progress.hidden = !bool;
+	} else {
+		progress.style.display = "none";
+		progress.hidden = bool;
+	}
+};
+
+SpriteMorph.prototype.checkIfImageWasGenerated = function (type) {
+	return document.querySelector(`#${type}-img`) != null;
+};
+
+SpriteMorph.prototype.checkIfImageWasConverted = function () {
+	return document.querySelector(`#converted-image`).src != "";
+};
+
+SpriteMorph.prototype.clearConvertedStyleTransferImage = function () {
+	let target = document.querySelector("#converted-image");
+	// let target = document.querySelector(`#${type}-img`);
+
+	if (target.src) target.removeAttribute("src");
+};
+
+////////////////////////////////////////////////////////////////
+// Helper functions
+////////////////////////////////////////////////////////////////
+function checkForStyleTransferImage(type) {
+	let img = document.querySelector(`#${type}-img`);
+	if (img) return true;
+	return false;
+}
+
+function getStyleTransferImage(type) {
+	let image = document.querySelector(`#${type}-img`);
+	if (image) return image;
+	throw new Error(`You have not set a ${type} image yet`);
+}
+
+function createStyleTransferImage(payload) {
+	console.log(payload);
+	let visualizer = document.getElementById("visualizer");
+	let image = document.createElement("IMG");
+
+	image.id = `${payload.type}-img`;
+	image.src = payload.data;
+
+	image.width = payload.width;
+	image.height = payload.height;
+
+	image.dataset.costume = payload.costume;
+
+	visualizer.appendChild(image);
+}
+
+function createCanvasForStyleTransfer(src) {
+	let canvas = document.createElement("canvas");
+	let ctx = canvas.getContext("2d");
+	canvas.width = 200;
+	canvas.height = 200;
+	let img = new Image();
+	img.src = src;
+
+	// get the scale
+	var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+	// get the top left position of the image
+	var x = canvas.width / 2 - (img.width / 2) * scale;
+	var y = canvas.height / 2 - (img.height / 2) * scale;
+	ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+	return canvas;
+}
+
+function createStyleTransferPromptLabels(a, b, isWide = false) {
+	let row = new AlignmentMorph("row", 4);
+	let left = new AlignmentMorph("column", 2);
+	let right = new AlignmentMorph("column", 2);
+
+	left.alignment = "left";
+	left.setColor(this.color);
+	left.setWidth(isWide ? 365 : 165);
+	left.setHeight(25);
+
+	right.alignment = "left";
+	right.setColor(this.color);
+	right.setWidth(10);
+	right.setHeight(25);
+
+	left.add(a);
+	right.add(b);
+	row.add(left);
+	row.add(right);
+
+	return [left, right, row];
+}
+////////////////////////////////////////////////////////////////
+// Misc functions
+////////////////////////////////////////////////////////////////
+//Images from the sprite library
+SpriteMorph.prototype.checkForASTIcon = function (type) {
+	let img = document.querySelector(`#${type}-library-canvas`);
+	if (img) return true;
+	return false;
+};
+SpriteMorph.prototype.getASTIcon = function (type) {
+	let image = document.querySelector(`#${type}-library-canvas`);
+	if (image) return image;
+	throw new Error(`You have not selected a ${type} image from the library yet`);
+};
+
+SpriteMorph.prototype.clearASTIcon = function (type) {
+	let vis = document.querySelector("#visualizer");
+	let target = document.querySelector(`#${type}-library-canvas`);
+
+	if (target) vis.removeChild(target);
 };

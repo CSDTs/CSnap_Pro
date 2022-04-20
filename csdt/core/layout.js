@@ -1008,7 +1008,7 @@ export function createCategories() {
 			button.setPosition(
 				new Point(
 					l + (col * xPadding + (col - 1) * buttonWidth),
-					t + ((row + 1) * yPadding + row * buttonHeight + border) + (i > 7 ? border + 2 : 0)
+					t + ((row + 1) * yPadding + row * buttonHeight + border) + (i > 8 ? border + 2 : 0)
 				)
 			);
 		});
@@ -1018,21 +1018,21 @@ export function createCategories() {
 			scroller.setColor(myself.groupColor);
 			scroller.acceptsDrops = false;
 			scroller.contents.acceptsDrops = false;
-			scroller.setPosition(new Point(0, myself.categories.children[8].top()));
+			scroller.setPosition(new Point(0, myself.categories.children[9].top()));
 			scroller.setWidth(myself.paletteWidth);
 			scroller.setHeight(buttonHeight * 6 + yPadding * 5);
 
 			for (i = 0; i < more; i += 1) {
-				scroller.addContents(myself.categories.children[8]);
+				scroller.addContents(myself.categories.children[9]);
 			}
 			myself.categories.add(scroller);
 			myself.categories.scroller = scroller;
 			myself.categories.setHeight(
-				(4 + 1) * yPadding + 4 * buttonHeight + 6 * (yPadding + buttonHeight) + border + 2 + 2 * border
+				(5 + 1) * yPadding + 5 * buttonHeight + 6 * (yPadding + buttonHeight) + border + 2 + 2 * border
 			);
 		} else {
 			myself.categories.setHeight(
-				(4 + 1) * yPadding + 4 * buttonHeight + (more ? more * (yPadding + buttonHeight) + border + 2 : 0) + 2 * border
+				(5 + 1) * yPadding + 5 * buttonHeight + (more ? more * (yPadding + buttonHeight) + border + 2 : 0) + 2 * border
 			);
 		}
 	}

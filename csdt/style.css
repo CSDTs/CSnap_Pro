@@ -3,7 +3,7 @@
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 0;
-	margin-bottom: auto;
+	margin-bottom: 30px;
 	overflow-x: hidden;
 }
 
@@ -33,7 +33,7 @@ section#vis-progress {
 	background: #00000094;
 	flex-direction: column;
 	/* justify-items: center; */
-	pointer-events: none;
+	/* pointer-events: none; */
 }
 
 section#vis-progress p {
@@ -50,6 +50,24 @@ section#vis-progress p {
 	padding-bottom: 1rem;
 }
 
+section#vis-progress button {
+	margin-bottom: auto;
+	/* display: flex; */
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	justify-content: center;
+	/* margin-bottom: 0; */
+	font-family: "Poppins", sans-serif;
+	color: white;
+	font-weight: 500;
+	background: #2368a1;
+	font-weight: 500;
+	border-radius: 0.5rem;
+	border: 0;
+	cursor: pointer;
+	padding: 0.25rem 0.5rem;
+}
 .slider {
 	position: absolute;
 	width: 500px;

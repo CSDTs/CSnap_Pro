@@ -73,3 +73,7 @@ ListMorph.prototype.deactivateIndex = function (idx) {
 	item.userState = "normal";
 	item.rerender();
 };
+
+document.querySelector("#vis-progress button").addEventListener("click", () => {
+	world.children[0].stop();
+});

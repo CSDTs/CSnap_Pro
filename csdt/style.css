@@ -1,10 +1,10 @@
 .wrapper {
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 0;
-  margin-bottom: auto;
-  overflow-x: hidden;
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0;
+	margin-bottom: auto;
+	overflow-x: hidden;
 }
 
 /* .progress-bar {
@@ -23,76 +23,77 @@
 } */
 
 section#vis-progress {
-  position: absolute;
-  z-index: 1;
-  /* display: flex; */
-  width: 100%;
-  height: 100%;
-  /* justify-content: center; */
-  /* justify-self: center; */
-  background: #00000094;
-  flex-direction: column;
-  /* justify-items: center; */
+	position: absolute;
+	z-index: 1;
+	/* display: flex; */
+	width: 100%;
+	height: 100%;
+	/* justify-content: center; */
+	/* justify-self: center; */
+	background: #00000094;
+	flex-direction: column;
+	/* justify-items: center; */
+	pointer-events: none;
 }
 
 section#vis-progress p {
-  margin-top: auto;
-  /* display: flex; */
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0;
-  font-family: "Poppins", sans-serif;
-  color: white;
-  font-weight: 600;
-  padding-bottom: 1rem;
+	margin-top: auto;
+	/* display: flex; */
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	justify-content: center;
+	margin-bottom: 0;
+	font-family: "Poppins", sans-serif;
+	color: white;
+	font-weight: 600;
+	padding-bottom: 1rem;
 }
 
 .slider {
-  position: absolute;
-  width: 500px;
-  height: 5px;
-  overflow-x: hidden;
+	position: absolute;
+	width: 500px;
+	height: 5px;
+	overflow-x: hidden;
 }
 
 .line {
-  position: absolute;
-  opacity: 0.4;
-  background: #4a8df8;
-  width: 750px;
-  height: 5px;
+	position: absolute;
+	opacity: 0.4;
+	background: #4a8df8;
+	width: 750px;
+	height: 5px;
 }
 
 .subline {
-  position: absolute;
-  background: #4a8df8;
-  height: 5px;
+	position: absolute;
+	background: #4a8df8;
+	height: 5px;
 }
 .inc {
-  animation: increase 2s infinite;
+	animation: increase 2s infinite;
 }
 .dec {
-  animation: decrease 2s 0.5s infinite;
+	animation: decrease 2s 0.5s infinite;
 }
 
 @keyframes increase {
-  from {
-    left: -5%;
-    width: 5%;
-  }
-  to {
-    left: 130%;
-    width: 100%;
-  }
+	from {
+		left: -5%;
+		width: 5%;
+	}
+	to {
+		left: 130%;
+		width: 100%;
+	}
 }
 @keyframes decrease {
-  from {
-    left: -80%;
-    width: 80%;
-  }
-  to {
-    left: 110%;
-    width: 10%;
-  }
+	from {
+		left: -80%;
+		width: 80%;
+	}
+	to {
+		left: 110%;
+		width: 10%;
+	}
 }

@@ -18,8 +18,8 @@ export let categories = [
 	"operators",
 	"variables",
 	"lists",
-	"ai",
 	"other",
+	"ai",
 ];
 
 export let blockColor = {
@@ -32,8 +32,8 @@ export let blockColor = {
 	operators: new Color(98, 194, 19),
 	variables: new Color(243, 118, 29),
 	lists: new Color(217, 77, 17),
-	ai: new Color(150, 150, 150),
 	other: new Color(150, 150, 150),
+	ai: new Color(100, 100, 100),
 };
 ////////////////////////////////////////////////////////////////
 // Special Block Syntax (SyntaxElementMorph)
@@ -112,9 +112,9 @@ export let csdtMigrations = {
 		offset: 0,
 	},
 	changeCostumeColor: {
-		selector: "setEffect",
-		inputs: [["color"]],
-		offset: 1,
+		selector: "legacySetCostumeColor",
+		// inputs: [["color"]],
+		offset: 0,
 	},
 	setCostumeShade: {
 		selector: "setEffect",
@@ -310,7 +310,7 @@ export let csdtBlocks = {
 	// },
 	legacySetCostumeColor: {
 		type: "command",
-		category: "other",
+		category: "looks",
 		spec: "(legacy) set costume color to %n ",
 	},
 
@@ -328,7 +328,7 @@ export let csdtBlocks = {
 	},
 	useStageForStyleTransferImage: {
 		type: "command",
-		category: "other",
+		category: "ai",
 		spec: "use stage for %ast image",
 	},
 	clearStyleTransferImage: {
@@ -338,7 +338,7 @@ export let csdtBlocks = {
 	},
 	switchToASTCostume: {
 		type: "command",
-		category: "other",
+		category: "ai",
 		spec: "switch to NST image",
 	},
 	saveStyleTransferImageAsCostume: {
@@ -368,32 +368,32 @@ export let csdtBlocks = {
 	},
 	checkIfImageWasGenerated: {
 		type: "reporter",
-		category: "other",
+		category: "ai",
 		spec: "was %ast image set",
 	},
 	checkIfImageWasConverted: {
 		type: "reporter",
-		category: "other",
+		category: "ai",
 		spec: "was NST image created",
 	},
 	clearConvertedStyleTransferImage: {
 		type: "command",
-		category: "other",
+		category: "ai",
 		spec: "clear NST created image",
 	},
 	checkForASTImage: {
 		type: "reporter",
-		category: "other",
+		category: "ai",
 		spec: "check if %ast image exists ",
 	},
 	sizeErrorHandlingAST: {
 		type: "command",
-		category: "other",
+		category: "ai",
 		spec: "image sizing error",
 	},
 	toggleASTProgress: {
 		type: "command",
-		category: "other",
+		category: "ai",
 		spec: "show progress bar - AI %b",
 	},
 };
@@ -2296,19 +2296,6 @@ export function blockTemplates(
 		blocks.push(block("doInsertInList"));
 		blocks.push(block("doReplaceInList"));
 		blocks.push("=");
-		blocks.push(block("createImageUsingStyleTransfer"));
-		blocks.push(block("useCostumeForStyleTransferImage"));
-		blocks.push(block("useStageForStyleTransferImage"));
-		blocks.push(block("saveStyleTransferImageAsCostume"));
-		blocks.push(block("switchToASTCostume"));
-		blocks.push(block("clearStyleTransferImage"));
-		blocks.push(block("clearConvertedStyleTransferImage"));
-		blocks.push(block("setStyleTransferParameter"));
-		blocks.push(block("setStyleTransferMode"));
-		blocks.push(block("getStyleTransferParameter"));
-		blocks.push(block("getStyleTransferMode"));
-		blocks.push(block("checkIfImageWasGenerated"));
-		blocks.push(block("checkIfImageWasConverted"));
 
 		// blocks.push(block("importImageOnlyStyleTransfer"));
 		// blocks.push(block("toggleASTProgress"));
@@ -2340,6 +2327,20 @@ export function blockTemplates(
 			blocks.push("-");
 			blocks.push(block("doShowTable"));
 		}
+	} else if (category === "ai") {
+		blocks.push(block("createImageUsingStyleTransfer"));
+		blocks.push(block("useCostumeForStyleTransferImage"));
+		blocks.push(block("useStageForStyleTransferImage"));
+		blocks.push(block("saveStyleTransferImageAsCostume"));
+		blocks.push(block("switchToASTCostume"));
+		blocks.push(block("clearStyleTransferImage"));
+		blocks.push(block("clearConvertedStyleTransferImage"));
+		blocks.push(block("setStyleTransferParameter"));
+		blocks.push(block("setStyleTransferMode"));
+		blocks.push(block("getStyleTransferParameter"));
+		blocks.push(block("getStyleTransferMode"));
+		blocks.push(block("checkIfImageWasGenerated"));
+		blocks.push(block("checkIfImageWasConverted"));
 	}
 
 	return blocks;

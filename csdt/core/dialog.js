@@ -731,7 +731,7 @@ export function installCloudProjectList(pl) {
 	};
 	this.body.add(this.listField);
 	if (this.task === "open" || this.task === "add") {
-		this.recoverButton.show();
+		// this.recoverButton.show();
 	}
 	// this.shareButton.show();
 	this.unshareButton.hide();

@@ -380,7 +380,7 @@ export function createProject(projectName, dataNum, imgNum, onSuccess, onError) 
 }
 
 export function getProjectList(onSuccess, onError, withThumbnail) {
-	var path = `/projects/?owner=${this.user_id}`;
+	var path = `/projects/?owner=${this.user_id}&application_type=CSPRO`;
 
 	// if (withThumbnail) {
 	//     path += '&withthumbnail=true';

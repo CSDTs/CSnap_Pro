@@ -644,11 +644,11 @@ export function installCloudProjectList(pl) {
 	this.projectList = pl[0] ? pl : [];
 
 	// Filter projects based on CSnap Pro apps (might need to find a better way of doing this, or just make sure that they all can work)
-	let filteredProjectList = this.projectList.filter(function (p) {
-		if (p.application === 97 || p.application >= 103) return true;
-		else return false;
-	});
-	this.projectList = filteredProjectList;
+	// let filteredProjectList = this.projectList.filter(function (p) {
+	// 	if (p.application === 97 || p.application >= 103) return true;
+	// 	else return false;
+	// });
+	// this.projectList = filteredProjectList;
 
 	this.projectList.sort((x, y) =>
 		// x.projectname.toLowerCase() < y.projectname.toLowerCase() ? -1 : 1

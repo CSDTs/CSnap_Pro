@@ -1,3 +1,25 @@
+/**
+ *
+ * STL Converter
+ * Author: Andrew Hunn (ahunn@umich.edu)
+ *
+ * Allows for user to interact with our stl converter python package to convert stage
+ * to a STL for 3D printing (either quick and easy or ability to tweak various parameters)
+ *
+ * Depends on:
+ * - stage.js (Code below is called via two menu options in stage, through stage right click -- userMenu())
+ * - STLCreate / STLCreateWithParams view (located in project_share/views.py)
+ *
+ * Repositories:
+ * - Tools to run converter - https://github.com/CSDTs/csdt_stl_tools
+ * - STL Converter - https://github.com/CSDTs/Adinkra_extrusion_converter
+ *
+ * Additional Documentation: https://docs.google.com/document/d/1dkEE18c57dyifXEf-jxpAI8IP1ybXcsHqCkcuO1AexM/edit
+ */
+
+// TODO: Add ability to accurately timeout stl download message (currently just set for 2 seconds)
+// TODO: Add 'More Info' buttons to dialog box letting user know what each parameter is / how it changes stl
+
 IDE_Morph.prototype.launchSTLParamsPrompt = function (name) {
 	let myself = this;
 

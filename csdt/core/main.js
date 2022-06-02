@@ -1,5 +1,5 @@
 import * as LayoutOverrides from "./layout.js";
-import * as STLConverter from "./stl.js";
+// import * as STLConverter from "./stl.js";
 import * as ProjectDialogOverrides from "./dialog.js";
 import * as SpriteOverrides from "./sprites.js";
 import * as StageOverrides from "./stage.js";
@@ -17,7 +17,7 @@ let jensMigrations = SpriteMorph.prototype.blockMigrations;
 Object.assign(IDE_Morph.prototype, LayoutOverrides);
 
 //Adds ability to convert stage to an STL for 3D printing
-Object.assign(IDE_Morph.prototype, STLConverter);
+// Object.assign(IDE_Morph.prototype, STLConverter);
 
 //Classrooms, Project Save and Load Prompts
 ProjectRecoveryDialogMorph.prototype.classroomListField = null;

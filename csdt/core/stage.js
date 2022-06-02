@@ -156,13 +156,22 @@ export function userMenu() {
 	menu.addItem("edit", "edit");
 	menu.addItem("show all", "showAll");
 	menu.addItem("pic...", () => ide.saveCanvasAs(this.fullImage(), this.name), "save a picture\nof the stage");
+	menu.addLine();
 	menu.addItem(
 		"stl...",
 		() => {
-			ide.saveAndExportAsSTL(ide.getProjectName());
+			ide.exportAsSTL(ide.getProjectName());
 		},
-		"save a stl\nof the stage \n(High Contrast Required)\n"
+		"save a stl of\nthe stage (High\nContrast Required)"
 	);
+	menu.addItem(
+		"advanced stl...",
+		() => {
+			ide.launchSTLParamsPrompt(ide.getProjectName());
+		},
+		"save a stl of\nthe stage (High\nContrast Required)"
+	);
+
 	menu.addLine();
 	menu.addItem(
 		"pen trails",

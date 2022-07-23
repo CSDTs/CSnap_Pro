@@ -71,6 +71,18 @@ IDE_Morph.prototype.loadWorkbookFile = function (xml) {
 	// this.renderTutorialLayout();
 };
 
+IDE_Morph.prototype.loadCustomXML = function (xml) {
+	// this.setBasicWorkbookLayout(true);
+	this.initialScaleSize = 0.6;
+	IDE_Morph.prototype.isSmallStage = true;
+	// this.renderBlocks = false;
+	// ScriptsMorph.prototype.enableKeyboard = false;
+
+	this.droppedText(xml);
+	// this.toggleStageSize();
+	// this.renderTutorialLayout();
+};
+
 // TODO Newest version of snap hides blocks by a select menu, not a show/hide primitive toggle. So hide and show primitive functions are useless now..
 IDE_Morph.prototype.hideBlocks = function (tutBlocks) {
 	let currentBlocks = this.palette.contents.children;

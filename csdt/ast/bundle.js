@@ -25,595 +25,595 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 tf.ENV.set("WEBGL_PACK", false); // This needs to be done otherwise things run very slow v1.0.4
 
 var Core = function () {
-  function Core() {
-    var _this = this;
-
-    _classCallCheck(this, Core);
-
-    Promise.all([this.loadMobileNetStyleModel(), this.loadSeparableTransformerModel()]).then(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-          styleNet = _ref2[0],
-          transformNet = _ref2[1];
-
-      console.log("Loaded styleNet");
-      _this.styleNet = styleNet;
-      _this.transformNet = transformNet;
-    });
-
-    //Checks if bundle is part of CSnap
-    this.ide = null;
-    if (typeof world !== "undefined") {
-      this.ide = world.children[0];
-    }
-  }
-
-  _createClass(Core, [{
-    key: "generateStylizedImage",
-    value: function generateStylizedImage(options) {
-      var _this2 = this;
-
-      var generic = {
-        contentImage: "images/beach.jpg",
-        sourceImage: "images/statue_of_liberty.jpg",
-        styleModel: "mobilenet",
-        transformModel: "separable",
-        styleRatio: 0.5,
-        contentSize: 100,
-        sourceSize: 100,
-        download: true
-      };
-
-      if (options) {
-        Object.assign(generic, options);
-      }
-
-      //TODO Convert to dynamic (width sizing issues prevented this from being done earlier)
-      this.contentImg = document.getElementById('base-img');
-      // this.contentImg.removeAttribute('height');
-      // this.contentImg.removeAttribute('width');
-
-      // this.contentImg.src = generic.contentImage;
-      this.contentImg.height = this.contentImg.height * generic.contentSize;
-      this.contentImg.width = this.contentImg.width * generic.contentSize;
-
-      this.styleImg = document.getElementById('style-img');
-      // this.styleImg.removeAttribute('height');
-      // this.styleImg.removeAttribute('width');
-      // this.styleImg.src = generic.sourceImage;
-      this.styleImg.height = this.styleImg.height * generic.sourceSize;
-      this.styleImg.width = this.styleImg.width * generic.sourceSize;
-
-      this.styleRatio = generic.styleRatio;
-      this.stylized = document.getElementById("style-canvas");
-
-      // Calls the block that loads the progress bar to user
-      if (typeof world !== "undefined") {
-        var ide = world.children[0];
-        ide.broadcast("startProgress");
-      }
-
-      Promise.all([this.loadStyleModel(generic.styleModel), this.loadTransformModel(generic.transformModel)]).then(function (_ref3) {
-        var _ref4 = _slicedToArray(_ref3, 2),
-            styleNet = _ref4[0],
-            transformNet = _ref4[1];
-
-        console.log("Loaded styleNet");
-        _this2.styleNet = styleNet;
-        _this2.transformNet = transformNet;
-
-        _this2.startStyling().finally(function () {
-          var a = document.createElement("a");
-
-          _this2.fixStylizedImage();
-          document.querySelector('#converted-image').src = _this2.stylized.toDataURL("image/png", 1.0);
-          if (generic.download) {
-            a.setAttribute("download", "output.png");
-            a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0));
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          }
-
-          // Calls the block that hides the progress bar to user
-          if (typeof world !== "undefined") {
-            var _ide = world.children[0];
-            _ide.broadcast("endProgress");
-          }
-        });
-      });
-    }
-
-    // ? Where does tensorflow call to duplicate the canvas by 2?
-    // This fixes the doubling with the canvas, producing a proper image
-
-  }, {
-    key: "fixStylizedImage",
-    value: function fixStylizedImage() {
-      var canvas = document.getElementById('style-canvas');
-      var ctx = canvas.getContext('2d');
-      var width = canvas.width / 2;
-      var height = canvas.height / 2;
-      var imageData = ctx.getImageData(0, 0, width, height);
-      canvas.width = width;
-      canvas.height = height;
-      ctx.putImageData(imageData, 0, 0);
-    }
-  }, {
-    key: "loadStyleModel",
-    value: function loadStyleModel(style) {
-      return regeneratorRuntime.async(function loadStyleModel$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              return _context.abrupt("return", style == "inception" ? this.loadInceptionStyleModel() : this.loadMobileNetStyleModel());
-
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "loadTransformModel",
-    value: function loadTransformModel(transform) {
-      return regeneratorRuntime.async(function loadTransformModel$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              return _context2.abrupt("return", transform == "original" ? this.loadOriginalTransformerModel() : this.loadSeparableTransformerModel());
-
-            case 1:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "loadMobileNetStyleModel",
-    value: function loadMobileNetStyleModel() {
-      return regeneratorRuntime.async(function loadMobileNetStyleModel$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              if (this.mobileStyleNet) {
-                _context3.next = 5;
-                break;
-              }
-
-              _context3.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_style_js/model.json"));
-
-            case 3:
-              this.mobileStyleNet = _context3.sent;
-
-              if (this.ide) {
-                this.ide.broadcast("fastModelLoad");
-              }
-
-            case 5:
-              return _context3.abrupt("return", this.mobileStyleNet);
-
-            case 6:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "loadInceptionStyleModel",
-    value: function loadInceptionStyleModel() {
-      return regeneratorRuntime.async(function loadInceptionStyleModel$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              if (this.inceptionStyleNet) {
-                _context4.next = 5;
-                break;
-              }
-
-              _context4.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_style_inception_js/model.json"));
-
-            case 3:
-              this.inceptionStyleNet = _context4.sent;
-
-              if (this.ide) {
-                this.ide.broadcast("highModelLoad");
-              }
-
-            case 5:
-              return _context4.abrupt("return", this.inceptionStyleNet);
-
-            case 6:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "loadOriginalTransformerModel",
-    value: function loadOriginalTransformerModel() {
-      return regeneratorRuntime.async(function loadOriginalTransformerModel$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              if (this.originalTransformNet) {
-                _context5.next = 5;
-                break;
-              }
-
-              _context5.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_transformer_js/model.json"));
-
-            case 3:
-              this.originalTransformNet = _context5.sent;
-
-              if (this.ide) {
-                this.ide.broadcast("highTransformLoad");
-              }
-
-            case 5:
-              return _context5.abrupt("return", this.originalTransformNet);
-
-            case 6:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "loadSeparableTransformerModel",
-    value: function loadSeparableTransformerModel() {
-      return regeneratorRuntime.async(function loadSeparableTransformerModel$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              if (this.separableTransformNet) {
-                _context6.next = 5;
-                break;
-              }
-
-              _context6.next = 3;
-              return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_transformer_separable_js/model.json"));
-
-            case 3:
-              this.separableTransformNet = _context6.sent;
-
-              if (this.ide) {
-                this.ide.broadcast("fastTransformLoad");
-              }
-
-            case 5:
-              return _context6.abrupt("return", this.separableTransformNet);
-
-            case 6:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "startStyling",
-    value: function startStyling() {
-      var _this3 = this;
-
-      var bottleneck, identityBottleneck, styleBottleneck, stylized;
-      return regeneratorRuntime.async(function startStyling$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              _context7.next = 2;
-              return regeneratorRuntime.awrap(tf.nextFrame());
-
-            case 2:
-              console.log("Generating 100D style representation");
-              _context7.next = 5;
-              return regeneratorRuntime.awrap(tf.nextFrame());
-
-            case 5:
-              _context7.next = 7;
-              return regeneratorRuntime.awrap(tf.tidy(function () {
-                return _this3.styleNet.predict(tf.browser.fromPixels(_this3.styleImg).toFloat().div(tf.scalar(255)).expandDims());
-              }));
-
-            case 7:
-              bottleneck = _context7.sent;
-
-              if (!(this.styleRatio !== 1.0)) {
-                _context7.next = 21;
-                break;
-              }
-
-              console.log("Generating 100D identity style representation");
-              _context7.next = 12;
-              return regeneratorRuntime.awrap(tf.nextFrame());
-
-            case 12:
-              _context7.next = 14;
-              return regeneratorRuntime.awrap(tf.tidy(function () {
-                return _this3.styleNet.predict(tf.browser.fromPixels(_this3.contentImg).toFloat().div(tf.scalar(255)).expandDims());
-              }));
-
-            case 14:
-              identityBottleneck = _context7.sent;
-              styleBottleneck = bottleneck;
-              _context7.next = 18;
-              return regeneratorRuntime.awrap(tf.tidy(function () {
-                var styleBottleneckScaled = styleBottleneck.mul(tf.scalar(_this3.styleRatio));
-                var identityBottleneckScaled = identityBottleneck.mul(tf.scalar(1.0 - _this3.styleRatio));
-                return styleBottleneckScaled.addStrict(identityBottleneckScaled);
-              }));
-
-            case 18:
-              bottleneck = _context7.sent;
-
-              styleBottleneck.dispose();
-              identityBottleneck.dispose();
-
-            case 21:
-              console.log("Stylizing image...");
-              _context7.next = 24;
-              return regeneratorRuntime.awrap(tf.nextFrame());
-
-            case 24:
-              _context7.next = 26;
-              return regeneratorRuntime.awrap(tf.tidy(function () {
-                return _this3.transformNet.predict([tf.browser.fromPixels(_this3.contentImg).toFloat().div(tf.scalar(255)).expandDims(), bottleneck]).squeeze();
-              }));
-
-            case 26:
-              stylized = _context7.sent;
-              _context7.next = 29;
-              return regeneratorRuntime.awrap(tf.browser.toPixels(stylized, this.stylized));
-
-            case 29:
-              bottleneck.dispose(); // Might wanna keep this around
-              stylized.dispose();
-
-            case 31:
-            case "end":
-              return _context7.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "startCombining",
-    value: function startCombining() {
-      var _this4 = this;
-
-      var bottleneck1, bottleneck2, combinedBottleneck, stylized;
-      return regeneratorRuntime.async(function startCombining$(_context8) {
-        while (1) {
-          switch (_context8.prev = _context8.next) {
-            case 0:
-              _context8.next = 2;
-              return regeneratorRuntime.awrap(tf.nextFrame());
-
-            case 2:
-              _context8.next = 4;
-              return regeneratorRuntime.awrap(tf.nextFrame());
-
-            case 4:
-              _context8.next = 6;
-              return regeneratorRuntime.awrap(tf.tidy(function () {
-                return _this4.styleNet.predict(tf.browser.fromPixels(_this4.combStyleImg1).toFloat().div(tf.scalar(255)).expandDims());
-              }));
-
-            case 6:
-              bottleneck1 = _context8.sent;
-              _context8.next = 9;
-              return regeneratorRuntime.awrap(tf.nextFrame());
-
-            case 9:
-              _context8.next = 11;
-              return regeneratorRuntime.awrap(tf.tidy(function () {
-                return _this4.styleNet.predict(tf.browser.fromPixels(_this4.combStyleImg2).toFloat().div(tf.scalar(255)).expandDims());
-              }));
-
-            case 11:
-              bottleneck2 = _context8.sent;
-              _context8.next = 14;
-              return regeneratorRuntime.awrap(tf.nextFrame());
-
-            case 14:
-              _context8.next = 16;
-              return regeneratorRuntime.awrap(tf.tidy(function () {
-                var scaledBottleneck1 = bottleneck1.mul(tf.scalar(1 - _this4.combStyleRatio));
-                var scaledBottleneck2 = bottleneck2.mul(tf.scalar(_this4.combStyleRatio));
-                return scaledBottleneck1.addStrict(scaledBottleneck2);
-              }));
-
-            case 16:
-              combinedBottleneck = _context8.sent;
-              _context8.next = 19;
-              return regeneratorRuntime.awrap(tf.tidy(function () {
-                return _this4.transformNet.predict([tf.browser.fromPixels(_this4.combContentImg).toFloat().div(tf.scalar(255)).expandDims(), combinedBottleneck]).squeeze();
-              }));
-
-            case 19:
-              stylized = _context8.sent;
-              _context8.next = 22;
-              return regeneratorRuntime.awrap(tf.browser.toPixels(stylized, this.combStylized));
-
-            case 22:
-              bottleneck1.dispose(); // Might wanna keep this around
-              bottleneck2.dispose();
-              combinedBottleneck.dispose();
-              stylized.dispose();
-
-            case 26:
-            case "end":
-              return _context8.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "benchmark",
-    value: function benchmark() {
-      var x, bottleneck, styleNet, time, transformNet;
-      return regeneratorRuntime.async(function benchmark$(_context9) {
-        while (1) {
-          switch (_context9.prev = _context9.next) {
-            case 0:
-              x = tf.randomNormal([1, 256, 256, 3]);
-              bottleneck = tf.randomNormal([1, 1, 1, 100]);
-              _context9.next = 4;
-              return regeneratorRuntime.awrap(this.loadInceptionStyleModel());
-
-            case 4:
-              styleNet = _context9.sent;
-              _context9.next = 7;
-              return regeneratorRuntime.awrap(this.benchmarkStyle(x, styleNet));
-
-            case 7:
-              time = _context9.sent;
-
-              styleNet.dispose();
-
-              _context9.next = 11;
-              return regeneratorRuntime.awrap(this.loadMobileNetStyleModel());
-
-            case 11:
-              styleNet = _context9.sent;
-              _context9.next = 14;
-              return regeneratorRuntime.awrap(this.benchmarkStyle(x, styleNet));
-
-            case 14:
-              time = _context9.sent;
-
-              styleNet.dispose();
-
-              _context9.next = 18;
-              return regeneratorRuntime.awrap(this.loadOriginalTransformerModel());
-
-            case 18:
-              transformNet = _context9.sent;
-              _context9.next = 21;
-              return regeneratorRuntime.awrap(this.benchmarkTransform(x, bottleneck, transformNet));
-
-            case 21:
-              time = _context9.sent;
-
-              transformNet.dispose();
-
-              _context9.next = 25;
-              return regeneratorRuntime.awrap(this.loadSeparableTransformerModel());
-
-            case 25:
-              transformNet = _context9.sent;
-              _context9.next = 28;
-              return regeneratorRuntime.awrap(this.benchmarkTransform(x, bottleneck, transformNet));
-
-            case 28:
-              time = _context9.sent;
-
-              transformNet.dispose();
-
-              x.dispose();
-              bottleneck.dispose();
-
-            case 32:
-            case "end":
-              return _context9.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "benchmarkStyle",
-    value: function benchmarkStyle(x, styleNet) {
-      var profile, time;
-      return regeneratorRuntime.async(function benchmarkStyle$(_context10) {
-        while (1) {
-          switch (_context10.prev = _context10.next) {
-            case 0:
-              _context10.next = 2;
-              return regeneratorRuntime.awrap(tf.profile(function () {
-                tf.tidy(function () {
-                  var dummyOut = styleNet.predict(x);
-                  dummyOut.print();
-                });
-              }));
-
-            case 2:
-              profile = _context10.sent;
-
-              console.log(profile);
-              _context10.next = 6;
-              return regeneratorRuntime.awrap(tf.time(function () {
-                tf.tidy(function () {
-                  for (var i = 0; i < 10; i++) {
-                    var y = styleNet.predict(x);
-                    y.print();
-                  }
-                });
-              }));
-
-            case 6:
-              time = _context10.sent;
-
-              console.log(time);
-
-            case 8:
-            case "end":
-              return _context10.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "benchmarkTransform",
-    value: function benchmarkTransform(x, bottleneck, transformNet) {
-      var profile, time;
-      return regeneratorRuntime.async(function benchmarkTransform$(_context11) {
-        while (1) {
-          switch (_context11.prev = _context11.next) {
-            case 0:
-              _context11.next = 2;
-              return regeneratorRuntime.awrap(tf.profile(function () {
-                tf.tidy(function () {
-                  var dummyOut = transformNet.predict([x, bottleneck]);
-                  dummyOut.print();
-                });
-              }));
-
-            case 2:
-              profile = _context11.sent;
-
-              console.log(profile);
-              _context11.next = 6;
-              return regeneratorRuntime.awrap(tf.time(function () {
-                tf.tidy(function () {
-                  for (var i = 0; i < 10; i++) {
-                    var y = transformNet.predict([x, bottleneck]);
-                    y.print();
-                  }
-                });
-              }));
-
-            case 6:
-              time = _context11.sent;
-
-              console.log(time);
-
-            case 8:
-            case "end":
-              return _context11.stop();
-          }
-        }
-      }, null, this);
-    }
-  }]);
-
-  return Core;
+	function Core() {
+		var _this = this;
+
+		_classCallCheck(this, Core);
+
+		Promise.all([this.loadMobileNetStyleModel(), this.loadSeparableTransformerModel()]).then(function (_ref) {
+			var _ref2 = _slicedToArray(_ref, 2),
+			    styleNet = _ref2[0],
+			    transformNet = _ref2[1];
+
+			console.log("Loaded styleNet");
+			_this.styleNet = styleNet;
+			_this.transformNet = transformNet;
+		});
+
+		//Checks if bundle is part of CSnap
+		this.ide = null;
+		if (typeof world !== "undefined") {
+			this.ide = world.children[0];
+		}
+	}
+
+	_createClass(Core, [{
+		key: "generateStylizedImage",
+		value: function generateStylizedImage(options) {
+			var _this2 = this;
+
+			var generic = {
+				contentImage: "images/beach.jpg",
+				sourceImage: "images/statue_of_liberty.jpg",
+				styleModel: "mobilenet",
+				transformModel: "separable",
+				styleRatio: 0.5,
+				contentSize: 100,
+				sourceSize: 100,
+				download: true
+			};
+
+			if (options) {
+				Object.assign(generic, options);
+			}
+
+			//TODO Convert to dynamic (width sizing issues prevented this from being done earlier)
+			this.contentImg = document.getElementById("base-img");
+			// this.contentImg.removeAttribute('height');
+			// this.contentImg.removeAttribute('width');
+
+			// this.contentImg.src = generic.contentImage;
+			this.contentImg.height = this.contentImg.height * generic.contentSize;
+			this.contentImg.width = this.contentImg.width * generic.contentSize;
+
+			this.styleImg = document.getElementById("style-img");
+			// this.styleImg.removeAttribute('height');
+			// this.styleImg.removeAttribute('width');
+			// this.styleImg.src = generic.sourceImage;
+			this.styleImg.height = this.styleImg.height * generic.sourceSize;
+			this.styleImg.width = this.styleImg.width * generic.sourceSize;
+
+			this.styleRatio = generic.styleRatio;
+			this.stylized = document.getElementById("style-canvas");
+
+			// Calls the block that loads the progress bar to user
+			if (typeof world !== "undefined") {
+				var ide = world.children[0];
+				ide.broadcast("startProgress");
+			}
+
+			Promise.all([this.loadStyleModel(generic.styleModel), this.loadTransformModel(generic.transformModel)]).then(function (_ref3) {
+				var _ref4 = _slicedToArray(_ref3, 2),
+				    styleNet = _ref4[0],
+				    transformNet = _ref4[1];
+
+				console.log("Loaded styleNet");
+				_this2.styleNet = styleNet;
+				_this2.transformNet = transformNet;
+
+				_this2.startStyling().finally(function () {
+					var a = document.createElement("a");
+
+					_this2.fixStylizedImage();
+					document.querySelector("#converted-image").src = _this2.stylized.toDataURL("image/png", 1.0);
+					if (generic.download) {
+						a.setAttribute("download", "output.png");
+						a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0));
+						document.body.appendChild(a);
+						a.click();
+						document.body.removeChild(a);
+					}
+
+					// Calls the block that hides the progress bar to user
+					if (typeof world !== "undefined") {
+						var _ide = world.children[0];
+						_ide.broadcast("endProgress");
+					}
+				});
+			});
+		}
+
+		// ? Where does tensorflow call to duplicate the canvas by 2?
+		// This fixes the doubling with the canvas, producing a proper image
+
+	}, {
+		key: "fixStylizedImage",
+		value: function fixStylizedImage() {
+			var canvas = document.getElementById("style-canvas");
+			var ctx = canvas.getContext("2d");
+			var width = canvas.width;
+			var height = canvas.height;
+			var imageData = ctx.getImageData(0, 0, width, height);
+			canvas.width = width / 2;
+			canvas.height = height / 2;
+			ctx.putImageData(imageData, 0, 0);
+		}
+	}, {
+		key: "loadStyleModel",
+		value: function loadStyleModel(style) {
+			return regeneratorRuntime.async(function loadStyleModel$(_context) {
+				while (1) {
+					switch (_context.prev = _context.next) {
+						case 0:
+							return _context.abrupt("return", style == "inception" ? this.loadInceptionStyleModel() : this.loadMobileNetStyleModel());
+
+						case 1:
+						case "end":
+							return _context.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "loadTransformModel",
+		value: function loadTransformModel(transform) {
+			return regeneratorRuntime.async(function loadTransformModel$(_context2) {
+				while (1) {
+					switch (_context2.prev = _context2.next) {
+						case 0:
+							return _context2.abrupt("return", transform == "original" ? this.loadOriginalTransformerModel() : this.loadSeparableTransformerModel());
+
+						case 1:
+						case "end":
+							return _context2.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "loadMobileNetStyleModel",
+		value: function loadMobileNetStyleModel() {
+			return regeneratorRuntime.async(function loadMobileNetStyleModel$(_context3) {
+				while (1) {
+					switch (_context3.prev = _context3.next) {
+						case 0:
+							if (this.mobileStyleNet) {
+								_context3.next = 5;
+								break;
+							}
+
+							_context3.next = 3;
+							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_style_js/model.json"));
+
+						case 3:
+							this.mobileStyleNet = _context3.sent;
+
+							if (this.ide) {
+								this.ide.broadcast("fastModelLoad");
+							}
+
+						case 5:
+							return _context3.abrupt("return", this.mobileStyleNet);
+
+						case 6:
+						case "end":
+							return _context3.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "loadInceptionStyleModel",
+		value: function loadInceptionStyleModel() {
+			return regeneratorRuntime.async(function loadInceptionStyleModel$(_context4) {
+				while (1) {
+					switch (_context4.prev = _context4.next) {
+						case 0:
+							if (this.inceptionStyleNet) {
+								_context4.next = 5;
+								break;
+							}
+
+							_context4.next = 3;
+							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_style_inception_js/model.json"));
+
+						case 3:
+							this.inceptionStyleNet = _context4.sent;
+
+							if (this.ide) {
+								this.ide.broadcast("highModelLoad");
+							}
+
+						case 5:
+							return _context4.abrupt("return", this.inceptionStyleNet);
+
+						case 6:
+						case "end":
+							return _context4.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "loadOriginalTransformerModel",
+		value: function loadOriginalTransformerModel() {
+			return regeneratorRuntime.async(function loadOriginalTransformerModel$(_context5) {
+				while (1) {
+					switch (_context5.prev = _context5.next) {
+						case 0:
+							if (this.originalTransformNet) {
+								_context5.next = 5;
+								break;
+							}
+
+							_context5.next = 3;
+							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_transformer_js/model.json"));
+
+						case 3:
+							this.originalTransformNet = _context5.sent;
+
+							if (this.ide) {
+								this.ide.broadcast("highTransformLoad");
+							}
+
+						case 5:
+							return _context5.abrupt("return", this.originalTransformNet);
+
+						case 6:
+						case "end":
+							return _context5.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "loadSeparableTransformerModel",
+		value: function loadSeparableTransformerModel() {
+			return regeneratorRuntime.async(function loadSeparableTransformerModel$(_context6) {
+				while (1) {
+					switch (_context6.prev = _context6.next) {
+						case 0:
+							if (this.separableTransformNet) {
+								_context6.next = 5;
+								break;
+							}
+
+							_context6.next = 3;
+							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_transformer_separable_js/model.json"));
+
+						case 3:
+							this.separableTransformNet = _context6.sent;
+
+							if (this.ide) {
+								this.ide.broadcast("fastTransformLoad");
+							}
+
+						case 5:
+							return _context6.abrupt("return", this.separableTransformNet);
+
+						case 6:
+						case "end":
+							return _context6.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "startStyling",
+		value: function startStyling() {
+			var _this3 = this;
+
+			var bottleneck, identityBottleneck, styleBottleneck, stylized;
+			return regeneratorRuntime.async(function startStyling$(_context7) {
+				while (1) {
+					switch (_context7.prev = _context7.next) {
+						case 0:
+							_context7.next = 2;
+							return regeneratorRuntime.awrap(tf.nextFrame());
+
+						case 2:
+							console.log("Generating 100D style representation");
+							_context7.next = 5;
+							return regeneratorRuntime.awrap(tf.nextFrame());
+
+						case 5:
+							_context7.next = 7;
+							return regeneratorRuntime.awrap(tf.tidy(function () {
+								return _this3.styleNet.predict(tf.browser.fromPixels(_this3.styleImg).toFloat().div(tf.scalar(255)).expandDims());
+							}));
+
+						case 7:
+							bottleneck = _context7.sent;
+
+							if (!(this.styleRatio !== 1.0)) {
+								_context7.next = 21;
+								break;
+							}
+
+							console.log("Generating 100D identity style representation");
+							_context7.next = 12;
+							return regeneratorRuntime.awrap(tf.nextFrame());
+
+						case 12:
+							_context7.next = 14;
+							return regeneratorRuntime.awrap(tf.tidy(function () {
+								return _this3.styleNet.predict(tf.browser.fromPixels(_this3.contentImg).toFloat().div(tf.scalar(255)).expandDims());
+							}));
+
+						case 14:
+							identityBottleneck = _context7.sent;
+							styleBottleneck = bottleneck;
+							_context7.next = 18;
+							return regeneratorRuntime.awrap(tf.tidy(function () {
+								var styleBottleneckScaled = styleBottleneck.mul(tf.scalar(_this3.styleRatio));
+								var identityBottleneckScaled = identityBottleneck.mul(tf.scalar(1.0 - _this3.styleRatio));
+								return styleBottleneckScaled.addStrict(identityBottleneckScaled);
+							}));
+
+						case 18:
+							bottleneck = _context7.sent;
+
+							styleBottleneck.dispose();
+							identityBottleneck.dispose();
+
+						case 21:
+							console.log("Stylizing image...");
+							_context7.next = 24;
+							return regeneratorRuntime.awrap(tf.nextFrame());
+
+						case 24:
+							_context7.next = 26;
+							return regeneratorRuntime.awrap(tf.tidy(function () {
+								return _this3.transformNet.predict([tf.browser.fromPixels(_this3.contentImg).toFloat().div(tf.scalar(255)).expandDims(), bottleneck]).squeeze();
+							}));
+
+						case 26:
+							stylized = _context7.sent;
+							_context7.next = 29;
+							return regeneratorRuntime.awrap(tf.browser.toPixels(stylized, this.stylized));
+
+						case 29:
+							bottleneck.dispose(); // Might wanna keep this around
+							stylized.dispose();
+
+						case 31:
+						case "end":
+							return _context7.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "startCombining",
+		value: function startCombining() {
+			var _this4 = this;
+
+			var bottleneck1, bottleneck2, combinedBottleneck, stylized;
+			return regeneratorRuntime.async(function startCombining$(_context8) {
+				while (1) {
+					switch (_context8.prev = _context8.next) {
+						case 0:
+							_context8.next = 2;
+							return regeneratorRuntime.awrap(tf.nextFrame());
+
+						case 2:
+							_context8.next = 4;
+							return regeneratorRuntime.awrap(tf.nextFrame());
+
+						case 4:
+							_context8.next = 6;
+							return regeneratorRuntime.awrap(tf.tidy(function () {
+								return _this4.styleNet.predict(tf.browser.fromPixels(_this4.combStyleImg1).toFloat().div(tf.scalar(255)).expandDims());
+							}));
+
+						case 6:
+							bottleneck1 = _context8.sent;
+							_context8.next = 9;
+							return regeneratorRuntime.awrap(tf.nextFrame());
+
+						case 9:
+							_context8.next = 11;
+							return regeneratorRuntime.awrap(tf.tidy(function () {
+								return _this4.styleNet.predict(tf.browser.fromPixels(_this4.combStyleImg2).toFloat().div(tf.scalar(255)).expandDims());
+							}));
+
+						case 11:
+							bottleneck2 = _context8.sent;
+							_context8.next = 14;
+							return regeneratorRuntime.awrap(tf.nextFrame());
+
+						case 14:
+							_context8.next = 16;
+							return regeneratorRuntime.awrap(tf.tidy(function () {
+								var scaledBottleneck1 = bottleneck1.mul(tf.scalar(1 - _this4.combStyleRatio));
+								var scaledBottleneck2 = bottleneck2.mul(tf.scalar(_this4.combStyleRatio));
+								return scaledBottleneck1.addStrict(scaledBottleneck2);
+							}));
+
+						case 16:
+							combinedBottleneck = _context8.sent;
+							_context8.next = 19;
+							return regeneratorRuntime.awrap(tf.tidy(function () {
+								return _this4.transformNet.predict([tf.browser.fromPixels(_this4.combContentImg).toFloat().div(tf.scalar(255)).expandDims(), combinedBottleneck]).squeeze();
+							}));
+
+						case 19:
+							stylized = _context8.sent;
+							_context8.next = 22;
+							return regeneratorRuntime.awrap(tf.browser.toPixels(stylized, this.combStylized));
+
+						case 22:
+							bottleneck1.dispose(); // Might wanna keep this around
+							bottleneck2.dispose();
+							combinedBottleneck.dispose();
+							stylized.dispose();
+
+						case 26:
+						case "end":
+							return _context8.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "benchmark",
+		value: function benchmark() {
+			var x, bottleneck, styleNet, time, transformNet;
+			return regeneratorRuntime.async(function benchmark$(_context9) {
+				while (1) {
+					switch (_context9.prev = _context9.next) {
+						case 0:
+							x = tf.randomNormal([1, 256, 256, 3]);
+							bottleneck = tf.randomNormal([1, 1, 1, 100]);
+							_context9.next = 4;
+							return regeneratorRuntime.awrap(this.loadInceptionStyleModel());
+
+						case 4:
+							styleNet = _context9.sent;
+							_context9.next = 7;
+							return regeneratorRuntime.awrap(this.benchmarkStyle(x, styleNet));
+
+						case 7:
+							time = _context9.sent;
+
+							styleNet.dispose();
+
+							_context9.next = 11;
+							return regeneratorRuntime.awrap(this.loadMobileNetStyleModel());
+
+						case 11:
+							styleNet = _context9.sent;
+							_context9.next = 14;
+							return regeneratorRuntime.awrap(this.benchmarkStyle(x, styleNet));
+
+						case 14:
+							time = _context9.sent;
+
+							styleNet.dispose();
+
+							_context9.next = 18;
+							return regeneratorRuntime.awrap(this.loadOriginalTransformerModel());
+
+						case 18:
+							transformNet = _context9.sent;
+							_context9.next = 21;
+							return regeneratorRuntime.awrap(this.benchmarkTransform(x, bottleneck, transformNet));
+
+						case 21:
+							time = _context9.sent;
+
+							transformNet.dispose();
+
+							_context9.next = 25;
+							return regeneratorRuntime.awrap(this.loadSeparableTransformerModel());
+
+						case 25:
+							transformNet = _context9.sent;
+							_context9.next = 28;
+							return regeneratorRuntime.awrap(this.benchmarkTransform(x, bottleneck, transformNet));
+
+						case 28:
+							time = _context9.sent;
+
+							transformNet.dispose();
+
+							x.dispose();
+							bottleneck.dispose();
+
+						case 32:
+						case "end":
+							return _context9.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "benchmarkStyle",
+		value: function benchmarkStyle(x, styleNet) {
+			var profile, time;
+			return regeneratorRuntime.async(function benchmarkStyle$(_context10) {
+				while (1) {
+					switch (_context10.prev = _context10.next) {
+						case 0:
+							_context10.next = 2;
+							return regeneratorRuntime.awrap(tf.profile(function () {
+								tf.tidy(function () {
+									var dummyOut = styleNet.predict(x);
+									dummyOut.print();
+								});
+							}));
+
+						case 2:
+							profile = _context10.sent;
+
+							console.log(profile);
+							_context10.next = 6;
+							return regeneratorRuntime.awrap(tf.time(function () {
+								tf.tidy(function () {
+									for (var i = 0; i < 10; i++) {
+										var y = styleNet.predict(x);
+										y.print();
+									}
+								});
+							}));
+
+						case 6:
+							time = _context10.sent;
+
+							console.log(time);
+
+						case 8:
+						case "end":
+							return _context10.stop();
+					}
+				}
+			}, null, this);
+		}
+	}, {
+		key: "benchmarkTransform",
+		value: function benchmarkTransform(x, bottleneck, transformNet) {
+			var profile, time;
+			return regeneratorRuntime.async(function benchmarkTransform$(_context11) {
+				while (1) {
+					switch (_context11.prev = _context11.next) {
+						case 0:
+							_context11.next = 2;
+							return regeneratorRuntime.awrap(tf.profile(function () {
+								tf.tidy(function () {
+									var dummyOut = transformNet.predict([x, bottleneck]);
+									dummyOut.print();
+								});
+							}));
+
+						case 2:
+							profile = _context11.sent;
+
+							console.log(profile);
+							_context11.next = 6;
+							return regeneratorRuntime.awrap(tf.time(function () {
+								tf.tidy(function () {
+									for (var i = 0; i < 10; i++) {
+										var y = transformNet.predict([x, bottleneck]);
+										y.print();
+									}
+								});
+							}));
+
+						case 6:
+							time = _context11.sent;
+
+							console.log(time);
+
+						case 8:
+						case "end":
+							return _context11.stop();
+					}
+				}
+			}, null, this);
+		}
+	}]);
+
+	return Core;
 }();
 
 // function validateTextureSize(width, height) {

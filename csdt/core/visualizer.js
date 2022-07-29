@@ -155,7 +155,7 @@ IDE_Morph.prototype.selectAiImage = function (folderName, items, imageType, payl
 	dialog.ok = function () {
 		if (selectedIcon) {
 			if (imageType == "base") {
-				console.log(selectedIcon);
+				// console.log(selectedIcon);
 				payload[0] = selectedIcon.url;
 				SpriteMorph.prototype.createImageForAST({
 					type: "base",
@@ -1168,7 +1168,7 @@ function getStyleTransferImage(type) {
 }
 
 function createStyleTransferImage(payload) {
-	console.log(payload);
+	// console.log(payload);
 	let visualizer = document.getElementById("visualizer");
 	let image = document.createElement("IMG");
 

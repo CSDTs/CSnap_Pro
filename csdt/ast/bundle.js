@@ -67,24 +67,14 @@ var Core = function () {
 				Object.assign(generic, options);
 			}
 
-			//TODO Convert to dynamic (width sizing issues prevented this from being done earlier)
 			this.contentImg = document.getElementById("base-img");
-			// this.contentImg.removeAttribute('height');
-			// this.contentImg.removeAttribute('width');
-
-			// this.contentImg.src = generic.contentImage;
-			this.contentImg.height = this.contentImg.height * generic.contentSize;
-			this.contentImg.width = this.contentImg.width * generic.contentSize;
-
 			this.styleImg = document.getElementById("style-img");
-			// this.styleImg.removeAttribute('height');
-			// this.styleImg.removeAttribute('width');
-			// this.styleImg.src = generic.sourceImage;
-			this.styleImg.height = this.styleImg.height * generic.sourceSize;
-			this.styleImg.width = this.styleImg.width * generic.sourceSize;
+			this.stylized = document.getElementById("style-canvas");
+
+			this.connectImageAndSizeScale(this.contentImg, generic.contentSize);
+			this.connectImageAndSizeScale(this.styleImg, generic.sourceSize);
 
 			this.styleRatio = generic.styleRatio;
-			this.stylized = document.getElementById("style-canvas");
 
 			// Calls the block that loads the progress bar to user
 			if (typeof world !== "undefined") {
@@ -104,7 +94,6 @@ var Core = function () {
 				_this2.startStyling().finally(function () {
 					var a = document.createElement("a");
 
-					_this2.fixStylizedImage();
 					document.querySelector("#converted-image").src = _this2.stylized.toDataURL("image/png", 1.0);
 					if (generic.download) {
 						a.setAttribute("download", "output.png");
@@ -113,7 +102,7 @@ var Core = function () {
 						a.click();
 						document.body.removeChild(a);
 					}
-
+					console.log("Finished");
 					// Calls the block that hides the progress bar to user
 					if (typeof world !== "undefined") {
 						var _ide = world.children[0];
@@ -122,21 +111,16 @@ var Core = function () {
 				});
 			});
 		}
-
-		// ? Where does tensorflow call to duplicate the canvas by 2?
-		// This fixes the doubling with the canvas, producing a proper image
-
 	}, {
-		key: "fixStylizedImage",
-		value: function fixStylizedImage() {
-			var canvas = document.getElementById("style-canvas");
-			var ctx = canvas.getContext("2d");
-			var width = canvas.width;
-			var height = canvas.height;
-			var imageData = ctx.getImageData(0, 0, width, height);
-			canvas.width = width / 2;
-			canvas.height = height / 2;
-			ctx.putImageData(imageData, 0, 0);
+		key: "connectImageAndSizeScale",
+		value: function connectImageAndSizeScale(img, scaleRatio) {
+			img.height = img.height * scaleRatio;
+			img.width = img.width * scaleRatio;
+			if (img.style.width) {
+				// If this branch is triggered, then that means the image was forced to a square using
+				// a fixed pixel value.
+				img.style.width = img.height + "px"; // Fix width back to a square
+			}
 		}
 	}, {
 		key: "loadStyleModel",

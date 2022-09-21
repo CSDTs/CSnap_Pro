@@ -52,11 +52,147 @@ IDE_Morph.prototype.renderTutorialLayout = function () {
 
 IDE_Morph.prototype.getCurrentScript = function () {};
 
-IDE_Morph.prototype.loadTutorial = function (xml, changeBlocks) {
+IDE_Morph.prototype.loadTutorial = function (xml, changeBlocks, coreList, whitelist, callback = null) {
+	let myself = this;
 	StageMorph.prototype.tutorial = true;
 	this.disableBackup = changeBlocks;
 	this.initialScaleSize = 0.7;
-	this.droppedText(xml);
+	this.openProjectString(xml, () => {
+		// myself.displayTutorialBlocks(coreList, whitelist);
+		if (callback) callback();
+	});
+};
+
+IDE_Morph.prototype.displayTutorialBlocks = function (coreList, whitelist) {
+	let myself = this;
+	const current = coreList.map((block) => {
+		return { selector: block, visible: whitelist.indexOf(block) >= 0 };
+	});
+	for (core of current) {
+		if (core.visible) delete StageMorph.prototype.hiddenPrimitives[core.selector];
+		else StageMorph.prototype.hiddenPrimitives[core.selector] = true;
+	}
+	myself.flushBlocksCache();
+	myself.refreshPalette();
+	myself.categories.refreshEmpty();
+};
+
+IDE_Morph.prototype.hideTutorialBlock = function (selector) {
+	StageMorph.prototype.hiddenPrimitives[selector] = true;
+
+	this.flushBlocksCache();
+	this.refreshPalette();
+	this.categories.refreshEmpty();
+};
+
+IDE_Morph.prototype.showTutorialBlock = function (selector) {
+	delete StageMorph.prototype.hiddenPrimitives[selector];
+
+	this.flushBlocksCache();
+	this.refreshPalette();
+	this.categories.refreshEmpty();
+};
+IDE_Morph.prototype.toggleSinglePalette = function () {
+	this.toggleUnifiedPalette();
+	this.refreshPalette();
+};
+IDE_Morph.prototype.enableSinglePalette = function () {
+	if (this.scene.unifiedPalette) return;
+	this.setUnifiedPalette(true);
+	this.recordUnsavedChanges();
+	this.refreshPalette();
+};
+
+IDE_Morph.prototype.disableSinglePalette = function () {
+	if (!this.scene.unifiedPalette) return;
+	this.setUnifiedPalette(false);
+	this.recordUnsavedChanges();
+	this.refreshPalette();
+};
+
+IDE_Morph.prototype.enableSinglePaletteCategories = function () {
+	if (!this.scene.unifiedPalette) return;
+	if (this.scene.showCategories) return;
+	this.toggleCategoryNames(true);
+	this.recordUnsavedChanges();
+	this.refreshPalette();
+};
+IDE_Morph.prototype.disableSinglePaletteCategories = function () {
+	if (!this.scene.unifiedPalette) return;
+	if (!this.scene.showCategories) return;
+	this.toggleCategoryNames(false);
+	this.recordUnsavedChanges();
+	this.refreshPalette();
+};
+
+IDE_Morph.prototype.enableSinglePaletteButtons = function () {
+	if (!this.scene.unifiedPalette) return;
+	if (this.scene.showPaletteButtons) return;
+	this.togglePaletteButtons(true);
+	this.recordUnsavedChanges();
+	this.refreshPalette();
+};
+IDE_Morph.prototype.disableSinglePaletteButtons = function () {
+	if (!this.scene.unifiedPalette) return;
+	if (!this.scene.showPaletteButtons) return;
+	this.togglePaletteButtons(false);
+	this.recordUnsavedChanges();
+	this.refreshPalette();
+};
+
+IDE_Morph.prototype.toggleCorralBar = function (forceValue = null) {
+	if (forceValue) IDE_Morph.prototype.hideCorralBar = forceValue;
+	else IDE_Morph.prototype.hideCorralBar = !IDE_Morph.prototype.hideCorralBar;
+	this.createCorralBar();
+	this.fixLayout();
+};
+
+IDE_Morph.prototype.toggleSpriteBar = function (forceValue = null) {
+	if (forceValue) {
+		IDE_Morph.prototype.hideSpriteBar = forceValue;
+	} else {
+		IDE_Morph.prototype.hideSpriteBar = !IDE_Morph.prototype.hideSpriteBar;
+	}
+
+	this.createSpriteBar();
+	this.fixLayout();
+};
+
+IDE_Morph.prototype.disableTutorialTabs = function () {
+	if (StageMorph.prototype.hideSoundsTab && StageMorph.prototype.hideSoundsTab) return;
+
+	StageMorph.prototype.hideSoundsTab = true;
+	StageMorph.prototype.hideCostumesTab = true;
+
+	this.createSpriteBar();
+	this.fixLayout();
+};
+
+IDE_Morph.prototype.enableTutorialTabs = function () {
+	if (!StageMorph.prototype.hideSoundsTab && !StageMorph.prototype.hideSoundsTab) return;
+
+	StageMorph.prototype.hideSoundsTab = false;
+	StageMorph.prototype.hideCostumesTab = false;
+
+	this.createSpriteBar();
+	this.fixLayout();
+};
+
+IDE_Morph.prototype.toggleTabs = function (forceValue = null) {
+	if (forceValue) {
+		StageMorph.prototype.hideSoundsTab = forceValue;
+		StageMorph.prototype.hideCostumesTab = forceValue;
+	} else {
+		StageMorph.prototype.hideSoundsTab = !StageMorph.prototype.hideSoundsTab;
+		StageMorph.prototype.hideCostumesTab = !StageMorph.prototype.hideCostumesTab;
+	}
+
+	this.createSpriteBar();
+	this.fixLayout();
+};
+
+IDE_Morph.prototype.fetchBlockList = function () {
+	return Object.keys(this.stage.children[0].blocks);
 };
 
 IDE_Morph.prototype.loadWorkbookFile = function (xml) {

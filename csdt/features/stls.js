@@ -167,7 +167,7 @@ const requestSTLConversion = (file, ide) => {
 		ide.showMessage("Something went wrong with the download. Try again later...", 5);
 	};
 
-	ide.showMessage("Creating STL. Please wait...");
+	ide.showMessage("Creating STL, please wait...");
 	$.ajax({
 		type: "PUT",
 		url: `/api/stl/`,

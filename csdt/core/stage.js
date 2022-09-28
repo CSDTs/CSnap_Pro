@@ -160,7 +160,7 @@ export function userMenu() {
 	menu.addItem(
 		"stl...",
 		() => {
-			ide.exportAsSTL(ide.getProjectName());
+			ide.exportAsSTL();
 		},
 		"save a stl of\nthe stage (High\nContrast Required)"
 	);

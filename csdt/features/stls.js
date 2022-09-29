@@ -18,7 +18,7 @@
  */
 
 import { dataURItoBlob } from "../utils/createBlobFromURI.js";
-import { createLabel } from "../utils/createText.js";
+import { createLabelInput, createText } from "../utils/createText.js";
 
 /**
  * Creates the actual prompt for additional user customizations
@@ -59,12 +59,24 @@ function promptForSTLParameters(title, world) {
 	inp.setColor(this.color);
 	bdy.setColor(this.color);
 
-	createLabel(inp, "Base: ", baseParam);
-	createLabel(inp, "Smooth: ", smoothParam);
-	createLabel(inp, "Negative: ", negativeParam);
-	createLabel(inp, "X: ", xParam);
-	createLabel(inp, "Y: ", yParam);
-	createLabel(inp, "Scale: ", scaleParam);
+	createLabelInput(inp, "Base: ", baseParam);
+	inp.add(createText("A platform behind your design", 9));
+	inp.add(createText(" ", 5));
+	createLabelInput(inp, "Smooth:", smoothParam);
+	inp.add(createText("Set False for more jagged edges", 9));
+	inp.add(createText(" ", 5));
+	createLabelInput(inp, "Negative: ", negativeParam);
+	inp.add(createText("Inverse your design", 9));
+	inp.add(createText(" ", 5));
+	createLabelInput(inp, "X: ", xParam);
+	inp.add(createText("Width of STL in pixels", 9));
+	inp.add(createText(" ", 5));
+	createLabelInput(inp, "Y: ", yParam);
+	inp.add(createText("Height of STL in pixels", 9));
+	inp.add(createText(" ", 5));
+	createLabelInput(inp, "Scale: ", scaleParam);
+	inp.add(createText("STL mesh height", 9));
+	inp.add(createText(" ", 5));
 
 	baseParam.value = "False";
 

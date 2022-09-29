@@ -1,7 +1,7 @@
-function labelText(string) {
+function createText(string, size = 10) {
 	return new TextMorph(
 		localize(string),
-		10,
+		size,
 		null, // style
 		false, // bold
 		null, // italic
@@ -13,10 +13,10 @@ function labelText(string) {
 	);
 }
 
-const createLabel = (alignment, label, input, width = 200) => {
+const createLabelInput = (alignment, label, input, width = 200) => {
 	input.setWidth(width);
-	alignment.add(labelText(label));
+	alignment.add(createText(label));
 	alignment.add(input);
 };
 
-export { createLabel };
+export { createText, createLabelInput };

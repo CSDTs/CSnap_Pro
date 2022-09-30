@@ -8,11 +8,18 @@ import * as Serializer from "./serializer.js";
 import * as SpriteOverrides from "./sprites.js";
 import * as StageOverrides from "./stage.js";
 
+import enableGlideFeature from "../features/glide.js";
+import enableNSTFeature from "../features/nst/nst_basic.js";
+
 let { csdtSyntax, ...blockOverrides } = BlockOverrides;
 let { shrinkToFit, getNoFit, noFit, ...spriteOverrides } = SpriteOverrides;
 
 let jensBlocks = SpriteMorph.prototype.blocks;
 let jensMigrations = SpriteMorph.prototype.blockMigrations;
+
+let allNewBlocks = blockOverrides.csdtBlocks;
+enableNSTFeature(allNewBlocks, (data) => (allNewBlocks = data));
+enableGlideFeature(allNewBlocks, (data) => (allNewBlocks = data));
 
 // Object.assign(DialogBoxMorph.prototype, Features_STL_DialogBoxMorph);
 // Object.assign(IDE_Morph.prototype, Features_STL_IDE_Morph);
@@ -60,7 +67,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
 SpriteMorph.prototype.initBlocks = function () {
 	SpriteMorph.prototype.blocks = {
 		...jensBlocks,
-		...blockOverrides.csdtBlocks,
+		...allNewBlocks,
 	};
 };
 

@@ -6,11 +6,11 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint-disable */
 
 
-require("babel-polyfill");
-
 var _tfjs = require("@tensorflow/tfjs");
 
 var tf = _interopRequireWildcard(_tfjs);
+
+require("babel-polyfill");
 
 var _links = require("./links");
 
@@ -167,7 +167,7 @@ var Core = function () {
 							}
 
 							_context3.next = 3;
-							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_style_js/model.json"));
+							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/features/nst/lib/saved_model_style_js/model.json"));
 
 						case 3:
 							this.mobileStyleNet = _context3.sent;
@@ -199,7 +199,7 @@ var Core = function () {
 							}
 
 							_context4.next = 3;
-							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_style_inception_js/model.json"));
+							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/features/nst/lib/saved_model_style_inception_js/model.json"));
 
 						case 3:
 							this.inceptionStyleNet = _context4.sent;
@@ -231,7 +231,7 @@ var Core = function () {
 							}
 
 							_context5.next = 3;
-							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_transformer_js/model.json"));
+							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/features/nst/lib/saved_model_transformer_js/model.json"));
 
 						case 3:
 							this.originalTransformNet = _context5.sent;
@@ -263,7 +263,7 @@ var Core = function () {
 							}
 
 							_context6.next = 3;
-							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/ast/saved_model_transformer_separable_js/model.json"));
+							return regeneratorRuntime.awrap(tf.loadGraphModel("/static/csnap_pro/csdt/features/nst/lib/saved_model_transformer_separable_js/model.json"));
 
 						case 3:
 							this.separableTransformNet = _context6.sent;

@@ -1,17 +1,28 @@
-import * as LayoutOverrides from "./layout.js";
-// import * as STLConverter from "./stl.js";
+// import { Features_STL_DialogBoxMorph, Features_STL_IDE_Morph } from "../features/stls.js";
+import mergeChanges from "../features/stls.js";
+import * as BlockOverrides from "./blocks.js";
+import * as CloudOverrides from "./cloud.js";
 import * as ProjectDialogOverrides from "./dialog.js";
+import * as LayoutOverrides from "./layout.js";
+import * as Serializer from "./serializer.js";
 import * as SpriteOverrides from "./sprites.js";
 import * as StageOverrides from "./stage.js";
-import * as Serializer from "./serializer.js";
-import * as CloudOverrides from "./cloud.js";
-import * as BlockOverrides from "./blocks.js";
+
+import enableGlideFeature from "../features/glide.js";
+import enableNSTFeature from "../features/nst/nst_basic.js";
 
 let { csdtSyntax, ...blockOverrides } = BlockOverrides;
 let { shrinkToFit, getNoFit, noFit, ...spriteOverrides } = SpriteOverrides;
 
 let jensBlocks = SpriteMorph.prototype.blocks;
 let jensMigrations = SpriteMorph.prototype.blockMigrations;
+
+let allNewBlocks = blockOverrides.csdtBlocks;
+enableNSTFeature(allNewBlocks, (data) => (allNewBlocks = data));
+enableGlideFeature(allNewBlocks, (data) => (allNewBlocks = data));
+
+// Object.assign(DialogBoxMorph.prototype, Features_STL_DialogBoxMorph);
+// Object.assign(IDE_Morph.prototype, Features_STL_IDE_Morph);
 
 //Generic IDE_Morph overrides (layout, GUI, adding additional options to menus)
 Object.assign(IDE_Morph.prototype, LayoutOverrides);
@@ -56,7 +67,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
 SpriteMorph.prototype.initBlocks = function () {
 	SpriteMorph.prototype.blocks = {
 		...jensBlocks,
-		...blockOverrides.csdtBlocks,
+		...allNewBlocks,
 	};
 };
 
@@ -143,3 +154,4 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
 		);
 	}
 };
+mergeChanges();

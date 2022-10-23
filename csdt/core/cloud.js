@@ -326,7 +326,10 @@ export function saveProject(projectName, body, onSuccess, onError) {
 				}
 			};
 
-			myself.saveFile(img, successIMG, onError);
+			myself.saveFile(img, successIMG, (err) => {
+				console.error(err);
+				onError();
+			});
 			myself.saveFile(xml, successXML, onError);
 		} else {
 			onError.call(this, "You are not logged in", "CSnap!Cloud");

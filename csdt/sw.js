@@ -40,7 +40,7 @@ var snapVersion = "7.2.2",
 		"./core/tutorials.js",
 		"./core/visualizer.js",
 		"./core/main.js",
-		"./ast/bundle.js",
+		"./features/nst/lib/bundle.js",
 
 		// translations
 		"../locale/lang-ar.js",

@@ -281,33 +281,7 @@ export let csdtBlocks = {
 		spec: "%eff effect",
 		defaults: [["color"]],
 	},
-	// setDreamImageForAI: {
-	// 	type: "command",
-	// 	category: "other",
-	// 	spec: "set %ast image - AI",
-	// },
 
-	// importImageOnlyStyleTransfer: {
-	// 	type: "command",
-	// 	category: "other",
-	// 	spec: "import image for %ast - AI",
-	// },
-
-	// getCurrentFilePicker: {
-	// 	type: "reporter",
-	// 	category: "other",
-	// 	spec: "has file picker",
-	// },
-	// getCurrentPaintEditor: {
-	// 	type: "reporter",
-	// 	category: "other",
-	// 	spec: "is paint editor visible",
-	// },
-	// getWorldChildren: {
-	// 	type: "reporter",
-	// 	category: "other",
-	// 	spec: "is world children",
-	// },
 	legacySetCostumeColor: {
 		type: "command",
 		category: "looks",
@@ -315,87 +289,6 @@ export let csdtBlocks = {
 	},
 
 	////////////////////////////////////////////////////////////////
-	createImageUsingStyleTransfer: {
-		type: "command",
-		category: "ai",
-		spec: "create image using NST - advanced? %b download? %b",
-		defaults: [false, false],
-	},
-	useCostumeForStyleTransferImage: {
-		type: "command",
-		category: "ai",
-		spec: "use costume %cst for %ast image",
-	},
-	useStageForStyleTransferImage: {
-		type: "command",
-		category: "ai",
-		spec: "use stage for %ast image",
-	},
-	clearStyleTransferImage: {
-		type: "command",
-		category: "ai",
-		spec: "clear %ast image",
-	},
-	switchToASTCostume: {
-		type: "command",
-		category: "ai",
-		spec: "switch to NST image",
-	},
-	saveStyleTransferImageAsCostume: {
-		type: "command",
-		category: "ai",
-		spec: "save and switch to NST image",
-	},
-	setStyleTransferParameter: {
-		type: "command",
-		category: "ai",
-		spec: "set NST %astp to %n %",
-	},
-	getStyleTransferParameter: {
-		type: "reporter",
-		category: "ai",
-		spec: "get NST %astp",
-	},
-	setStyleTransferMode: {
-		type: "command",
-		category: "ai",
-		spec: "set NST mode to %astm",
-	},
-	getStyleTransferMode: {
-		type: "reporter",
-		category: "ai",
-		spec: "get NST mode",
-	},
-	checkIfImageWasGenerated: {
-		type: "reporter",
-		category: "ai",
-		spec: "was %ast image set",
-	},
-	checkIfImageWasConverted: {
-		type: "reporter",
-		category: "ai",
-		spec: "was NST image created",
-	},
-	clearConvertedStyleTransferImage: {
-		type: "command",
-		category: "ai",
-		spec: "clear NST created image",
-	},
-	checkForASTImage: {
-		type: "reporter",
-		category: "ai",
-		spec: "check if %ast image exists ",
-	},
-	sizeErrorHandlingAST: {
-		type: "command",
-		category: "ai",
-		spec: "image sizing error",
-	},
-	toggleASTProgress: {
-		type: "command",
-		category: "ai",
-		spec: "show progress bar - AI %b",
-	},
 };
 
 // export let blockMigrations = {
@@ -1793,7 +1686,7 @@ export function clearEffects() {
 
 export function blockTemplates(
 	category = "motion",
-	all = false // include hidden blocks
+	all = false // include hidden blocks,
 ) {
 	var blocks = [],
 		myself = this,
@@ -1865,8 +1758,6 @@ export function blockTemplates(
 		blocks.push(block("pointAtAngle"));
 		blocks.push(block("rotateByDegrees"));
 	}
-
-	function addVisualizerBlocks(blocks) {}
 
 	if (StageMorph.prototype.decategorize) {
 		if (myself.parentThatIsA(IDE_Morph).renderBlocks) {
@@ -2297,13 +2188,9 @@ export function blockTemplates(
 		blocks.push(block("doReplaceInList"));
 		blocks.push("=");
 
-		// blocks.push(block("importImageOnlyStyleTransfer"));
 		// blocks.push(block("toggleASTProgress"));
-		// blocks.push(block("setDreamImageForAI"));
+
 		// blocks.push(block("createImageUsingAI"));
-		// blocks.push(block("getCurrentFilePicker"));
-		// blocks.push(block("getCurrentPaintEditor"));
-		// blocks.push(block("getWorldChildren"));
 
 		if (SpriteMorph.prototype.showingExtensions) {
 			blocks.push("=");
@@ -2328,19 +2215,11 @@ export function blockTemplates(
 			blocks.push(block("doShowTable"));
 		}
 	} else if (category === "ai") {
-		blocks.push(block("createImageUsingStyleTransfer"));
-		blocks.push(block("useCostumeForStyleTransferImage"));
-		blocks.push(block("useStageForStyleTransferImage"));
-		blocks.push(block("saveStyleTransferImageAsCostume"));
-		blocks.push(block("switchToASTCostume"));
-		blocks.push(block("clearStyleTransferImage"));
-		blocks.push(block("clearConvertedStyleTransferImage"));
-		blocks.push(block("setStyleTransferParameter"));
-		blocks.push(block("setStyleTransferMode"));
-		blocks.push(block("getStyleTransferParameter"));
-		blocks.push(block("getStyleTransferMode"));
-		blocks.push(block("checkIfImageWasGenerated"));
-		blocks.push(block("checkIfImageWasConverted"));
+		if (SpriteMorph.prototype.csdtOverrides["ai"]) {
+			for (let customBlock of SpriteMorph.prototype.csdtOverrides["ai"]) {
+				blocks.push(block(customBlock));
+			}
+		}
 	}
 
 	return blocks;

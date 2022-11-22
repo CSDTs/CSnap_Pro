@@ -2376,10 +2376,10 @@ export function openIn(world) {
 
 	if (launcherLangSetting()) {
 		// launch with this non-persisten lang setting
-		this.loadNewProject = true;
+		// this.loadNewProject = true;
 		this.setLanguage(launcherLangSetting(), interpretUrlAnchors, true);
 	} else if (this.userLanguage) {
-		this.loadNewProject = true;
+		// this.loadNewProject = true;
 		this.setLanguage(this.userLanguage, interpretUrlAnchors);
 	} else {
 		interpretUrlAnchors.call(this);

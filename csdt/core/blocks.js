@@ -523,6 +523,13 @@ export function degreesToRadians(degrees) {
 
 export function legacySetCostumeColor(color) {
 	let oldCostume, currentPix, newCostume;
+
+	let currentIdx = this.getCostumeIdx();
+
+	if (this.costume?.csdtColorIdx) {
+		this.doSwitchToCostume(this.costume.csdtColorIdx);
+	}
+
 	const convertColors = (pix, col) => {
 		let costumeColor = new Color(255, 255, 255);
 		let currentPixels = this.costume.contents
@@ -569,6 +576,8 @@ export function legacySetCostumeColor(color) {
 	this.clearEffects();
 
 	this.doSwitchToCostume(newCostume);
+
+	this.costume.csdtColorIdx = currentIdx;
 }
 
 export function smoothBorders(start, dest) {
@@ -1678,6 +1687,23 @@ export function clearEffects() {
 	this.hasSaturation = false;
 	this.graphicsValues["saturation"] = 50;
 	this.graphicsValues["brightness"] = 50;
+}
+
+export function doWearNextCostume() {
+	var arr = this.costumes.asArray(),
+		idx;
+
+	if (arr.length > 1) {
+		idx = arr.indexOf(this.costume);
+		if (this.costume?.csdtColorIdx && this.costume?.csdtColorIdx >= 1) idx = this.costume.csdtColorIdx - 1;
+		if (idx > -1) {
+			idx += 1;
+			if (idx > arr.length - 1) {
+				idx = 0;
+			}
+			this.wearCostume(arr[idx]);
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////

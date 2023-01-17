@@ -525,6 +525,9 @@ export function legacySetCostumeColor(color) {
 	let oldCostume, currentPix, newCostume;
 
 	let currentIdx = this.getCostumeIdx();
+	if (this.colorShiftCostume) currentIdx = this.colorShiftCostume;
+
+	this.colorShiftCostume = currentIdx;
 
 	if (this.costume?.csdtColorIdx) {
 		this.doSwitchToCostume(this.costume.csdtColorIdx);
@@ -1690,6 +1693,7 @@ export function clearEffects() {
 }
 
 export function doWearNextCostume() {
+	if (this.colorShiftCostume) this.colorShiftCostume = null;
 	var arr = this.costumes.asArray(),
 		idx;
 

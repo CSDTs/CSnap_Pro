@@ -149,6 +149,11 @@ export let csdtMigrations = {
 		selector: "reflectYAxis",
 		offset: 1,
 	},
+	penSize: {
+		selector: "getPenAttribute",
+		inputs: [["size"]],
+		offset: 1,
+	},
 };
 
 export let csdtBlocks = {

@@ -27,7 +27,7 @@ export function init(globals) {
 	// this.flippedY = false;
 	// this.isNotFlipBack = true;
 	this.colorShiftCostume = null;
-	this.borderColor = 0;
+	this.borderColor = new Color(255, 0, 0);
 	this.borderSize = 0;
 	this.normalExtent = new Point(60, 60); // only for costume-less situation
 	this.lineList = []; //For borders

@@ -251,6 +251,24 @@ export let csdtBlocks = {
 		spec: "set pen border: size %n color %n",
 		defaults: [0, 0],
 	},
+	setBorderHue: {
+		type: "command",
+		category: "pen",
+		spec: "set pen border color: %n",
+		defaults: [0],
+	},
+	setBorderShade: {
+		type: "command",
+		category: "pen",
+		spec: "set pen border shade: %n",
+		defaults: [0],
+	},
+	setBorderSize: {
+		type: "command",
+		category: "pen",
+		spec: "set pen border size: %n ",
+		defaults: [0],
+	},
 	borderPathLengthHelp: {
 		type: "command",
 		category: "pen",
@@ -369,8 +387,8 @@ export function setBorder(size, color) {
 	} else {
 		this.hasBorder = false;
 	}
-	this.borderSize = size;
-	this.borderColor = color;
+	this.borderSize = this.setBorderSize(size);
+	this.borderColor = this.setBorderHue(color);
 }
 
 // Returns various attributes of a pen border
@@ -592,7 +610,7 @@ export function smoothBorders(start, dest) {
 	var tempSize = this.size,
 		tempColor = this.color;
 
-	for (line = 0; line < this.lineList.length; line++) {
+	for (let line = 0; line < this.lineList.length; line++) {
 		this.size = this.lineList[line][2];
 		this.color = this.lineList[line][3];
 		this.drawLine(this.lineList[line][0], this.lineList[line][1], false);
@@ -615,8 +633,19 @@ export function getBorderHue() {
 	return this.borderColor;
 }
 
-export function setBorderHue(clr) {
-	this.borderColor = clr;
+export function setBorderHue(num) {
+	var hsv = this.borderColor.hsv(),
+		x = this.xPosition(),
+		y = this.yPosition();
+
+	hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
+	hsv[1] = 1; // we gotta fix this at some time
+	this.borderColor.set_hsv.apply(this.borderColor, hsv);
+	if (!this.costume) {
+		this.drawNew();
+		this.changed();
+	}
+	this.gotoXY(x, y);
 }
 
 export function getBorderShade() {
@@ -624,6 +653,7 @@ export function getBorderShade() {
 }
 
 export function setBorderShade(num) {
+	let myself = this;
 	var hsv = this.borderColor.hsv(),
 		x = this.xPosition(),
 		y = this.yPosition();
@@ -639,7 +669,7 @@ export function setBorderShade(num) {
 		hsv[2] = num; //Make it more black
 	}
 
-	this.borderColor.set_hsv.apply(this.borderColor, hsv);
+	this.borderColor.set_hsv.apply(myself.borderColor, hsv);
 	if (!this.costume) {
 		this.drawNew();
 		this.changed();
@@ -1620,6 +1650,8 @@ export function clear() {
 	this.clearEffects();
 	this.setVisibility(true);
 	this.hasBorder = false;
+	this.borderColor = new Color(255, 0, 0);
+	this.borderSize = 0;
 
 	if (this.isVariableNameInUse("base image size")) this.deleteVariable("base image size");
 	if (this.isVariableNameInUse("style image size")) this.deleteVariable("style image size");
@@ -1995,7 +2027,10 @@ export function blockTemplates(
 
 		blocks.push("=");
 		blocks.push(block("flatLineEnds"));
-		blocks.push(block("setBorder"));
+		blocks.push(block("setBorderSize"));
+		blocks.push(block("setBorderHue"));
+		blocks.push(block("setBorderShade"));
+		blocks.push(block("smoothBorders"));
 		blocks.push(block("getPenBorderAttribute"));
 	} else if (category === "control") {
 		blocks.push(block("receiveGo"));
@@ -2258,4 +2293,91 @@ export function blockTemplates(
 	}
 
 	return blocks;
+}
+
+export function drawLine(start, dest, isBorder = false) {
+	var stagePos = this.parent.bounds.origin,
+		stageScale = this.parent.scale,
+		context = this.parent.penTrails().getContext("2d"),
+		from = start.subtract(stagePos).divideBy(stageScale),
+		to = dest.subtract(stagePos).divideBy(stageScale),
+		damagedFrom = from.multiplyBy(stageScale).add(stagePos),
+		damagedTo = to.multiplyBy(stageScale).add(stagePos),
+		damaged = damagedFrom
+			.rectangle(damagedTo)
+			.expandBy(Math.max((this.size * stageScale) / 2, 1))
+			.intersect(this.parent.visibleBounds())
+			.spread();
+
+	if (this.isDown) {
+		// record for later svg conversion
+		if (StageMorph.prototype.enablePenLogging) {
+			this.parent.trailsLog.push([
+				this.snapPoint(start),
+				this.snapPoint(dest),
+				this.color.copy(),
+				this.size,
+				this.useFlatLineEnds ? "butt" : "round",
+			]);
+		}
+
+		// draw on the pen-trails layer
+		if (isBorder && this.borderSize > 0) {
+			console.log("enters border drawing");
+			context.lineWidth = this.size + this.borderSize;
+			context.strokeStyle = this.borderColor.toString();
+		} else {
+			context.lineWidth = this.size;
+			context.strokeStyle = this.color.toString();
+		}
+		if (this.useFlatLineEnds) {
+			context.lineCap = "butt";
+			context.lineJoin = "miter";
+		} else {
+			context.lineCap = "round";
+			context.lineJoin = "round";
+		}
+		context.beginPath();
+		context.moveTo(from.x, from.y);
+		context.lineTo(to.x, to.y);
+		context.stroke();
+		if (this.isWarped === false) {
+			this.world().broken.push(damaged);
+		}
+		this.parent.cachedPenTrailsMorph = null;
+	}
+}
+export function moveBy(delta, justMe) {
+	// override the inherited default to make sure my parts follow
+	// unless it's justMe (a correction)
+	var start = this.isDown && !justMe && this.parent ? this.rotationCenter() : null;
+	SpriteMorph.uber.moveBy.call(this, delta);
+	if (start) {
+		console.log(this.hasBorder);
+		if (this.hasBorder) this.drawBorderedLine(start, this.rotationCenter());
+		else this.drawLine(start, this.rotationCenter());
+	}
+	if (!justMe) {
+		this.parts.forEach((part) => part.moveBy(delta));
+		this.instances.forEach((instance) => {
+			if (instance.cachedPropagation) {
+				var inheritsX = instance.inheritsAttribute("x position"),
+					inheritsY = instance.inheritsAttribute("y position");
+				if (inheritsX && inheritsY) {
+					instance.moveBy(delta);
+				} else if (inheritsX) {
+					instance.moveBy(new Point(delta.x, 0));
+				} else if (inheritsY) {
+					instance.moveBy(new Point(0, delta.y));
+				}
+			}
+		});
+	}
+}
+export function setBorderSize(size) {
+	// pen size
+	if (!isNaN(size)) {
+		this.borderSize = Math.min(Math.max(+size, 0.0001), 1000);
+		this.hasBorder = true;
+	}
 }

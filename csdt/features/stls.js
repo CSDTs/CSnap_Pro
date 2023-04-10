@@ -69,12 +69,12 @@ function promptForSTLParameters(title, world) {
 	inp.add(createText("Inverse your design", 9));
 	inp.add(createText(" ", 5));
 	createLabelInput(inp, "X: ", xParam);
-	inp.add(createText("Width of STL in pixels", 9));
+	inp.add(createText("Length of STL in pixels", 9));
 	inp.add(createText(" ", 5));
 	createLabelInput(inp, "Y: ", yParam);
-	inp.add(createText("Height of STL in pixels", 9));
+	inp.add(createText("Width of STL in pixels", 9));
 	inp.add(createText(" ", 5));
-	createLabelInput(inp, "Scale: ", scaleParam);
+	createLabelInput(inp, "Z: ", scaleParam);
 	inp.add(createText("STL mesh height", 9));
 	inp.add(createText(" ", 5));
 

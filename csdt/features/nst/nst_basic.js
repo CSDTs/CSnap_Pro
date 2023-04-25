@@ -395,7 +395,7 @@ function promptInputForStyleTransfer(
 
 	function createColumn(col, width) {
 		col.alignment = "left";
-		col.setColor(this.color);
+		col.setColor(new Color(55, 55, 55));
 		col.setWidth(width);
 		col.setHeight(25);
 	}
@@ -468,8 +468,8 @@ function promptInputForStyleTransfer(
 	};
 
 	inp.alignment = "left";
-	inp.setColor(this.color);
-	bdy.setColor(this.color);
+	inp.setColor(new Color(155, 155, 155));
+	bdy.setColor(new Color(85, 85, 85));
 
 	createColumn(baseCentLeft, 165);
 	createColumn(baseCentRight, 10);

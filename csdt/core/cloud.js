@@ -4,6 +4,10 @@ export let knownDomains = {
 	"localhost (default)": "http://localhost:8000",
 	"localhost (alt)": "http://127.0.0.1:8000",
 	"localhost (secure)": "https://localhost:4431",
+	"fly.dev": "https://csdt-site.fly.dev",
+	"csdt-media.s3.us-east-2.amazonaws.com": "https://csdt-media.s3.us-east-2.amazonaws.com",
+	"django-aws": "https://csdt.site",
+	render: "https://csdt-development-latest.onrender.com",
 };
 export let defaultDomain = knownDomains["Snap!Cloud"];
 
@@ -104,8 +108,12 @@ export function request(method, path, onSuccess, onError, errorMsg, wantsRawResp
 	}
 
 	if (path.includes("/media/")) {
-		fullPath = this.determineCloudDomain() + path;
+		fullPath = path;
 	}
+
+	// if (path.includes("csdt-media.s3.us-east-2")) {
+	// 	fullPath = path;
+	// }
 
 	try {
 		request.open(method, fullPath, true);
@@ -165,16 +173,23 @@ export function initSession(onSuccess) {
 
 export function checkCredentials(onSuccess, onError, response) {
 	var myself = this;
-	this.getCurrentUser(function (user) {
-		if (user.username) {
-			myself.username = user.username;
-			myself.user_id = user.id;
-			myself.verified = true;
+	this.getCurrentUser(
+		function (user) {
+			if (user.username) {
+				myself.username = user.username;
+				myself.user_id = user.id;
+				myself.verified = true;
+			}
+			if (onSuccess) {
+				onSuccess.call(null, user.username, user.id, user.role, response ? JSON.parse(response) : null);
+			}
+		},
+		(data) => {
+			console.log(data);
+
+			onError(data);
 		}
-		if (onSuccess) {
-			onSuccess.call(null, user.username, user.id, user.role, response ? JSON.parse(response) : null);
-		}
-	}, onError);
+	);
 }
 
 export function login(username, password, persist, onSuccess, onError) {
@@ -192,7 +207,10 @@ export function login(username, password, persist, onSuccess, onError) {
 			password: password,
 		},
 		myCallBack
-	).fail(onError);
+	).fail((data) => {
+		console.log(data);
+		onError(data);
+	});
 }
 
 export function logout(onSuccess, onError) {
@@ -394,10 +412,11 @@ export function getProjectList(onSuccess, onError, withThumbnail) {
 
 export function getThumbnail(url, onSuccess, onError) {
 	let texture = null;
+	console.log(url);
 	fetch(url)
 		.then((res) => {
 			if (res.ok) texture = url;
-			else texture = this.determineCloudDomain() + "/static/csnap_pro/csdt/img/project_placeholder.png";
+			else texture = this.determineCloudDomain() + "/csnap_pro/csdt/img/project_placeholder.png";
 			return texture;
 		})
 		.finally(() => {
@@ -409,5 +428,6 @@ export function getThumbnail(url, onSuccess, onError) {
 }
 
 export function getProject(project, delta, onSuccess, onError) {
+	console.log(project.project_url);
 	this.request("GET", project.project_url, onSuccess, onError, "Could not fetch project " + project.name, true);
 }

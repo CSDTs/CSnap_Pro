@@ -71,10 +71,6 @@ var Core = function () {
 			this.styleImg = document.getElementById("style-img");
 			this.stylized = document.getElementById("style-canvas");
 
-			// Get width and height of base image
-			var baseWidth = this.contentImg.width;
-			var baseHeight = this.contentImg.height;
-
 			this.connectImageAndSizeScale(this.contentImg, generic.contentSize);
 			this.connectImageAndSizeScale(this.styleImg, generic.sourceSize);
 
@@ -98,29 +94,7 @@ var Core = function () {
 				_this2.startStyling().finally(function () {
 					var a = document.createElement("a");
 
-					// document.querySelector("#converted-image").src = this.stylized.toDataURL("image/png", 1.0);
-					var ctx = _this2.stylized.getContext("2d");
-					var img = new Image();
-					img.src = _this2.stylized.toDataURL("image/png", 1.0); // Replace with your image URL
-					img.onload = function () {
-						// Draw the image on the top-left corner of the canvas
-						ctx.drawImage(img, 0, 0);
-
-						// Create a new canvas for the cropped image
-						var croppedCanvas = document.createElement("canvas");
-						croppedCanvas.width = baseWidth; // Set to the cropped width
-						croppedCanvas.height = baseHeight; // Set to the cropped height
-						var croppedCtx = croppedCanvas.getContext("2d");
-
-						// Extract the relevant portion from the original canvas
-						var imageData = ctx.getImageData(0, 0, baseWidth, baseHeight);
-						croppedCtx.putImageData(imageData, 0, 0);
-
-						// The croppedCanvas now contains the cropped image
-						document.querySelector("#converted-image").src = croppedCanvas.toDataURL("image/png", 1.0);
-						// document.body.appendChild(croppedCanvas); // Append to the document to see the result
-					};
-
+					document.querySelector("#converted-image").src = _this2.stylized.toDataURL("image/png", 1.0);
 					if (generic.download) {
 						a.setAttribute("download", "output.png");
 						a.setAttribute("href", _this2.stylized.toDataURL("image/png", 1.0));

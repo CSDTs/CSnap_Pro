@@ -57,7 +57,7 @@
 			var world;
 			window.onload = function () {
 				if ("serviceWorker" in navigator) {
-					navigator.serviceWorker.register("/static/csnap_pro/csdt/sw.js");
+					navigator.serviceWorker.register("/csnap_pro/csdt/sw.js");
 				}
 				world = new WorldMorph(document.getElementById("world"));
 				new IDE_Morph().openIn(world);

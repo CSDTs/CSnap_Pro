@@ -38,7 +38,7 @@ export function init(isAutoFill) {
 	this.tutorialMode = false;
 
 	// Applying correct asset path for projects
-	this.asset_path = "/static/csnap_pro/csdt/";
+	this.asset_path = "/csnap_pro/csdt/";
 	////////////////////////////////
 
 	// additional properties:

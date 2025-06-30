@@ -2361,8 +2361,11 @@ export function openIn(world) {
 	}
 
 	function launcherLangSetting() {
+		console.log(location.search.includes("lang="));
 		var langSetting = null;
-		if (location.hash.substr(0, 6) === "#lang:") {
+		if (location.search.includes("lang=")) {
+			langSetting = location.search.split("lang=")[1].split("&")[0];
+		} else if (location.hash.substr(0, 6) === "#lang:") {
 			if (location.hash.charAt(8) === "_") {
 				langSetting = location.hash.slice(6, 11);
 			} else {
